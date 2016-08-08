@@ -44,6 +44,9 @@ namespace GitSubmodules.Helper
                     // return "submodule foreach git pull origin master";
                     return "TODO";
 
+                case SubModuleCommand.OneStatus:
+                    return "submodule status " + submoduleName;
+
                 case SubModuleCommand.OneRegister:
                     return "submodule init " + submoduleName;
 

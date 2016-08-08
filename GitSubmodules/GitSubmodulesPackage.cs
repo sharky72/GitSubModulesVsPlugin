@@ -1,9 +1,8 @@
 ﻿using System;
 using System.ComponentModel.Design;
-using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using EnvDTE;
+using EnvDTE80;
 using GitSubmodules.Mvvm.ViewModel;
 using GitSubmodules.Other;
 using Microsoft.VisualStudio;
@@ -21,25 +20,13 @@ namespace GitSubmodules
     {
         private void ShowToolWindow(object sender, EventArgs e)
         {
-            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this));
-
-            var window = FindToolWindow(typeof(MainViewModel), 0, true) as MainViewModel;
+            var window = FindToolWindow(typeof(MainViewModel), 0, false) as MainViewModel;
             if((window == null) || (window.Frame == null))
             {
-                throw new NotSupportedException("Can not create tool window");
-            }
-
-            var dte = GetGlobalService(typeof(DTE)) as DTE;
-
-            if(dte != null)
-            {
-                dte.Events.SolutionEvents.Opened        += () => window.UpdateSolutionFullName(dte.Solution.FullName);
-                dte.Events.SolutionEvents.BeforeClosing += () => window.UpdateSolutionFullName(dte.Solution.FullName);
-                dte.Events.WindowEvents.WindowActivated += delegate { window.UpdateSolutionFullName(dte.Solution.FullName); };
+                return;
             }
 
             var vsWindowFrame = window.Frame as IVsWindowFrame;
-
             if(vsWindowFrame == null)
             {
                 return;
@@ -55,8 +42,6 @@ namespace GitSubmodules
         /// </summary>
         protected override void Initialize()
         {
-            Debug.WriteLine (string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", ToString()));
-
             base.Initialize();
 
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
@@ -67,6 +52,20 @@ namespace GitSubmodules
 
             mcs.AddCommand(new MenuCommand(ShowToolWindow, new CommandID(GuidList.GuidVsPackage3CmdSet,
                                                                          Convert.ToInt32(PkgCmdIdList.CmdidMyTool))));
+
+            var window = FindToolWindow(typeof(MainViewModel), 0, true) as MainViewModel;
+            if(window == null)
+            {
+                return;
+            }
+
+            var dte = GetGlobalService(typeof(DTE)) as DTE2;
+            if(dte == null)
+            {
+                return;
+            }
+
+            dte.Events.WindowEvents.WindowActivated += delegate { window.UpdateSolutionFullName(dte); };
         }
 
         #endregion

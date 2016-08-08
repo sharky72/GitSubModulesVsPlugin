@@ -36,6 +36,11 @@
         AllGetLatest,
 
         /// <summary>
+        /// Command for the status of one submodule
+        /// </summary>
+        OneStatus,
+
+        /// <summary>
         /// Command for the registration of one submodule
         /// </summary>
         OneRegister,

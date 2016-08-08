@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using EnvDTE80;
 using GitSubmodules.Enumerations;
 using GitSubmodules.Helper;
 using GitSubmodules.Mvvm.Model;
@@ -142,33 +143,48 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// <summary>
         /// Update the solution full name
         /// </summary>
-        /// <param name="solutionFullName">The full name of the current opend solution</param>
-        internal void UpdateSolutionFullName(string solutionFullName)
+        /// <param name="dte2">The main Visual Studio object</param>
+        internal void UpdateSolutionFullName(DTE2 dte2)
         {
-            Model.CanExecuteCommand  = false;
-            Model.ConsoleOutput       = string.Empty;
-            Model.CurrentSolutionPath = string.Empty;
-
-            if(string.IsNullOrEmpty(solutionFullName))
+            if(dte2 == null)
             {
-                Model.CurrentSolutionPath = "No solution opend";
-                Model.ConsoleOutput       = "No solution opend";
+                return;
+            }
+
+            if(Model.OutputPane == null)
+            {
+                Model.OutputPane = dte2.ToolWindows.OutputWindow.OutputWindowPanes.Add("Git submodules");
+            }
+
+            if(dte2.Solution == null)
+            {
+                return;
+            }
+
+            if(Model.CurrentSolutionFullName == dte2.Solution.FullName)
+            {
+                return;
+            }
+
+            Model.ListOfSubmodules        = null;
+            Model.CanExecuteCommand       = false;
+            Model.CurrentSolutionFullName = dte2.Solution.FullName;
+            Model.GitCounter++;
+
+            if(string.IsNullOrEmpty(Model.CurrentSolutionFullName))
+            {
+                WriteToOutputWindow(Category.Debug, "No solution opend");
                 return;
             }
 
             try
             {
-                Model.CurrentSolutionPath = Path.GetDirectoryName(solutionFullName);
+                Model.CurrentSolutionPath = Path.GetDirectoryName(Model.CurrentSolutionFullName);
             }
             catch(Exception exception)
             {
-                Model.ConsoleOutput = exception.ToString();
-                return;
-            }
-
-            if(!CheckSolutionIsAGitRepository())
-            {
-                return;
+                WriteToOutputWindow(Category.Error, "Get diretory name from solution path");
+                WriteToOutputWindow(Category.Error, exception.ToString());
             }
 
             StartGit(null, SubModuleCommand.AllStatus);
@@ -182,9 +198,11 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             if(string.IsNullOrEmpty(Model.CurrentSolutionPath) || !Directory.Exists(Model.CurrentSolutionPath))
             {
-                Model.ConsoleOutput = "Error on switch to solution path";
+                WriteToOutputWindow(Category.Error, "Can't find solution path");
                 return false;
             }
+
+            WriteToOutputWindow(Category.Debug, string.Format("Set solution path to {0}", Model.CurrentSolutionPath));
 
             try
             {
@@ -192,17 +210,18 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
             catch(Exception exception)
             {
-                Model.ConsoleOutput = exception.ToString();
+                WriteToOutputWindow(Category.Error, "Can't switch to solution path");
+                WriteToOutputWindow(Category.Error, exception.ToString());
                 return false;
             }
 
             if(!Directory.Exists(".git"))
             {
-                Model.ConsoleOutput = "Solution is not Git repository";
+                WriteToOutputWindow(Category.Debug, "Solution is not Git repository");
                 return false;
             }
 
-            Model.CanExecuteCommand = true;
+            WriteToOutputWindow(Category.Debug,"Solution is a Git repository");
             return true;
         }
 
@@ -216,63 +235,113 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             Task.Run(() =>
             {
+                Model.GitCounter++;
                 Model.CanExecuteCommand = false;
 
-                if(submoduleCommand != SubModuleCommand.AllStatus)
+                if(!CheckSolutionIsAGitRepository())
                 {
-                    Model.ConsoleOutput = string.Empty;
+                    return;
+                }
 
-                    if(!CheckSolutionIsAGitRepository())
+                var gitStartInfo = new ProcessStartInfo("git.exe")
+                {
+                    Arguments              = GitHelper.GetGitArguments(submodule, submoduleCommand),
+                    CreateNoWindow         = true,
+                    RedirectStandardError  = true,
+                    RedirectStandardOutput = true,
+                    UseShellExecute        = false
+                };
+
+                WriteToOutputWindow(Category.Debug, string.Format("Start Git with the follow arguments: {0}", gitStartInfo.Arguments));
+
+                string consoleOutput;
+
+                using(var process = Process.Start(gitStartInfo))
+                {
+                    if(process == null)
                     {
+                        WriteToOutputWindow(Category.Error, "Can't start Git process");
+                        Model.CanExecuteCommand = true;
                         return;
                     }
 
-                    var gitStartInfo = new ProcessStartInfo("git.exe")
+                    using(var reader = process.StandardOutput)
                     {
-                        Arguments              = GitHelper.GetGitArguments(submodule, submoduleCommand),
-                        CreateNoWindow         = true,
-                        RedirectStandardError  = true,
-                        RedirectStandardOutput = true,
-                        UseShellExecute        = false
-                    };
+                        consoleOutput = reader.ReadToEnd().TrimEnd();
+                    }
 
-                    using(var process = Process.Start(gitStartInfo))
+                    if(process.ExitCode != 0)
                     {
-                        if(process == null)
-                        {
-                            return;
-                        }
-
-                        using(var reader = process.StandardOutput)
-                        {
-                            Model.ConsoleOutput = reader.ReadToEnd();
-                        }
-
-                        if(process.ExitCode == 0)
-                        {
-                            return;
-                        }
+                        WriteToOutputWindow(Category.Error, string.Format("Error on Git process with command: {0}", gitStartInfo.Arguments));
+                        WriteToOutputWindow(Category.Error, string.Format("Git process end with errorcode: {0}", process.ExitCode));
 
                         using(var reader = process.StandardError)
                         {
-                            Model.ConsoleOutput = string.Format("Error on git command: {0}\n\n{1}",
-                                submoduleCommand, reader.ReadToEnd());
+                            WriteToOutputWindow(Category.Error, reader.ReadToEnd().TrimEnd());
+                            Model.CanExecuteCommand = true;
+                            return;
                         }
                     }
+                }
 
+                if(submoduleCommand != SubModuleCommand.AllStatus)
+                {
+                    WriteToOutputWindow(Category.Debug, "Finished Git process with no error\n");
+                    StartGit(null, SubModuleCommand.AllStatus);
+                    Model.CanExecuteCommand = true;
+                    return;
+                }
+
+                if(string.IsNullOrEmpty(consoleOutput))
+                {
+                    WriteToOutputWindow(Category.Debug, "No submodules found\n");
+                    Model.CanExecuteCommand = true;
                     return;
                 }
 
                 var tempList = new List<Submodule>();
 
-                tempList.AddRange(Model.ConsoleOutput.Split('\n')
-                                                     .Where(found => !string.IsNullOrEmpty(found))
-                                                     .Select(found => new Submodule(Model.CurrentSolutionPath, found)));
+                var splitedAnswer = consoleOutput.Split('\n').Where(found => !string.IsNullOrEmpty(found)).ToList();
+
+                WriteToOutputWindow(Category.Debug, "Console output from Git process:");
+                WriteToOutputWindow(Category.Debug, string.Empty.PadRight(40, '-'));
+
+                foreach(var line in splitedAnswer)
+                {
+                    WriteToOutputWindow(Category.Debug, line);
+                }
+
+                WriteToOutputWindow(Category.Debug, string.Empty.PadRight(40, '-'));
+
+                WriteToOutputWindow(Category.Debug, string.Format("Git console output have {0} lines, that should be {0} submodules",
+                                                                  splitedAnswer.Count));
+
+                tempList.AddRange(splitedAnswer.Select(found => new Submodule(Model.CurrentSolutionPath, found)));
 
                 Model.ListOfSubmodules = tempList;
 
+                if(splitedAnswer.Count == Model.ListOfSubmodules.Count())
+                {
+                    WriteToOutputWindow(Category.Debug, string.Format("Count of Submodules: {0}\n", Model.ListOfSubmodules.Count()));
+                }
+                else
+                {
+                    WriteToOutputWindow(Category.Error, string.Format("Count of Submodules {0} are not identical with count of lines {1}\n",
+                                                               Model.ListOfSubmodules.Count(), splitedAnswer.Count));
+                }
+
                 Model.CanExecuteCommand = true;
             });
+        }
+
+        internal void WriteToOutputWindow(Category category, string message)
+        {
+            if((Model == null) || (Model.OutputPane == null))
+            {
+                return;
+            }
+
+            Model.OutputPane.OutputString(string.Format("{0:HH:mm:ss} - {1:00} - {2} : {3}\n", DateTime.Now, Model.GitCounter, category, message));
         }
 
         #endregion Internal Methods

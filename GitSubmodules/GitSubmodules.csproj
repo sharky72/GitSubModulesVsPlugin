@@ -42,6 +42,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="envdte80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.OLE.Interop" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop" />
@@ -98,6 +101,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enumerations\MessageCategory.cs" />
     <Compile Include="Enumerations\SubModuleCommands.cs" />
     <Compile Include="Enumerations\SubModuleStatus.cs" />
     <Compile Include="Helper\GitHelper.cs" />
@@ -132,6 +136,7 @@
   <ItemGroup>
     <VSCTCompile Include="VSPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
+      <SubType>Designer</SubType>
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
