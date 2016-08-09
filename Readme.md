@@ -3,7 +3,7 @@
 ##Info
 This Visual Studio plugin is for users that need a easier way to handle with Git submodules inside Visual Studio
 
-##How To
+##How to
 1. Install VISX (Grab from extension site or over extension manager)
 2. Restart Visual Studio
 3. Menu -> View -> Additional Windows -> Git Submodules
@@ -22,9 +22,10 @@ This Visual Studio plugin is for users that need a easier way to handle with Git
 ##Pictures
 ![picture](picture2.png)
 
-##System Requierments
+##System requierments
 * Visual Studio 2013, 2015
-* .NET Framework 4.5
+* [.NET Framework 4.5](https://www.microsoft.com/de-de/download/details.aspx?id=30653)
+* [Git for Windows](https://git-for-windows.github.io/)
 
 ##Tested
 Currently tested with Visual Studio 2013 and two submodules
