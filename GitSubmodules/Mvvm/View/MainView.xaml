@@ -15,173 +15,179 @@
             <RowDefinition Height="5" />
             <RowDefinition Height="*" />
             <RowDefinition Height="5" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Expander Grid.Row="1"
-                  Header="Info"
-                  IsExpanded="True">
+        <StackPanel Grid.Row="1" Margin="5">
+            <TextBlock FontWeight="Bold" Text="Solution path" />
+            <TextBlock Text="{Binding Model.CurrentSolutionPath}" TextWrapping="Wrap" />
+        </StackPanel>
 
-            <StackPanel Margin="5">
-                <TextBlock FontWeight="Bold" Text="Solution path" />
-                <TextBlock Text="{Binding Model.CurrentSolutionPath}" TextWrapping="Wrap" />
-            </StackPanel>
+        <Grid Grid.Row="3" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        </Expander>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
 
-        <Expander Grid.Row="3"
-                  Header="Commands for all submodules"
-                  IsExpanded="True">
+            <Button Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Command="{Binding CommandAllStatus}"
+                    Content="Status for all submodules" />
 
-            <Grid Margin="5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+            <Button Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Command="{Binding CommandAllRegister}"
+                    Content="Register all submodules" />
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="100" />
-                </Grid.ColumnDefinitions>
+            <Button Grid.Row="4"
+                    Grid.Column="0"
+                    Command="{Binding CommandAllDeRegister}"
+                    Content="Deregister all submodules" />
 
-                <Button Grid.Row="0"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        Command="{Binding CommandAllStatus}"
-                        Content="Status for all submodules" />
+            <Button Grid.Row="4"
+                    Grid.Column="1"
+                    Command="{Binding CommandAllDeinitForce}"
+                    Content="Force Deregister" />
 
-                <Button Grid.Row="2"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        Command="{Binding CommandAllRegister}"
-                        Content="Register all submodules" />
+            <Button Grid.Row="6"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Command="{Binding CommandAllUpdate}"
+                    Content="Update all submodules" />
 
-                <Button Grid.Row="4"
-                        Grid.Column="0"
-                        Command="{Binding CommandAllDeRegister}"
-                        Content="Deregister all submodules" />
+            <Button Grid.Row="8"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Command="{Binding CommandAllPullOriginMaster}"
+                    Content="Pull origion master for all submodules" />
 
-                <Button Grid.Row="4"
-                        Grid.Column="1"
-                        Command="{Binding CommandAllDeinitForce}"
-                        Content="Force Deregister" />
+        </Grid>
 
-                <Button Grid.Row="6"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        Command="{Binding CommandAllUpdate}"
-                        Content="Update all submodules" />
+        <ScrollViewer Grid.Row="5"
+                      Margin="0,5,0,0"
+                      VerticalScrollBarVisibility="Auto">
+            <ItemsControl Margin="0,0,2,0" ItemsSource="{Binding Model.ListOfSubmodules, Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
 
-                <Button Grid.Row="8"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        Command="{Binding CommandAllLatest}"
-                        Content="Get latest for all submodules" />
+                        <Border Margin="0,0,0,5"
+                                BorderBrush="Black"
+                                BorderThickness="1">
 
-            </Grid>
-        </Expander>
+                            <Grid Background="{Binding BackgroundColor, Mode=OneWay}">
 
-        <Expander Grid.Row="5"
-                  Header="List of submodules"
-                  IsExpanded="True">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="5" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="5" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="5" />
+                                </Grid.ColumnDefinitions>
 
-            <ScrollViewer Margin="0,5,0,0">
-                <ItemsControl Margin="0,0,2,0" ItemsSource="{Binding Model.ListOfSubmodules, Mode=OneWay}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="5" />
+                                </Grid.RowDefinitions>
 
-                            <Border Margin="0,0,0,5"
-                                    BorderBrush="Black"
-                                    BorderThickness="1">
+                                <TextBlock Grid.Row="1"
+                                           Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Bold"
+                                           Text="{Binding Name,
+                                                          Mode=OneWay}"
+                                           TextTrimming="CharacterEllipsis" />
 
-                                <Grid Background="{Binding BackgroundColor, Mode=OneWay}">
+                                <Button Grid.Row="1"
+                                        Grid.Column="3"
+                                        Width="80"
+                                        Command="{Binding DataContext.CommandOneRegister,
+                                                          RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding}"
+                                        Content="Register" />
 
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="5" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="5" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="5" />
-                                    </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Row="3"
+                                           Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Id,
+                                                          Mode=OneWay}"
+                                           TextTrimming="CharacterEllipsis" />
 
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="5" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="5" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="5" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="5" />
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="1"
-                                               Grid.Column="1"
-                                               FontWeight="Bold"
-                                               Text="{Binding Name,
-                                                              Mode=OneWay}"
-                                               TextTrimming="CharacterEllipsis" />
-
-                                    <Button Grid.Row="1"
+                                <StackPanel Grid.Row="3"
                                             Grid.Column="3"
-                                            Width="80"
-                                            Command="{Binding DataContext.CommandOneRegister,
+                                            Orientation="Horizontal">
+
+                                    <Button Width="40"
+                                            Command="{Binding DataContext.CommandOneDeRegister,
                                                               RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                             CommandParameter="{Binding}"
-                                            Content="Register" />
+                                            Content="DeReg" />
 
-                                    <TextBlock Grid.Row="3"
-                                               Grid.Column="1"
-                                               Text="{Binding Id,
-                                                              Mode=OneWay}"
-                                               TextTrimming="CharacterEllipsis" />
-
-                                    <StackPanel Grid.Row="3"
-                                                Grid.Column="3"
-                                                Orientation="Horizontal">
-
-                                        <Button Width="40"
-                                                Command="{Binding DataContext.CommandOneDeRegister,
-                                                                  RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                                CommandParameter="{Binding}"
-                                                Content="DeReg" />
-
-                                        <Button Width="40"
-                                                Command="{Binding DataContext.CommandOneDeRegisterForce,
-                                                                  RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                                CommandParameter="{Binding}"
-                                                Content="Force" />
-
-                                    </StackPanel>
-
-                                    <TextBlock Grid.Row="5"
-                                               Grid.Column="1"
-                                               Text="{Binding CommitId,
-                                                              Mode=OneWay}"
-                                               TextTrimming="CharacterEllipsis" />
-
-                                    <Button Grid.Row="5"
-                                            Grid.Column="3"
-                                            Width="80"
-                                            Command="{Binding DataContext.CommandOneUpdate,
+                                    <Button Width="40"
+                                            Command="{Binding DataContext.CommandOneDeRegisterForce,
                                                               RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                             CommandParameter="{Binding}"
-                                            Content="Update" />
-                                </Grid>
+                                            Content="Force" />
 
-                            </Border>
+                                </StackPanel>
 
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
-        </Expander>
+                                <TextBlock Grid.Row="5"
+                                           Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding CommitId,
+                                                          Mode=OneWay}"
+                                           TextTrimming="CharacterEllipsis" />
+
+                                <Button Grid.Row="5"
+                                        Grid.Column="3"
+                                        Width="80"
+                                        Command="{Binding DataContext.CommandOneUpdate,
+                                                          RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding}"
+                                        Content="Update" />
+
+                                <TextBlock Grid.Row="7"
+                                           Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding StatusText,
+                                                          Mode=OneWay}"
+                                           TextTrimming="CharacterEllipsis" />
+
+                                <Button Grid.Row="7"
+                                        Grid.Column="3"
+                                        Width="80"
+                                        Command="{Binding DataContext.CommandOnePullOriginMaster,
+                                                          RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding}"
+                                        Content="Pull O/M" />
+                            </Grid>
+
+                        </Border>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
     </Grid>
 
 </UserControl>

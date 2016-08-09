@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using EnvDTE;
 using GitSubmodules.Helper;
 using GitSubmodules.Mvvm.ViewModel;
@@ -61,6 +62,11 @@ namespace GitSubmodules.Mvvm.Model
         /// Counter of git calls with arguments
         /// </summary>
         internal int GitCounter;
+
+        /// <summary>
+        /// <see cref="AutoResetEvent"/> to wait for a finished of git process
+        /// </summary>
+        internal AutoResetEvent WaitingTimer;
 
         #endregion Internal Fields
 

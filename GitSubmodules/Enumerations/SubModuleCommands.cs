@@ -1,4 +1,5 @@
-﻿namespace GitSubmodules.Enumerations
+﻿
+namespace GitSubmodules.Enumerations
 {
     /// <summary>
     /// This enumeration contains all supported git commands by this application
@@ -31,9 +32,9 @@
         AllUpdate,
 
         /// <summary>
-        /// Command for the pull of latest state of all submodules
+        /// Command for pull origin master for all submodules
         /// </summary>
-        AllGetLatest,
+        AllPullOriginMaster,
 
         /// <summary>
         /// Command for the status of one submodule
@@ -61,8 +62,8 @@
         OneUpdate,
 
         /// <summary>
-        /// Command for the pull latest state of one submodule
+        /// Command for pull origin master of one submodule
         /// </summary>
-        OneGetLatest
+        OnePullOriginMaster
     }
 }

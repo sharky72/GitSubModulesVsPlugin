@@ -34,16 +34,17 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public SolidColorBrush BackgroundColor { get; private set; }
 
-        #endregion Public Properties
-
-        #region Private Backing-Fields
-
         /// <summary>
         /// The current status of this module
         /// </summary>
-        private SubModuleStatus _status;
+        public SubModuleStatus Status { get; private set; }
 
-        #endregion Private Backing-Fields
+        /// <summary>
+        /// The current status text of this module
+        /// </summary>
+        public string StatusText { get; private set; }
+
+        #endregion Public Properties
 
         #region Internal Constructor
 
@@ -68,6 +69,11 @@ namespace GitSubmodules.Mvvm.Model
 
             Id = !string.IsNullOrEmpty(Id) ? Id = Id.Substring(1, Id.Length - 1) : "???";
 
+            if(!string.IsNullOrEmpty(CommitId))
+            {
+                CommitId = CommitId.TrimStart('(').TrimEnd(')');
+            }
+
             SetSubModuleStatus(solutionPath, subModuleInformation);
             SetBackgroundColor();
         }
@@ -77,11 +83,11 @@ namespace GitSubmodules.Mvvm.Model
         #region Internal Methods
 
         /// <summary>
-        /// Set the background color for thsi module based on the <see cref="_status"/>
+        /// Set the background color for thsi module based on the <see cref="Status"/>
         /// </summary>
         internal void SetBackgroundColor()
         {
-            switch(_status)
+            switch(Status)
             {
                 case SubModuleStatus.Unknown:
                     BackgroundColor = Brushes.LightGray;
@@ -92,11 +98,11 @@ namespace GitSubmodules.Mvvm.Model
                     break;
 
                 case SubModuleStatus.Registered:
-                    BackgroundColor = Brushes.LightYellow;
+                    BackgroundColor = Brushes.Yellow;
                     break;
 
                 case SubModuleStatus.MergeConflict:
-                    BackgroundColor = Brushes.LightSteelBlue;
+                    BackgroundColor = Brushes.DarkOrange;
                     break;
 
                 case SubModuleStatus.Current:
@@ -104,17 +110,17 @@ namespace GitSubmodules.Mvvm.Model
                     break;
 
                 case SubModuleStatus.NotCurrent:
-                    BackgroundColor = Brushes.LightGreen;
+                    BackgroundColor = Brushes.LightSkyBlue;
                     break;
 
                 default:
-                    BackgroundColor = Brushes.White;
+                    BackgroundColor = Brushes.LightGray;
                     break;
             }
         }
 
         /// <summary>
-        /// Set the <see cref="_status"/> of this module, based on the given information
+        /// Set the <see cref="Status"/> of this module, based on the given information
         /// </summary>
         /// <param name="solutionPath">The path to the current opend solution</param>
         /// <param name="subModuleInformation">The <see cref="string"/>
@@ -129,15 +135,18 @@ namespace GitSubmodules.Mvvm.Model
             switch(subModuleInformation.FirstOrDefault())
             {
                 case ' ':
-                    _status = SubModuleStatus.Current;
+                    Status     = SubModuleStatus.Current;
+                    StatusText = "Submodule is current";
                     break;
 
                 case 'U':
-                    _status = SubModuleStatus.MergeConflict;
+                    Status     = SubModuleStatus.MergeConflict;
+                    StatusText = "Submodule has merge conflicts";
                     break;
 
                 case '+':
-                    _status = SubModuleStatus.NotCurrent;
+                    Status     = SubModuleStatus.NotCurrent;
+                    StatusText = "Submodule is not current";
                     break;
 
                 case '-':
@@ -145,7 +154,8 @@ namespace GitSubmodules.Mvvm.Model
                     break;
 
                 default:
-                    _status = SubModuleStatus.Unknown;
+                    Status     = SubModuleStatus.Unknown;
+                    StatusText = "Submodule status is unknown";
                     break;
             }
         }
@@ -171,20 +181,20 @@ namespace GitSubmodules.Mvvm.Model
                     {
                         if(streamReader.ReadToEnd().Contains("[submodule \"" + Name + "\"]"))
                         {
-                            _status  = SubModuleStatus.Registered;
-                            CommitId = "Submodule is registered";
+                            Status     = SubModuleStatus.Registered;
+                            StatusText = "Submodule is registered";
                             return;
                         }
                     }
 
-                    _status  = SubModuleStatus.NotRegistered;
-                    CommitId = "Submodule is not registered";
+                    Status     = SubModuleStatus.NotRegistered;
+                    StatusText = "Submodule is not registered";
                 }
             }
             catch(Exception exception)
             {
-                CommitId = exception.Message;
-                _status  = SubModuleStatus.NotRegistered;
+                Status     = SubModuleStatus.Unknown;
+                StatusText = exception.Message;
             }
         }
 

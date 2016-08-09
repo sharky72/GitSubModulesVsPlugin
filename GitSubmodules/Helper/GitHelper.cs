@@ -38,11 +38,8 @@ namespace GitSubmodules.Helper
                 case SubModuleCommand.AllUpdate:
                     return "submodule update";
 
-                case SubModuleCommand.AllGetLatest:
-                    // TODO:
-                    // replaced with own method, FOREACH command is still broken on mysys under windows
-                    // return "submodule foreach git pull origin master";
-                    return "TODO";
+                case SubModuleCommand.AllPullOriginMaster:
+                    return "foreach command is still broken under windows";
 
                 case SubModuleCommand.OneStatus:
                     return "submodule status " + submoduleName;
@@ -59,8 +56,8 @@ namespace GitSubmodules.Helper
                 case SubModuleCommand.OneUpdate:
                     return "submodule update " + submoduleName;
 
-                case SubModuleCommand.OneGetLatest:
-                    return "TODO";
+                case SubModuleCommand.OnePullOriginMaster:
+                    return "pull origin master";
 
                 default:
                     return string.Empty;

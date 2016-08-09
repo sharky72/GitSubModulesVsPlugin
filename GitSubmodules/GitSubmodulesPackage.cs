@@ -18,23 +18,6 @@ namespace GitSubmodules
     [Guid(GuidList.GuidVsPackage3PkgString)]
     public sealed class GitSubmodulesPackage : Package
     {
-        private void ShowToolWindow(object sender, EventArgs e)
-        {
-            var window = FindToolWindow(typeof(MainViewModel), 0, false) as MainViewModel;
-            if((window == null) || (window.Frame == null))
-            {
-                return;
-            }
-
-            var vsWindowFrame = window.Frame as IVsWindowFrame;
-            if(vsWindowFrame == null)
-            {
-                return;
-            }
-
-            ErrorHandler.ThrowOnFailure(vsWindowFrame.Show());
-        }
-
         #region Package Members
 
         /// <summary>
@@ -65,9 +48,35 @@ namespace GitSubmodules
                 return;
             }
 
-            dte.Events.WindowEvents.WindowActivated += delegate { window.UpdateSolutionFullName(dte); };
+            dte.Events.WindowEvents.WindowActivated += delegate { window.UpdateDte2(dte); };
         }
 
-        #endregion
+        #endregion Package Members
+
+        #region Private Methods
+
+        /// <summary>
+        /// Show the <see cref="ToolWindowPane"/> of this <see cref="Package"/>
+        /// </summary>
+        /// <param name="sender">The sender of this event (typical the <see cref="ToolWindowPane"/></param>
+        /// <param name="e">The arguments for this event</param>
+        private void ShowToolWindow(object sender, EventArgs e)
+        {
+            var window = FindToolWindow(typeof(MainViewModel), 0, false) as MainViewModel;
+            if((window == null) || (window.Frame == null))
+            {
+                return;
+            }
+
+            var vsWindowFrame = window.Frame as IVsWindowFrame;
+            if(vsWindowFrame == null)
+            {
+                return;
+            }
+
+            ErrorHandler.ThrowOnFailure(vsWindowFrame.Show());
+        }
+
+        #endregion Private Methods
     }
 }
