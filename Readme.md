@@ -4,9 +4,10 @@
 This Visual Studio plugin is for users that need a easier way to handle with Git submodules inside Visual Studio
 
 ##How to
-1. Install VISX (Grab from extension site or over extension manager)
-2. Restart Visual Studio
-3. Menu -> View -> Additional Windows -> Git Submodules
+1. [Download from this repo](https://github.com/Dark-Water/GitSubModulesVsPlugin/tree/master/VISX%20for%20Testers) ~~Grab from extension site or over extension manager (next)~~
+2. Install VISX 
+3. Restart Visual Studio
+4. Menu -> View -> Additional Windows -> Git Submodules
 
 ##Supported Git functions for each and all submodules
 * Status
