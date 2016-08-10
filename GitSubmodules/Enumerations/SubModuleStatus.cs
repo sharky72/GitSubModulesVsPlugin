@@ -11,14 +11,14 @@
         Unknown,
 
         /// <summary>
-        /// Indicate that the submodule is not registered
+        /// Indicate that the submodule is not initialized
         /// </summary>
-        NotRegistered,
+        NotInitialized,
 
         /// <summary>
-        /// Indicate that the submodule is registered
+        /// Indicate that the submodule is initialized
         /// </summary>
-        Registered,
+        Initialized,
 
         /// <summary>
         /// Indicate that the submodule has merge conflicts

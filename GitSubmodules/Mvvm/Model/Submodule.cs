@@ -93,11 +93,11 @@ namespace GitSubmodules.Mvvm.Model
                     BackgroundColor = Brushes.LightGray;
                     break;
 
-                case SubModuleStatus.NotRegistered:
+                case SubModuleStatus.NotInitialized:
                     BackgroundColor = Brushes.LightCoral;
                     break;
 
-                case SubModuleStatus.Registered:
+                case SubModuleStatus.Initialized:
                     BackgroundColor = Brushes.Yellow;
                     break;
 
@@ -175,20 +175,17 @@ namespace GitSubmodules.Mvvm.Model
 
             try
             {
-                using(var fileStream = File.Open(gitConfigFilePath, FileMode.Open, FileAccess.Read))
+                using(var streamReader = new StreamReader(File.Open(gitConfigFilePath, FileMode.Open, FileAccess.Read)))
                 {
-                    using(var streamReader = new StreamReader(fileStream))
+                    if(streamReader.ReadToEnd().Contains("[submodule \"" + Name + "\"]"))
                     {
-                        if(streamReader.ReadToEnd().Contains("[submodule \"" + Name + "\"]"))
-                        {
-                            Status     = SubModuleStatus.Registered;
-                            StatusText = "Submodule is registered";
-                            return;
-                        }
+                        Status     = SubModuleStatus.Initialized;
+                        StatusText = "Submodule is initialized";
+                        return;
                     }
 
-                    Status     = SubModuleStatus.NotRegistered;
-                    StatusText = "Submodule is not registered";
+                    Status     = SubModuleStatus.NotInitialized;
+                    StatusText = "Submodule is not initialized";
                 }
             }
             catch(Exception exception)

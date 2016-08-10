@@ -13,10 +13,11 @@ This Visual Studio plugin is for users that need a easier way to handle with Git
 * Status
 * Init
 * Deinit (Force)
-* Update
+* Update (Force)
 * Pull origin master
 
 ##Other features
+- Open in File-Explorer (right-click on a submodule)
 - Debug and error messages will be written on a separate output window
 - The output window is only grab on the first use on the panel
 

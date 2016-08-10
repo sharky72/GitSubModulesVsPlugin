@@ -57,20 +57,20 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
-        public ICommand CommandAllRegister
+        public ICommand CommandAllInit
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllRegister),
+                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllInit),
                                         param => Model.CanExecuteCommand);
             }
         }
 
-        public ICommand CommandAllDeRegister
+        public ICommand CommandAllDeinit
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllDeRegister),
+                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllDeinit),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -79,7 +79,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllDeRegisterForce),
+                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllDeinitForce),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -93,6 +93,15 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
+        public ICommand CommandAllUpdateForce
+        {
+            get
+            {
+                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllUpdateForce),
+                                        param => Model.CanExecuteCommand);
+            }
+        }
+
         public ICommand CommandAllPullOriginMaster
         {
             get
@@ -102,29 +111,29 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
-        public ICommand CommandOneRegister
+        public ICommand CommandOneInit
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.OneRegister),
+                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.OneInit),
                                         param => Model.CanExecuteCommand);
             }
         }
 
-        public ICommand CommandOneDeRegister
+        public ICommand CommandOneDeinit
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.OneDeRegister),
+                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.OneDeinit),
                                         param => Model.CanExecuteCommand);
             }
         }
 
-        public ICommand CommandOneDeRegisterForce
+        public ICommand CommandOneDeinitForce
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.OneDeRegisterForce),
+                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.OneDeinitForce),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -134,6 +143,15 @@ namespace GitSubmodules.Mvvm.ViewModel
             get
             {
                 return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.OneUpdate),
+                                        param => Model.CanExecuteCommand);
+            }
+        }
+
+        public ICommand CommandOneUpdateForce
+        {
+            get
+            {
+                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.OneUpdateForce),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -301,6 +319,36 @@ namespace GitSubmodules.Mvvm.ViewModel
                     Model.WaitingTimer.WaitOne(10000);
                     DoStartGit(null, SubModuleCommand.AllStatus);
                 });
+            }
+        }
+
+        /// <summary>
+        /// Open a folder of a <see cref="Submodule"/> with the system file-explorer
+        /// </summary>
+        /// <param name="submodule">The <see cref="Submodule"/> these folder should be open</param>
+        internal void DoOpenFolder(Submodule submodule)
+        {
+            if((submodule == null) || string.IsNullOrEmpty(submodule.Name) || string.IsNullOrEmpty(Model.CurrentSolutionPath))
+            {
+                return;
+            }
+
+            var folderToOpen = Path.Combine(Model.CurrentSolutionPath, submodule.Name);
+
+            if(!Directory.Exists(folderToOpen))
+            {
+                WriteToOutputWindow(Category.Error, string.Format("Folder not found {0}", folderToOpen));
+                return;
+            }
+
+            try
+            {
+                Process.Start("explorer", folderToOpen);
+            }
+            catch(Exception exception)
+            {
+                WriteToOutputWindow(Category.Error, string.Format("Can't open explorer on the given path {0}", folderToOpen));
+                WriteToOutputWindow(Category.Error, exception.ToString());
             }
         }
 

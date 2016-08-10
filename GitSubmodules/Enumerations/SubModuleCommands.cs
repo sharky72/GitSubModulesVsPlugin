@@ -1,5 +1,4 @@
-﻿
-namespace GitSubmodules.Enumerations
+﻿namespace GitSubmodules.Enumerations
 {
     /// <summary>
     /// This enumeration contains all supported git commands by this application
@@ -14,22 +13,27 @@ namespace GitSubmodules.Enumerations
         /// <summary>
         /// Command for the registration of all submodules
         /// </summary>
-        AllRegister,
+        AllInit,
 
         /// <summary>
         /// Command for the deregistration of all submodules
         /// </summary>
-        AllDeRegister,
+        AllDeinit,
 
         /// <summary>
-        /// Command for the forced de-registration all submodules
+        /// Command for the forced de-registration all submodules (lose changes)
         /// </summary>
-        AllDeRegisterForce,
+        AllDeinitForce,
 
         /// <summary>
         /// Command for the update of all submodules
         /// </summary>
         AllUpdate,
+
+        /// <summary>
+        /// Command for the force update of all submodules (lose changes)
+        /// </summary>
+        AllUpdateForce,
 
         /// <summary>
         /// Command for pull origin master for all submodules
@@ -44,22 +48,27 @@ namespace GitSubmodules.Enumerations
         /// <summary>
         /// Command for the registration of one submodule
         /// </summary>
-        OneRegister,
+        OneInit,
 
         /// <summary>
         /// Command for the de-registration of one submodule
         /// </summary>
-        OneDeRegister,
+        OneDeinit,
 
         /// <summary>
-        /// Command for the forced de-registration of one submodule
+        /// Command for the forced de-registration of one submodule (lose changes)
         /// </summary>
-        OneDeRegisterForce,
+        OneDeinitForce,
 
         /// <summary>
         /// Command for the update of one submodule
         /// </summary>
         OneUpdate,
+
+        /// <summary>
+        /// Command for the fore update of one submodule (lose changes)
+        /// </summary>
+        OneUpdateForce,
 
         /// <summary>
         /// Command for pull origin master of one submodule

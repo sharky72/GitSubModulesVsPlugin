@@ -26,35 +26,41 @@ namespace GitSubmodules.Helper
                 case SubModuleCommand.AllStatus:
                     return "submodule status";
 
-                case SubModuleCommand.AllRegister:
+                case SubModuleCommand.AllInit:
                     return "submodule init";
 
-                case SubModuleCommand.AllDeRegister:
+                case SubModuleCommand.AllDeinit:
                     return "submodule deinit --all";
 
-                case SubModuleCommand.AllDeRegisterForce:
+                case SubModuleCommand.AllDeinitForce:
                     return "submodule deinit --all --force";
 
                 case SubModuleCommand.AllUpdate:
                     return "submodule update";
 
+                case SubModuleCommand.AllUpdateForce:
+                    return "submodule update --force";
+
                 case SubModuleCommand.AllPullOriginMaster:
-                    return "foreach command is still broken under windows";
+                    return "FOREACH command is still broken under windows";
 
                 case SubModuleCommand.OneStatus:
                     return "submodule status " + submoduleName;
 
-                case SubModuleCommand.OneRegister:
+                case SubModuleCommand.OneInit:
                     return "submodule init " + submoduleName;
 
-                case SubModuleCommand.OneDeRegister:
+                case SubModuleCommand.OneDeinit:
                     return "submodule deinit " + submoduleName;
 
-                case SubModuleCommand.OneDeRegisterForce:
+                case SubModuleCommand.OneDeinitForce:
                     return "submodule deinit --force " + submoduleName;
 
                 case SubModuleCommand.OneUpdate:
                     return "submodule update " + submoduleName;
+
+                case SubModuleCommand.OneUpdateForce:
+                    return "submodule update --force " + submoduleName;
 
                 case SubModuleCommand.OnePullOriginMaster:
                     return "pull origin master";
