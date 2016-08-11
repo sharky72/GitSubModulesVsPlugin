@@ -49,6 +49,9 @@ namespace GitSubmodules
             }
 
             dte.Events.WindowEvents.WindowActivated += delegate { window.UpdateDte2(dte); };
+
+            dte.Events.SolutionEvents.BeforeClosing += () => window.UpdateDte2(dte);
+            dte.Events.SolutionEvents.Opened        += () => window.UpdateDte2(dte);
         }
 
         #endregion Package Members
