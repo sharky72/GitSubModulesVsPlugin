@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using EnvDTE;
 using GitSubmodules.Helper;
@@ -39,6 +40,19 @@ namespace GitSubmodules.Mvvm.Model
             }
         }
 
+        /// <summary>
+        /// The <see cref="Version"/> of the current installed git version
+        /// </summary>
+        public string GitVersion
+        {
+            get { return _gitVersion; }
+            internal set
+            {
+                _gitVersion = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion Public Properties
 
         #region Internal Fields
@@ -68,6 +82,11 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         internal AutoResetEvent WaitingTimer;
 
+        /// <summary>
+        /// Indicate that Git is present
+        /// </summary>
+        internal bool GitIsPresent;
+
         #endregion Internal Fields
 
         #region Private Backing-Fields
@@ -81,6 +100,11 @@ namespace GitSubmodules.Mvvm.Model
         /// The Backing-field for <see cref="CurrentSolutionPath"/>
         /// </summary>
         private string _currentSolutionPath;
+
+        /// <summary>
+        /// The Backing-field for <see cref="GitVersion"/>
+        /// </summary>
+        private string _gitVersion;
 
         #endregion Private Backing-Fields
     }

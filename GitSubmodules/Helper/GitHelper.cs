@@ -65,6 +65,9 @@ namespace GitSubmodules.Helper
                 case SubModuleCommand.OnePullOriginMaster:
                     return "pull origin master";
 
+                case SubModuleCommand.OtherGitVersion:
+                    return "--version";
+
                 default:
                     return string.Empty;
             }

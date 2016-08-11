@@ -39,7 +39,13 @@ namespace GitSubmodules.Mvvm.ViewModel
                 ListOfSubmodules    = new Collection<Submodule>(),
                 CanExecuteCommand   = true,
                 WaitingTimer        = new AutoResetEvent(false),
+                GitVersion          = "Git is not present, please install"
             };
+
+            if(!Model.GitIsPresent)
+            {
+                DoStartGit(null, SubModuleCommand.OtherGitVersion);
+            }
 
             Content = new MainView(this);
         }
@@ -229,6 +235,28 @@ namespace GitSubmodules.Mvvm.ViewModel
                     }
                 }
 
+                if(submoduleCommand == SubModuleCommand.OtherGitVersion)
+                {
+                    WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
+
+                    if(string.IsNullOrEmpty(consoleOutput))
+                    {
+                        WriteToOutputWindow(Category.Error, "Can't get version number from git");
+                        return;
+                    }
+
+                    var versionNumberString = consoleOutput.Split(' ').LastOrDefault();
+                    if(string.IsNullOrEmpty(versionNumberString))
+                    {
+                        WriteToOutputWindow(Category.Error, "Can't parse version number from git");
+                        return;
+                    }
+
+                    Model.GitVersion = versionNumberString;
+                    Model.GitIsPresent = true;
+                    Model.WaitingTimer.Set();
+                }
+
                 if(submoduleCommand == SubModuleCommand.OnePullOriginMaster)
                 {
                     WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
@@ -395,7 +423,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                 return;
             }
 
-            if(!CheckSolutionIsAGitRepository())
+            if(!CheckSolutionIsAGitRepository() || !Model.GitIsPresent)
             {
                 return;
             }

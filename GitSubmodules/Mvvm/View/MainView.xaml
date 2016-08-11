@@ -18,8 +18,13 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="1" Margin="5">
+
+            <TextBlock FontWeight="Bold" Text="Git Version" />
+            <TextBlock Text="{Binding Model.GitVersion}" />
+
             <TextBlock FontWeight="Bold" Text="Solution path" />
             <TextBlock Text="{Binding Model.CurrentSolutionPath}" TextWrapping="Wrap" />
+
         </StackPanel>
 
         <Grid Grid.Row="3" Margin="5">

@@ -73,6 +73,11 @@
         /// <summary>
         /// Command for pull origin master of one submodule
         /// </summary>
-        OnePullOriginMaster
+        OnePullOriginMaster,
+
+        /// <summary>
+        /// Commd to check the current installed git version
+        /// </summary>
+        OtherGitVersion
     }
 }
