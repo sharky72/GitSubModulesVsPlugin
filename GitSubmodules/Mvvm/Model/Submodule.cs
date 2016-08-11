@@ -173,6 +173,13 @@ namespace GitSubmodules.Mvvm.Model
 
             var gitConfigFilePath = Path.Combine(solutionPath, ".git", "config");
 
+            if(!File.Exists(gitConfigFilePath))
+            {
+                Status     = SubModuleStatus.Unknown;
+                StatusText = "Git config file not found";
+                return;
+            }
+
             try
             {
                 using(var streamReader = new StreamReader(File.Open(gitConfigFilePath, FileMode.Open, FileAccess.Read)))
