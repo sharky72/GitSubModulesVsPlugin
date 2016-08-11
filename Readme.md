@@ -25,8 +25,14 @@ This Visual Studio plugin is for users that need a easier way to handle with Git
  - Last commit Id (SHA-1 or Tag) of the submodule
  - Status of the submodule
 
+##Right-click options for a submodule
+- Open in File-Explorer
+- Init
+- Deinit (Force)
+- Update (Force)
+- Pull origin master
+ 
 ##Other features
-- Open in File-Explorer (right-click on a submodule)
 - Debug and error messages will be written on a separate output window
 - The output window is automatical actiavte on the first use and when a error occures
 
