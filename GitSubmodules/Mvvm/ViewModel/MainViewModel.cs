@@ -482,6 +482,13 @@ namespace GitSubmodules.Mvvm.ViewModel
             Model.OutputPane.OutputString(category != Category.EmptyLine
                 ? string.Format("{0:HH:mm:ss} - {1:00} - {2} : {3}\n", DateTime.Now, Model.GitCounter, category, message)
                 : "\n");
+
+            if(category != Category.Error)
+            {
+                return;
+            }
+
+            Model.OutputPane.Activate();
         }
 
         #endregion Internal Methods
