@@ -4,10 +4,10 @@
 This Visual Studio plugin is for users that need a easier way to handle with Git submodules inside Visual Studio.
 
 ##How to
-1. Grab from [Visual Studio extension site](https://visualstudiogallery.msdn.microsoft.com/0e71baf2-2d0b-44f9-8172-d27df583ad20) or over Visual Studio extension manager or [direct from this repository](https://github.com/Dark-Water/GitSubModulesVsPlugin/tree/master/VSIX%20for%20Testers)
+1. Grab from [Visual Studio extension site](https://visualstudiogallery.msdn.microsoft.com/0e71baf2-2d0b-44f9-8172-d27df583ad20) or over Visual Studio extension manager ([direct from this repository](https://github.com/Dark-Water/GitSubModulesVsPlugin/tree/master/VSIX%20for%20Testers)
 2. Install VSIX 
 3. Restart Visual Studio
-4. Menu -> View -> Additional Windows -> Git Submodules
+4. Menu -> View -> Other Windows -> Git Submodules
 
 ##Supported Git functions for each and all submodules
 * Status
@@ -16,10 +16,19 @@ This Visual Studio plugin is for users that need a easier way to handle with Git
 * Update (Force)
 * Pull origin master
 
+##Shown information
+- Git version
+- Path to the current open solution
+- Submodules of this repository
+ - Name of the Submodule
+ - Id (SHA-1) of the submodule
+ - Last commit Id (SHA-1 or Tag) of the submodule
+ - Status of the submodule
+
 ##Other features
 - Open in File-Explorer (right-click on a submodule)
 - Debug and error messages will be written on a separate output window
-- The output window is only grab on the first use on the panel
+- The output window is automatical actiavte on the first use and when a error occures
 
 ##Pictures
 ![picture](picture2.png)
