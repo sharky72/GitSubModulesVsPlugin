@@ -132,6 +132,35 @@
                                         <MenuItem Click="SubmoduleOpenFolder"
                                                   Header="Open in File-Explorer"
                                                   Tag="{Binding}" />
+
+                                        <Separator />
+
+                                        <MenuItem Click="SubmoduleInit"
+                                                  Header="Init"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="SubmoduleDeinit"
+                                                  Header="Deinit"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="SubmoduleDeinitForce"
+                                                  Header="Force Deinit"
+                                                  Tag="{Binding}" />
+
+                                        <Separator />
+
+                                        <MenuItem Click="SubmoduleUpdate"
+                                                  Header="Update"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="SubmoduleUpdateForce"
+                                                  Header="Force Update"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="SubmodulePullOriginMaster"
+                                                  Header="Pull origin master"
+                                                  Tag="{Binding}" />
+
                                     </ContextMenu>
                                 </Grid.ContextMenu>
 
