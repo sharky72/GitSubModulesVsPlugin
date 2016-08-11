@@ -36,9 +36,9 @@ namespace GitSubmodules.Mvvm.ViewModel
 
             Model = new MainModel
             {
-                ListOfSubmodules   = new Collection<Submodule>(),
-                CanExecuteCommand  = true,
-                WaitingTimer       = new AutoResetEvent(false)
+                ListOfSubmodules    = new Collection<Submodule>(),
+                CanExecuteCommand   = true,
+                WaitingTimer        = new AutoResetEvent(false),
             };
 
             Content = new MainView(this);
@@ -386,6 +386,7 @@ namespace GitSubmodules.Mvvm.ViewModel
             Model.ListOfSubmodules        = null;
             Model.CanExecuteCommand       = false;
             Model.CurrentSolutionFullName = dte2.Solution.FullName;
+            Model.CurrentSolutionPath     = "No solution opend";
             Model.GitCounter++;
 
             if(string.IsNullOrEmpty(Model.CurrentSolutionFullName))
@@ -459,7 +460,7 @@ namespace GitSubmodules.Mvvm.ViewModel
 
             if(!Directory.Exists(".git"))
             {
-                WriteToOutputWindow(Category.Debug, "Solution is not Git repository");
+                WriteToOutputWindow(Category.Debug, "Solution is not a Git repository");
                 return false;
             }
 
