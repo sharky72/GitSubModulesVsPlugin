@@ -356,12 +356,14 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// <param name="submodule">The <see cref="Submodule"/> these folder should be open</param>
         internal void DoOpenFolder(Submodule submodule)
         {
-            if((submodule == null) || string.IsNullOrEmpty(submodule.Name) || string.IsNullOrEmpty(Model.CurrentSolutionPath))
+            if(string.IsNullOrEmpty(Model.CurrentSolutionPath))
             {
                 return;
             }
 
-            var folderToOpen = Path.Combine(Model.CurrentSolutionPath, submodule.Name);
+            var folderToOpen = (submodule != null) && !string.IsNullOrEmpty(submodule.Name)
+                ? Path.Combine(Model.CurrentSolutionPath, submodule.Name)
+                : Model.CurrentSolutionPath;
 
             if(!Directory.Exists(folderToOpen))
             {

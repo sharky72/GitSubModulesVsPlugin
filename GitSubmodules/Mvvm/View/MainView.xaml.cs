@@ -35,6 +35,13 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleOpenFolder(object sender, RoutedEventArgs e)
         {
+            var frameworkContentElement = sender as FrameworkContentElement;
+            if(frameworkContentElement != null)
+            {
+                ViewModel.DoOpenFolder(frameworkContentElement.Tag as Submodule);
+                return;
+            }
+
             var frameworkElement = sender as FrameworkElement;
             if(frameworkElement == null)
             {
