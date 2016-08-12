@@ -67,7 +67,9 @@ namespace GitSubmodules.Mvvm.Model
             Name     = lineSplit.ElementAtOrDefault(1) ?? "???";
             CommitId = lineSplit.ElementAtOrDefault(2) ?? "???";
 
-            Id = !string.IsNullOrEmpty(Id) ? Id = Id.Substring(1, Id.Length - 1) : "???";
+            Id = !string.IsNullOrEmpty(Id)
+                    ? Id.Replace('U', '').Replace('+','').Replace('-','')
+                    : "???";
 
             if(!string.IsNullOrEmpty(CommitId))
             {
