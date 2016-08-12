@@ -230,8 +230,21 @@ namespace GitSubmodules.Mvvm.ViewModel
                             WriteToOutputWindow(Category.Error, reader.ReadToEnd().TrimEnd());
                             Model.CanExecuteCommand = true;
                             Model.WaitingTimer.Set();
-                            return;
                         }
+
+                        if(submodule != null)
+                        {
+                            submodule.UpdateHealthStatus(HealthStatus.Error);
+                        }
+                        else
+                        {
+                            foreach(var module in Model.ListOfSubmodules)
+                            {
+                                module.UpdateHealthStatus(HealthStatus.Error);
+                            }
+                        }
+
+                        return;
                     }
                 }
 

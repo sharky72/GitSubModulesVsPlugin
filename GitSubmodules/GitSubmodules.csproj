@@ -107,6 +107,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enumerations\HealthStatus.cs" />
     <Compile Include="Enumerations\MessageCategory.cs" />
     <Compile Include="Enumerations\SubModuleCommands.cs" />
     <Compile Include="Enumerations\SubModuleStatus.cs" />
@@ -157,6 +158,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <EmbeddedResource Include="Resources\HealthStatus\Error.png" />
+    <EmbeddedResource Include="Resources\HealthStatus\Okay.png" />
+    <EmbeddedResource Include="Resources\HealthStatus\Unknown.png" />
+    <EmbeddedResource Include="Resources\HealthStatus\Warning.png" />
     <Content Include="Resources\miniPicture.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>

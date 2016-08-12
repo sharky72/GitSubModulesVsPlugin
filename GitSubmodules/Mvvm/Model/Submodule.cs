@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using GitSubmodules.Enumerations;
 using GitSubmodules.Helper;
 
@@ -44,7 +48,29 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public string StatusText { get; private set; }
 
+        /// <summary>
+        /// The <see cref="Image"/> for the health status of this <see cref="Submodule"/>
+        /// </summary>
+        public BitmapSource HealthImage
+        {
+            get { return _healthImage; }
+            private set
+            {
+                _healthImage = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion Public Properties
+
+        #region Private Fields
+
+        /// <summary>
+        /// The Backing-field for <see cref="HealthImage"/>
+        /// </summary>
+        private BitmapSource _healthImage;
+
+        #endregion Private Fields
 
         #region Internal Constructor
 
@@ -80,7 +106,10 @@ namespace GitSubmodules.Mvvm.Model
             }
 
             SetSubModuleStatus(solutionPath, subModuleInformation);
+
             SetBackgroundColor();
+
+            UpdateHealthStatus(HealthStatus.Okay);
         }
 
         #endregion Internal Constructor
@@ -204,6 +233,60 @@ namespace GitSubmodules.Mvvm.Model
             {
                 Status     = SubModuleStatus.Unknown;
                 StatusText = exception.Message;
+            }
+        }
+
+        internal void UpdateHealthStatus(HealthStatus healthStatus)
+        {
+            string healthImageFile;
+
+            switch(healthStatus)
+            {
+                case HealthStatus.Unknown:
+                    healthImageFile = "Unknown.png";
+                    break;
+
+                case HealthStatus.Okay:
+                    healthImageFile = "Okay.png";
+                    break;
+
+                case HealthStatus.Warning:
+                    healthImageFile = "Warning.png";
+                    break;
+
+                case HealthStatus.Error:
+                    healthImageFile = "Error.png";
+                    break;
+
+                default:
+                    healthImageFile = "Unknown.png";
+                    break;
+            }
+
+            var resourceName = Assembly.GetExecutingAssembly()
+                                       .GetManifestResourceNames()
+                                       .FirstOrDefault(found => found.Contains(healthImageFile));
+
+            if(string.IsNullOrEmpty(resourceName))
+            {
+                return;
+            }
+
+            try
+            {
+                using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+                {
+                    if(stream == null)
+                    {
+                        return;
+                    }
+
+                    HealthImage = BitmapFrame.Create(stream);
+                }
+            }
+            catch(Exception exception)
+            {
+                Debug.WriteLine(exception.ToString());
             }
         }
 
