@@ -59,7 +59,7 @@
 
       <Button guid="guidVSPackage3CmdSet" id="cmdidMyTool" priority="0x0100" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
-        <Icon guid="guidImages" id="bmpPic2" />
+        <Icon guid="guidImages"   id="bmpPic1" />
         <Strings>
           <ButtonText>Git Submodules</ButtonText>
         </Strings>
@@ -75,7 +75,7 @@
             bitmap strip containing the bitmaps and then there are the numeric ids of the elements used 
             inside a button definition. An important aspect of this declaration is that the element id 
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
-      <Bitmap guid="guidImages" href="Resources\Images.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows"/>
+      <Bitmap guid="guidImages" href="Resources\Git-Icon.png" usedList="bmpPic1"/>
       
     </Bitmaps>
  
@@ -91,20 +91,12 @@
     
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidVSPackage3CmdSet" value="{f9b0e65c-ca09-47e7-83c5-f79cbf304af2}">
-
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="cmdidMyTool" value="0x0101" />
     </GuidSymbol>
     
-    
-    
     <GuidSymbol name="guidImages" value="{8ce24c2e-0084-4df6-a162-be48aa2a5ec6}" >
       <IDSymbol name="bmpPic1" value="1" />
-      <IDSymbol name="bmpPic2" value="2" />
-      <IDSymbol name="bmpPicSearch" value="3" />
-      <IDSymbol name="bmpPicX" value="4" />
-      <IDSymbol name="bmpPicArrows" value="5" />
-      <IDSymbol name="bmpPicStrikethrough" value="6" />
     </GuidSymbol>
   </Symbols>
 
