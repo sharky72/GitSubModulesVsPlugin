@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace GitSubmodules.Helper
 {
@@ -23,9 +22,9 @@ namespace GitSubmodules.Helper
         /// Call the <see cref="PropertyChangedEventHandler"/> event to update a surface element
         /// </summary>
         /// <param name="propertyName">The property that should be update on the surface</param>
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged(string propertyName)
         {
-            if ((PropertyChanged == null) || string.IsNullOrEmpty(propertyName))
+            if((PropertyChanged == null) || string.IsNullOrEmpty(propertyName))
             {
                 return;
             }
