@@ -18,10 +18,10 @@ This Visual Studio plugin is for users that need a easier way to handle with Git
 
 ##Shown information
 - Git version
-- Path to the current open solution
+- Path to the current open solution (clickable -> Open in File-Explorer)
 - Submodules of this repository
- - Status of the last action (git command)
- - Name of the Submodule
+ - Status of the last action
+ - Name of the Submodule (clickable -> Open in File-Explorer)
  - Id (SHA-1) of the submodule
  - Last commit Id (SHA-1 or Tag) of the submodule
  - Status of the submodule
@@ -39,7 +39,10 @@ This Visual Studio plugin is for users that need a easier way to handle with Git
 - The output window is automatical actiavte on the first use and when a error occures
 
 ##Pictures
+On blue theme
 ![picture](picture2.png)
+
+On dark theme
 ![picture](picture3.png)
 
 ##System requirements
