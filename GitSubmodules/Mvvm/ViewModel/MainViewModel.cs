@@ -7,18 +7,18 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using EnvDTE80;
 using GitSubmodules.Enumerations;
 using GitSubmodules.Helper;
 using GitSubmodules.Mvvm.Model;
 using GitSubmodules.Mvvm.View;
 using GitSubmodules.Other;
+using Microsoft.VisualStudio.PlatformUI;
 
 namespace GitSubmodules.Mvvm.ViewModel
 {
     [Guid(GuidList.GuidToolWindowPersistenceString)]
-    public sealed class MainViewModel : Microsoft.VisualStudio.Shell.ToolWindowPane
+    public sealed partial class MainViewModel : Microsoft.VisualStudio.Shell.ToolWindowPane
     {
         #region Public Properties
 
@@ -36,136 +36,27 @@ namespace GitSubmodules.Mvvm.ViewModel
 
             Model = new MainModel
             {
-                ListOfSubmodules   = new Collection<Submodule>(),
-                CanExecuteCommand  = true,
-                WaitingTimer       = new AutoResetEvent(false)
+                ListOfSubmodules  = new Collection<Submodule>(),
+                CanExecuteCommand = true,
+                WaitingTimer      = new AutoResetEvent(false),
+                GitVersion        = "Git is not present, please install",
+                Foreground        = ColorHelper.GetThemedBrush(EnvironmentColors.ToolWindowTextColorKey)
+            };
+
+            if(!Model.GitIsPresent)
+            {
+                DoStartGit(null, SubModuleCommand.OtherGitVersion);
+            }
+
+            VSColorTheme.ThemeChanged += delegate
+            {
+                Model.Foreground = ColorHelper.GetThemedBrush(EnvironmentColors.ToolWindowTextColorKey);
             };
 
             Content = new MainView(this);
         }
 
         #endregion Internal Constructor
-
-        #region Commmands
-
-        public ICommand CommandAllStatus
-        {
-            get
-            {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllStatus),
-                                        param => Model.CanExecuteCommand);
-            }
-        }
-
-        public ICommand CommandAllInit
-        {
-            get
-            {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllInit),
-                                        param => Model.CanExecuteCommand);
-            }
-        }
-
-        public ICommand CommandAllDeinit
-        {
-            get
-            {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllDeinit),
-                                        param => Model.CanExecuteCommand);
-            }
-        }
-
-        public ICommand CommandAllDeinitForce
-        {
-            get
-            {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllDeinitForce),
-                                        param => Model.CanExecuteCommand);
-            }
-        }
-
-        public ICommand CommandAllUpdate
-        {
-            get
-            {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllUpdate),
-                                        param => Model.CanExecuteCommand);
-            }
-        }
-
-        public ICommand CommandAllUpdateForce
-        {
-            get
-            {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllUpdateForce),
-                                        param => Model.CanExecuteCommand);
-            }
-        }
-
-        public ICommand CommandAllPullOriginMaster
-        {
-            get
-            {
-                return new RelayCommand(param => DoAllPullOriginMaster(null),
-                                        param => Model.CanExecuteCommand);
-            }
-        }
-
-        public ICommand CommandOneInit
-        {
-            get
-            {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.OneInit),
-                                        param => Model.CanExecuteCommand);
-            }
-        }
-
-        public ICommand CommandOneDeinit
-        {
-            get
-            {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.OneDeinit),
-                                        param => Model.CanExecuteCommand);
-            }
-        }
-
-        public ICommand CommandOneDeinitForce
-        {
-            get
-            {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.OneDeinitForce),
-                                        param => Model.CanExecuteCommand);
-            }
-        }
-
-        public ICommand CommandOneUpdate
-        {
-            get
-            {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.OneUpdate),
-                                        param => Model.CanExecuteCommand);
-            }
-        }
-
-        public ICommand CommandOneUpdateForce
-        {
-            get
-            {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.OneUpdateForce),
-                                        param => Model.CanExecuteCommand);
-            }
-        }
-
-        public ICommand CommandOnePullOriginMaster
-        {
-            get
-            {
-                return new RelayCommand(param => DoAllPullOriginMaster(param as Submodule),
-                                        param => Model.CanExecuteCommand);
-            }
-        }
-
-        #endregion Commands
 
         #region Command Methods
 
@@ -224,9 +115,44 @@ namespace GitSubmodules.Mvvm.ViewModel
                             WriteToOutputWindow(Category.Error, reader.ReadToEnd().TrimEnd());
                             Model.CanExecuteCommand = true;
                             Model.WaitingTimer.Set();
-                            return;
                         }
+
+                        if(submodule != null)
+                        {
+                            submodule.UpdateHealthStatus(HealthStatus.Error);
+                        }
+                        else
+                        {
+                            foreach(var module in Model.ListOfSubmodules)
+                            {
+                                module.UpdateHealthStatus(HealthStatus.Error);
+                            }
+                        }
+
+                        return;
                     }
+                }
+
+                if(submoduleCommand == SubModuleCommand.OtherGitVersion)
+                {
+                    WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
+
+                    if(string.IsNullOrEmpty(consoleOutput))
+                    {
+                        WriteToOutputWindow(Category.Error, "Can't get version number from git");
+                        return;
+                    }
+
+                    var versionNumberString = consoleOutput.Split(' ').LastOrDefault();
+                    if(string.IsNullOrEmpty(versionNumberString))
+                    {
+                        WriteToOutputWindow(Category.Error, "Can't parse version number from git");
+                        return;
+                    }
+
+                    Model.GitVersion = versionNumberString;
+                    Model.GitIsPresent = true;
+                    Model.WaitingTimer.Set();
                 }
 
                 if(submoduleCommand == SubModuleCommand.OnePullOriginMaster)
@@ -328,12 +254,14 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// <param name="submodule">The <see cref="Submodule"/> these folder should be open</param>
         internal void DoOpenFolder(Submodule submodule)
         {
-            if((submodule == null) || string.IsNullOrEmpty(submodule.Name) || string.IsNullOrEmpty(Model.CurrentSolutionPath))
+            if(string.IsNullOrEmpty(Model.CurrentSolutionPath))
             {
                 return;
             }
 
-            var folderToOpen = Path.Combine(Model.CurrentSolutionPath, submodule.Name);
+            var folderToOpen = (submodule != null) && !string.IsNullOrEmpty(submodule.Name)
+                ? Path.Combine(Model.CurrentSolutionPath, submodule.Name)
+                : Model.CurrentSolutionPath;
 
             if(!Directory.Exists(folderToOpen))
             {
@@ -386,6 +314,7 @@ namespace GitSubmodules.Mvvm.ViewModel
             Model.ListOfSubmodules        = null;
             Model.CanExecuteCommand       = false;
             Model.CurrentSolutionFullName = dte2.Solution.FullName;
+            Model.CurrentSolutionPath     = "No solution opend";
             Model.GitCounter++;
 
             if(string.IsNullOrEmpty(Model.CurrentSolutionFullName))
@@ -394,7 +323,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                 return;
             }
 
-            if(!CheckSolutionIsAGitRepository())
+            if(!CheckSolutionIsAGitRepository() || !Model.GitIsPresent)
             {
                 return;
             }
@@ -459,7 +388,7 @@ namespace GitSubmodules.Mvvm.ViewModel
 
             if(!Directory.Exists(".git"))
             {
-                WriteToOutputWindow(Category.Debug, "Solution is not Git repository");
+                WriteToOutputWindow(Category.Debug, "Solution is not a Git repository");
                 return false;
             }
 
@@ -482,6 +411,13 @@ namespace GitSubmodules.Mvvm.ViewModel
             Model.OutputPane.OutputString(category != Category.EmptyLine
                 ? string.Format("{0:HH:mm:ss} - {1:00} - {2} : {3}\n", DateTime.Now, Model.GitCounter, category, message)
                 : "\n");
+
+            if(category != Category.Error)
+            {
+                return;
+            }
+
+            Model.OutputPane.Activate();
         }
 
         #endregion Internal Methods

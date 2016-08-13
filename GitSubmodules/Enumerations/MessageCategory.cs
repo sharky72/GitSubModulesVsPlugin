@@ -1,4 +1,5 @@
-﻿namespace GitSubmodules.Enumerations
+﻿
+namespace GitSubmodules.Enumerations
 {
     /// <summary>
     /// Category for a message on the output console

@@ -18,8 +18,27 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="1" Margin="5">
-            <TextBlock FontWeight="Bold" Text="Solution path" />
-            <TextBlock Text="{Binding Model.CurrentSolutionPath}" TextWrapping="Wrap" />
+
+            <TextBlock FontWeight="Bold"
+                       Foreground="{Binding Model.Foreground}"
+                       Text="Git Version" />
+
+            <TextBlock Foreground="{Binding Model.Foreground}" Text="{Binding Model.GitVersion}" />
+
+            <TextBlock FontWeight="Bold"
+                       Foreground="{Binding Model.Foreground}"
+                       Text="Solution path" />
+
+            <TextBlock>
+                <Hyperlink NavigateUri="http://nothing.not/" RequestNavigate="SubmoduleOpenFolder">
+
+                    <TextBlock Foreground="{Binding Model.Foreground}"
+                               Text="{Binding Model.CurrentSolutionPath}"
+                               TextWrapping="Wrap" />
+
+                </Hyperlink>
+            </TextBlock>
+
         </StackPanel>
 
         <Grid Grid.Row="3" Margin="5">
@@ -127,16 +146,60 @@
                                         <MenuItem Click="SubmoduleOpenFolder"
                                                   Header="Open in File-Explorer"
                                                   Tag="{Binding}" />
+
+                                        <Separator />
+
+                                        <MenuItem Click="SubmoduleInit"
+                                                  Header="Init"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="SubmoduleDeinit"
+                                                  Header="Deinit"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="SubmoduleDeinitForce"
+                                                  Header="Force Deinit"
+                                                  Tag="{Binding}" />
+
+                                        <Separator />
+
+                                        <MenuItem Click="SubmoduleUpdate"
+                                                  Header="Update"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="SubmoduleUpdateForce"
+                                                  Header="Force Update"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="SubmodulePullOriginMaster"
+                                                  Header="Pull origin master"
+                                                  Tag="{Binding}" />
+
                                     </ContextMenu>
                                 </Grid.ContextMenu>
 
-                                <TextBlock Grid.Row="1"
-                                           Grid.Column="1"
-                                           VerticalAlignment="Center"
-                                           FontWeight="Bold"
-                                           Text="{Binding Name,
-                                                          Mode=OneWay}"
-                                           TextTrimming="CharacterEllipsis" />
+                                <StackPanel Grid.Row="1"
+                                            Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+
+                                    <Image Source="{Binding HealthImage}" />
+
+                                    <TextBlock Margin="5,0,0,0">
+                                        <Hyperlink NavigateUri="http://nothing.not/"
+                                                   RequestNavigate="SubmoduleOpenFolder"
+                                                   Tag="{Binding}">
+
+                                            <TextBlock FontWeight="Bold"
+                                                       Foreground="Black"
+                                                       Text="{Binding Name,
+                                                                      Mode=OneWay}"
+                                                       TextTrimming="CharacterEllipsis" />
+
+                                        </Hyperlink>
+                                    </TextBlock>
+
+                                </StackPanel>
 
                                 <Button Grid.Row="1"
                                         Grid.Column="3"

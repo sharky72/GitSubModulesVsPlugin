@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Program Files %28x86%29\Microsoft Visual Studio 12.0\Common7\IDE\devenv.exe</StartProgram>
+    <StartArguments>/rootsuffix Exp</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,6 +43,9 @@
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <Prefer32Bit>false</Prefer32Bit>
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Program Files %28x86%29\Microsoft Visual Studio 12.0\Common7\IDE\devenv.exe</StartProgram>
+    <StartArguments>/rootsuffix Exp</StartArguments>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="envdte80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -68,6 +74,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
     <Reference Include="WindowsBase" />
     <Reference Include="System.Xaml" />
   </ItemGroup>
@@ -101,14 +108,17 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enumerations\HealthStatus.cs" />
     <Compile Include="Enumerations\MessageCategory.cs" />
     <Compile Include="Enumerations\SubModuleCommands.cs" />
     <Compile Include="Enumerations\SubModuleStatus.cs" />
+    <Compile Include="Helper\ColorHelper.cs" />
     <Compile Include="Helper\GitHelper.cs" />
     <Compile Include="Helper\ModelBase.cs" />
     <Compile Include="Mvvm\Model\MainModel.cs" />
     <Compile Include="Mvvm\Model\Submodule.cs" />
     <Compile Include="Helper\RelayCommand.cs" />
+    <Compile Include="Mvvm\ViewModel\MainViewModelCommands.cs" />
     <Compile Include="Mvvm\View\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -144,6 +154,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\Git-Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <EmbeddedResource Include="Resources\HealthStatus\Error.png" />
+    <EmbeddedResource Include="Resources\HealthStatus\Okay.png" />
+    <EmbeddedResource Include="Resources\HealthStatus\Unknown.png" />
+    <EmbeddedResource Include="Resources\HealthStatus\Warning.png" />
+    <Content Include="Resources\miniPicture.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

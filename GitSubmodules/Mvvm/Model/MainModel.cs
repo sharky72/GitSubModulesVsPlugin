@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
+using System.Windows.Media;
 using EnvDTE;
 using GitSubmodules.Helper;
 using GitSubmodules.Mvvm.ViewModel;
@@ -39,6 +41,32 @@ namespace GitSubmodules.Mvvm.Model
             }
         }
 
+        /// <summary>
+        /// The <see cref="Version"/> of the current installed git version
+        /// </summary>
+        public string GitVersion
+        {
+            get { return _gitVersion; }
+            internal set
+            {
+                _gitVersion = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// The main forground color for all text elements
+        /// </summary>
+        public Brush Foreground
+        {
+            get { return _foreground; }
+            internal set
+            {
+                _foreground = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion Public Properties
 
         #region Internal Fields
@@ -68,6 +96,11 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         internal AutoResetEvent WaitingTimer;
 
+        /// <summary>
+        /// Indicate that Git is present
+        /// </summary>
+        internal bool GitIsPresent;
+
         #endregion Internal Fields
 
         #region Private Backing-Fields
@@ -81,6 +114,16 @@ namespace GitSubmodules.Mvvm.Model
         /// The Backing-field for <see cref="CurrentSolutionPath"/>
         /// </summary>
         private string _currentSolutionPath;
+
+        /// <summary>
+        /// The Backing-field for <see cref="GitVersion"/>
+        /// </summary>
+        private string _gitVersion;
+
+        /// <summary>
+        /// The Backing-field for <see cref="Foreground"/>
+        /// </summary>
+        private Brush _foreground;
 
         #endregion Private Backing-Fields
     }
