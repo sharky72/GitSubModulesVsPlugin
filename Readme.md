@@ -4,7 +4,7 @@
 This Visual Studio plugin is for users that need a easier way to handle with Git submodules inside Visual Studio.
 
 ##How to
-1. Grab from [Visual Studio extension site](https://visualstudiogallery.msdn.microsoft.com/0e71baf2-2d0b-44f9-8172-d27df583ad20) or over Visual Studio extension manager ([direct from this repository](https://github.com/Dark-Water/GitSubModulesVsPlugin/tree/master/VSIX%20for%20Testers)
+1. Download from [Visual Studio extension site](https://visualstudiogallery.msdn.microsoft.com/0e71baf2-2d0b-44f9-8172-d27df583ad20) or over Visual Studio extension manager ([or direct](https://github.com/Dark-Water/GitSubModulesVsPlugin/tree/master/VSIX%20for%20Testers))
 2. Install VSIX 
 3. Restart Visual Studio
 4. Menu -> View -> Other Windows -> Git Submodules
