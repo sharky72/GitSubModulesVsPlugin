@@ -20,6 +20,7 @@ This Visual Studio plugin is for users that need a easier way to handle with Git
 - Git version
 - Path to the current open solution
 - Submodules of this repository
+ - Status of the last action (git command)
  - Name of the Submodule
  - Id (SHA-1) of the submodule
  - Last commit Id (SHA-1 or Tag) of the submodule
@@ -32,12 +33,14 @@ This Visual Studio plugin is for users that need a easier way to handle with Git
 - Update (Force)
 - Pull origin master
  
-##Other features
+##Others
+- Supported any used Visual Studio theme
 - Debug and error messages will be written on a separate output window
 - The output window is automatical actiavte on the first use and when a error occures
 
 ##Pictures
 ![picture](picture2.png)
+![picture](picture3.png)
 
 ##System requirements
 * Visual Studio 2013, 2015
