@@ -5,6 +5,8 @@
     <Description xml:space="preserve">Visual Studio plugin for easier handle with Git submodules</Description>
     <MoreInfo>https://github.com/Dark-Water/GitSubModulesVsPlugin</MoreInfo>
     <License>LICENSE.txt</License>
+    <GettingStartedGuide>https://github.com/Dark-Water/GitSubModulesVsPlugin</GettingStartedGuide>
+    <ReleaseNotes>https://github.com/Dark-Water/GitSubModulesVsPlugin/releases</ReleaseNotes>
     <Icon>Resources\Git-Icon.png</Icon>
     <PreviewImage>Resources\miniPicture.png</PreviewImage>
     <Tags>git,submodules</Tags>
