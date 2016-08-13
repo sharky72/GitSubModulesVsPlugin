@@ -12,7 +12,7 @@ namespace GitSubmodules.Helper
         /// <summary>
         /// Run a <see cref="Action"/> asynchronous [exact the same as Task.Run(Action) in .NET Framework 4.5]
         /// </summary>
-        /// <param name="action"></param>
+        /// <param name="action">The <see cref="Action"/> that should be run asynchronous</param>
         internal static void Run(Action action)
         {
             Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
