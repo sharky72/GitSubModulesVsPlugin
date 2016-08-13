@@ -36,22 +36,22 @@ namespace GitSubmodules
             mcs.AddCommand(new MenuCommand(ShowToolWindow, new CommandID(GuidList.GuidVsPackage3CmdSet,
                                                                          Convert.ToInt32(PkgCmdIdList.CmdidMyTool))));
 
-            var window = FindToolWindow(typeof(MainViewModel), 0, true) as MainViewModel;
-            if(window == null)
+            var mainViewModel = FindToolWindow(typeof(MainViewModel), 0, true) as MainViewModel;
+            if(mainViewModel == null)
             {
                 return;
             }
 
-            var dte = GetGlobalService(typeof(DTE)) as DTE2;
-            if(dte == null)
+            var dte2 = GetGlobalService(typeof(DTE)) as DTE2;
+            if(dte2 == null)
             {
                 return;
             }
 
-            dte.Events.WindowEvents.WindowActivated += delegate { window.UpdateDte2(dte); };
+            dte2.Events.WindowEvents.WindowActivated += delegate { mainViewModel.UpdateDte2(dte2); };
 
-            dte.Events.SolutionEvents.BeforeClosing += () => window.UpdateDte2(dte);
-            dte.Events.SolutionEvents.Opened        += () => window.UpdateDte2(dte);
+            dte2.Events.SolutionEvents.BeforeClosing += () => mainViewModel.UpdateDte2(dte2);
+            dte2.Events.SolutionEvents.Opened        += () => mainViewModel.UpdateDte2(dte2);
         }
 
         #endregion Package Members
@@ -76,6 +76,7 @@ namespace GitSubmodules
             {
                 return;
             }
+
 
             ErrorHandler.ThrowOnFailure(vsWindowFrame.Show());
         }
