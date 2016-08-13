@@ -13,6 +13,7 @@ using GitSubmodules.Helper;
 using GitSubmodules.Mvvm.Model;
 using GitSubmodules.Mvvm.View;
 using GitSubmodules.Other;
+using Microsoft.VisualStudio.PlatformUI;
 
 namespace GitSubmodules.Mvvm.ViewModel
 {
@@ -35,16 +36,22 @@ namespace GitSubmodules.Mvvm.ViewModel
 
             Model = new MainModel
             {
-                ListOfSubmodules    = new Collection<Submodule>(),
-                CanExecuteCommand   = true,
-                WaitingTimer        = new AutoResetEvent(false),
-                GitVersion          = "Git is not present, please install"
+                ListOfSubmodules  = new Collection<Submodule>(),
+                CanExecuteCommand = true,
+                WaitingTimer      = new AutoResetEvent(false),
+                GitVersion        = "Git is not present, please install",
+                Foreground        = ColorHelper.GetThemedBrush(EnvironmentColors.ToolWindowTextColorKey)
             };
 
             if(!Model.GitIsPresent)
             {
                 DoStartGit(null, SubModuleCommand.OtherGitVersion);
             }
+
+            VSColorTheme.ThemeChanged += delegate
+            {
+                Model.Foreground = ColorHelper.GetThemedBrush(EnvironmentColors.ToolWindowTextColorKey);
+            };
 
             Content = new MainView(this);
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Windows.Media;
 using EnvDTE;
 using GitSubmodules.Helper;
 using GitSubmodules.Mvvm.ViewModel;
@@ -49,6 +50,19 @@ namespace GitSubmodules.Mvvm.Model
             internal set
             {
                 _gitVersion = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// The main forground color for all text elements
+        /// </summary>
+        public Brush Foreground
+        {
+            get { return _foreground; }
+            internal set
+            {
+                _foreground = value;
                 OnPropertyChanged();
             }
         }
@@ -105,6 +119,11 @@ namespace GitSubmodules.Mvvm.Model
         /// The Backing-field for <see cref="GitVersion"/>
         /// </summary>
         private string _gitVersion;
+
+        /// <summary>
+        /// The Backing-field for <see cref="Foreground"/>
+        /// </summary>
+        private Brush _foreground;
 
         #endregion Private Backing-Fields
     }

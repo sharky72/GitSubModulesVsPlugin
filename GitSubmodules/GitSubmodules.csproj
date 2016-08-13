@@ -74,6 +74,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
     <Reference Include="WindowsBase" />
     <Reference Include="System.Xaml" />
   </ItemGroup>
@@ -111,6 +112,7 @@
     <Compile Include="Enumerations\MessageCategory.cs" />
     <Compile Include="Enumerations\SubModuleCommands.cs" />
     <Compile Include="Enumerations\SubModuleStatus.cs" />
+    <Compile Include="Helper\ColorHelper.cs" />
     <Compile Include="Helper\GitHelper.cs" />
     <Compile Include="Helper\ModelBase.cs" />
     <Compile Include="Mvvm\Model\MainModel.cs" />

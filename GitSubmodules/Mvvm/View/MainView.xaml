@@ -18,17 +18,24 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="1" Margin="5">
-            <TextBlock FontWeight="Bold" Text="Git Version" />
-            <TextBlock Text="{Binding Model.GitVersion}" />
 
-            <TextBlock FontWeight="Bold" Text="Solution path" />
+            <TextBlock FontWeight="Bold"
+                       Foreground="{Binding Model.Foreground}"
+                       Text="Git Version" />
+
+            <TextBlock Foreground="{Binding Model.Foreground}" Text="{Binding Model.GitVersion}" />
+
+            <TextBlock FontWeight="Bold"
+                       Foreground="{Binding Model.Foreground}"
+                       Text="Solution path" />
 
             <TextBlock>
                 <Hyperlink NavigateUri="http://nothing.not/" RequestNavigate="SubmoduleOpenFolder">
 
-                    <TextBlock Foreground="Black"
+                    <TextBlock Foreground="{Binding Model.Foreground}"
                                Text="{Binding Model.CurrentSolutionPath}"
                                TextWrapping="Wrap" />
+
                 </Hyperlink>
             </TextBlock>
 
