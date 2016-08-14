@@ -46,13 +46,16 @@ On dark theme
 ![picture](picture3.png)
 
 ##System requirements
-* Visual Studio 2013, 2015
+* Visual Studio 2012, 2013, 2015
 * [.NET Framework 4.5](https://www.microsoft.com/de-de/download/details.aspx?id=30653)
 * [Git for Windows](https://git-for-windows.github.io/)
 
-##Tested with
-* Visual Studio 2013 Professional, Ultimate (Update 5)
-* Visual Studio 2015 Community, Professional (Update 3)
+##Test matrix
+| Visual Studio | Community / Express      | Professional   | Ultimate       |
+|-------------- | ------------------------ | -------------- | -------------- |
+| 2012          | Extensions not supported | on testing     | Should be work |
+| 2013          | ----------               | **tested**     | **tested**     |
+| 2015          | **tested**               | **tested**     | Should be work |
 
 ##Copyrights and Copylefts
 * Indicator Icons
@@ -60,13 +63,13 @@ On dark theme
  * Licence: Free for commercial use
  * Autor: Andy Gogena
  * Website: http://www.graphicrating.com/
- * Changes: none
+ * Changes: Reduced image dimensions
 * Git Logo 
  * Found: On Git website -> Orange logomark for light backgrounds
  * Licence: [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/)
  * Auto: Jason Long
  * Website: https://git-scm.com/downloads/logos
- * Changes: none
+ * Changes: Reduced image dimensions
 
 ##Whats next?
 * [See milestones inside bugtracker](https://github.com/Dark-Water/GitSubModulesVsPlugin/milestones)
