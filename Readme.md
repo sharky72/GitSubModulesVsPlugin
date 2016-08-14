@@ -63,13 +63,13 @@ On dark theme
  * Licence: Free for commercial use
  * Autor: Andy Gogena
  * Website: http://www.graphicrating.com/
- * Changes: none
+ * Changes: Reduced image dimensions
 * Git Logo 
  * Found: On Git website -> Orange logomark for light backgrounds
  * Licence: [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/)
  * Auto: Jason Long
  * Website: https://git-scm.com/downloads/logos
- * Changes: none
+ * Changes: Reduced image dimensions
 
 ##Whats next?
 * [See milestones inside bugtracker](https://github.com/Dark-Water/GitSubModulesVsPlugin/milestones)
