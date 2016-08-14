@@ -421,6 +421,11 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// or all <see cref="Submodule"/>s</param>
         internal void ChangeHealthStatus(Submodule submodule, HealthStatus healthStatus)
         {
+            if((Model.ListOfSubmodules == null) || !Model.ListOfSubmodules.Any())
+            {
+                return;
+            }
+
             string healthImageFile;
 
             switch(healthStatus)

@@ -55,7 +55,7 @@
 
       <Button guid="guidVSPackage3CmdSet" id="cmdidMyTool" priority="0x0100" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
-        <Icon guid="guidImages"   id="bmpPic1" />
+        <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
           <ButtonText>Git Submodules</ButtonText>
         </Strings>
