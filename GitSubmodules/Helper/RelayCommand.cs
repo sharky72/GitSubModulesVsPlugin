@@ -6,7 +6,7 @@ namespace GitSubmodules.Helper
     /// <summary>
     /// Helper class to easier handle with <see cref="ICommand"/>s
     /// </summary>
-    public sealed class RelayCommand : ICommand
+    internal sealed class RelayCommand : ICommand
     {
         #region Private Fields
 
@@ -30,7 +30,7 @@ namespace GitSubmodules.Helper
         /// </summary>
         /// <param name="execute">The excute <see cref="Action{T}"/> of this command</param>
         /// <param name="canExecute">The <see cref="Predicate{T}"/> of this command</param>
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
+        internal RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
         {
             _execute   = execute;
             _canExecute = canExecute;

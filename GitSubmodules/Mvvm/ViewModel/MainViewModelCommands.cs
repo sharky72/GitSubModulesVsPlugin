@@ -7,8 +7,6 @@ namespace GitSubmodules.Mvvm.ViewModel
 {
     public sealed partial class MainViewModel
     {
-        #region Commmands
-
         public ICommand CommandAllStatus
         {
             get
@@ -125,7 +123,5 @@ namespace GitSubmodules.Mvvm.ViewModel
                                         param => Model.CanExecuteCommand);
             }
         }
-
-        #endregion Commands
     }
 }

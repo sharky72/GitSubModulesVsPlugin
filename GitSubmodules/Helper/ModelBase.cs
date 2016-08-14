@@ -25,7 +25,7 @@ namespace GitSubmodules.Helper
         /// <param name="propertyName">The property that should be update on the surface</param>
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            if ((PropertyChanged == null) || string.IsNullOrEmpty(propertyName))
+            if((PropertyChanged == null) || string.IsNullOrEmpty(propertyName))
             {
                 return;
             }
