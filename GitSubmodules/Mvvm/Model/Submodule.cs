@@ -55,7 +55,7 @@ namespace GitSubmodules.Mvvm.Model
             internal set
             {
                 _healthImage = value;
-                OnPropertyChanged("HealthImage");
+                OnPropertyChanged();
             }
         }
 

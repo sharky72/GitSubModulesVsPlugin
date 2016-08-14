@@ -24,7 +24,7 @@ namespace GitSubmodules.Mvvm.Model
             internal set
             {
                 _listOfSubmodules = value;
-                OnPropertyChanged("ListOfSubmodules");
+                OnPropertyChanged();
             }
         }
 
@@ -37,7 +37,7 @@ namespace GitSubmodules.Mvvm.Model
             internal set
             {
                 _currentSolutionPath= value;
-                OnPropertyChanged("CurrentSolutionPath");
+                OnPropertyChanged();
             }
         }
 
@@ -50,7 +50,7 @@ namespace GitSubmodules.Mvvm.Model
             internal set
             {
                 _gitVersion = value;
-                OnPropertyChanged("GitVersion");
+                OnPropertyChanged();
             }
         }
 
@@ -63,7 +63,7 @@ namespace GitSubmodules.Mvvm.Model
             internal set
             {
                 _foreground = value;
-                OnPropertyChanged("Foreground");
+                OnPropertyChanged();
             }
         }
 

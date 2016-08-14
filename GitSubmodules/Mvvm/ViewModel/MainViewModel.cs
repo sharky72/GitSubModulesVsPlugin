@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using EnvDTE80;
 using GitSubmodules.Enumerations;
@@ -69,7 +70,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// <param name="submoduleCommand">The <see cref="SubModuleCommand"/> for this argument</param>
         internal void DoStartGit(Submodule submodule, SubModuleCommand submoduleCommand)
         {
-            TaskHelper.Run(() =>
+            Task.Run(() =>
             {
                 Model.GitCounter++;
                 Model.CanExecuteCommand = false;
@@ -216,7 +217,7 @@ namespace GitSubmodules.Mvvm.ViewModel
 
             if(submodule == null)
             {
-                TaskHelper.Run(() =>
+                Task.Run(() =>
                 {
                     foreach(var submoduleEntry in Model.ListOfSubmodules)
                     {
@@ -230,7 +231,7 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
             else
             {
-                TaskHelper.Run(() =>
+                Task.Run(() =>
                 {
                     DoStartGit(submodule, SubModuleCommand.OnePullOriginMaster);
                     Model.WaitingTimer.Reset();
