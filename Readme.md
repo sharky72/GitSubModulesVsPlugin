@@ -51,11 +51,11 @@ On dark theme
 * [Git for Windows](https://git-for-windows.github.io/)
 
 ##Test matrix
-| Visual Studio | Community / Express      | Professional   | Ultimate       |
-|-------------- | ------------------------ | -------------- | -------------- |
-| 2012          | Extensions not supported | on testing     | Should be work |
-| 2013          | ----------               | **tested**     | **tested**     |
-| 2015          | **tested**               | **tested**     | Should be work |
+| Visual Studio | Community / Express      | Professional   | Premium        | Ultimate       |
+|-------------- | ------------------------ | -------------- | -------------- | -------------- |
+| 2012          | Extensions not supported | **tested**     | Should be work | Should be work |
+| 2013          | ----------               | **tested**     | Should be work | **tested**     |
+| 2015          | **tested**               | **tested**     | Should be work | Should be work |
 
 ##Copyrights and Copylefts
 * Indicator Icons
