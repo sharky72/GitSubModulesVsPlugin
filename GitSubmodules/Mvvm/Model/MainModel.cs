@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Windows.Controls;
 using System.Windows.Media;
 using EnvDTE;
 using GitSubmodules.Helper;
@@ -67,6 +68,19 @@ namespace GitSubmodules.Mvvm.Model
             }
         }
 
+        /// <summary>
+        /// Indicate that the <see cref="ProgressBar"/> for the git process is shown
+        /// </summary>
+        public bool ShowWatingIndicator
+        {
+            get { return _showWatingIndicator; }
+            set
+            {
+                _showWatingIndicator = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion Public Properties
 
         #region Internal Fields
@@ -124,6 +138,11 @@ namespace GitSubmodules.Mvvm.Model
         /// The Backing-field for <see cref="Foreground"/>
         /// </summary>
         private Brush _foreground;
+
+        /// <summary>
+        /// The Backing-field for <see cref="ShowWatingIndicator"/>
+        /// </summary>
+        private bool _showWatingIndicator;
 
         #endregion Private Backing-Fields
     }

@@ -6,13 +6,19 @@
                                    Mode=OneWay,
                                    RelativeSource={RelativeSource Self}}">
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+
     <Grid Margin="2">
         <Grid.RowDefinitions>
             <RowDefinition Height="3" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="5" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="5" />
+            <RowDefinition Height="1" />
+            <RowDefinition Height="3" />
+            <RowDefinition Height="1" />
             <RowDefinition Height="*" />
             <RowDefinition Height="5" />
         </Grid.RowDefinitions>
@@ -108,7 +114,17 @@
 
         </Grid>
 
-        <ScrollViewer Grid.Row="5"
+        <ProgressBar Grid.Row="5"
+                     Height="3"
+                     Margin="5,0,5,0"
+                     Background="Transparent"
+                     IsEnabled="{Binding Model.ShowWatingIndicator}"
+                     IsIndeterminate="{Binding Model.ShowWatingIndicator}"
+                     UseLayoutRounding="False"
+                     Visibility="{Binding Model.ShowWatingIndicator,
+                                          Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <ScrollViewer Grid.Row="7"
                       Margin="0,5,0,0"
                       VerticalScrollBarVisibility="Auto">
             <ItemsControl Margin="0,0,2,0" ItemsSource="{Binding Model.ListOfSubmodules, Mode=OneWay}">
