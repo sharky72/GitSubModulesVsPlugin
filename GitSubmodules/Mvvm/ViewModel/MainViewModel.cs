@@ -307,11 +307,12 @@ namespace GitSubmodules.Mvvm.ViewModel
             Model.ListOfSubmodules        = null;
             Model.CanExecuteCommand       = false;
             Model.CurrentSolutionFullName = dte2.Solution.FullName;
-            Model.CurrentSolutionPath     = "No solution opend";
+            Model.CurrentSolutionPath     = string.Empty;
             Model.GitCounter++;
 
             if(string.IsNullOrEmpty(Model.CurrentSolutionFullName))
             {
+                Model.CurrentSolutionPath = "No solution opend";
                 WriteToOutputWindow(Category.Debug, "No solution opend");
                 return;
             }
