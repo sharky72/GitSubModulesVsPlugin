@@ -39,7 +39,6 @@ namespace GitSubmodules.Mvvm.ViewModel
             Model = new MainModel
             {
                 ListOfSubmodules  = new Collection<Submodule>(),
-                CanExecuteCommand = true,
                 WaitingTimer      = new AutoResetEvent(false),
                 GitVersion        = "Git is not present, please install",
                 Foreground        = ColorHelper.GetThemedBrush(EnvironmentColors.ToolWindowTextColorKey)
@@ -73,7 +72,7 @@ namespace GitSubmodules.Mvvm.ViewModel
             Task.Run(() =>
             {
                 Model.GitCounter++;
-                Model.CanExecuteCommand = false;
+                CanExecuteCommand(false);
 
                 WriteToOutputWindow(Category.EmptyLine, null);
 
@@ -97,7 +96,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                     if(process == null)
                     {
                         WriteToOutputWindow(Category.Error, "Can't start Git process");
-                        Model.CanExecuteCommand = true;
+                        CanExecuteCommand(true);
                         Model.WaitingTimer.Set();
                         return;
                     }
@@ -115,7 +114,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                         using(var reader = process.StandardError)
                         {
                             WriteToOutputWindow(Category.Error, reader.ReadToEnd().TrimEnd());
-                            Model.CanExecuteCommand = true;
+                            CanExecuteCommand(true);
                             Model.WaitingTimer.Set();
                         }
 
@@ -163,7 +162,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                 if(string.IsNullOrEmpty(consoleOutput))
                 {
                     WriteToOutputWindow(Category.Debug, "No submodules found");
-                    Model.CanExecuteCommand = true;
+                    CanExecuteCommand(true);
                     return;
                 }
 
@@ -200,7 +199,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                                                                Model.ListOfSubmodules.Count(), splitedAnswer.Count));
                 }
 
-                Model.CanExecuteCommand = true;
+                CanExecuteCommand(true);
             });
         }
 
@@ -488,6 +487,16 @@ namespace GitSubmodules.Mvvm.ViewModel
                 WriteToOutputWindow(Category.Error, "Can't set indictor icon");
                 WriteToOutputWindow(Category.Error, exception.ToString());
             }
+        }
+
+        /// <summary>
+        /// Change the execution state of the functions of this extension
+        /// </summary>
+        /// <param name="status">The new execution state</param>
+        internal void CanExecuteCommand(bool status)
+        {
+            Model.CanExecuteCommand   = status;
+            Model.ShowWatingIndicator = !status;
         }
 
         #endregion Internal Methods
