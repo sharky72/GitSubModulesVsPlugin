@@ -322,7 +322,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                 return;
             }
 
-            DoStartGit(null, SubModuleCommand.AllStatus);
+            DoStartGit(null, SubModuleCommand.AllFetch);
         }
 
         /// <summary>

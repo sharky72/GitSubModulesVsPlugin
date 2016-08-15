@@ -23,6 +23,9 @@ namespace GitSubmodules.Helper
 
             switch(submoduleCommand)
             {
+                case SubModuleCommand.AllFetch:
+                    return "fetch --recurse-submodules";
+
                 case SubModuleCommand.AllStatus:
                     return "submodule status";
 
