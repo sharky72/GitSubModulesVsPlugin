@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using GitSubmodules.Enumerations;
+using GitSubmodules.Helper;
 using GitSubmodules.Mvvm.Model;
 using GitSubmodules.Mvvm.ViewModel;
 
@@ -12,12 +13,19 @@ namespace GitSubmodules.Mvvm.View
     {
         #region Public Properties
 
+        /// <summary>
+        /// The view model for the this view that contains all logic and the model
+        /// </summary>
         public MainViewModel ViewModel { get; private set; }
 
         #endregion Public Properties
 
         #region Internal Constructor
 
+        /// <summary>
+        /// Constructor for the <see cref="MainView"/>
+        /// </summary>
+        /// <param name="viewModel"></param>
         internal MainView(MainViewModel viewModel)
         {
             ViewModel = viewModel;
@@ -42,13 +50,7 @@ namespace GitSubmodules.Mvvm.View
                 return;
             }
 
-            var frameworkElement = sender as FrameworkElement;
-            if(frameworkElement == null)
-            {
-                return;
-            }
-
-            ViewModel.DoOpenFolder(frameworkElement.Tag as Submodule);
+            ViewModel.DoOpenFolder(SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -58,13 +60,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleInit(object sender, RoutedEventArgs e)
         {
-            var frameworkElement = sender as FrameworkElement;
-            if(frameworkElement == null)
-            {
-                return;
-            }
-
-            ViewModel.DoStartGit(frameworkElement.Tag as Submodule, SubModuleCommand.OneInit);
+            ViewModel.DoStartGit(SubmoduleHelper.TryToGetSubmoduleFromTag(sender), SubModuleCommand.OneInit);
         }
 
         /// <summary>
@@ -74,13 +70,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleDeinit(object sender, RoutedEventArgs e)
         {
-            var frameworkElement = sender as FrameworkElement;
-            if(frameworkElement == null)
-            {
-                return;
-            }
-
-            ViewModel.DoStartGit(frameworkElement.Tag as Submodule, SubModuleCommand.OneDeinit);
+            ViewModel.DoStartGit(SubmoduleHelper.TryToGetSubmoduleFromTag(sender), SubModuleCommand.OneDeinit);
         }
 
         /// <summary>
@@ -90,13 +80,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleDeinitForce(object sender, RoutedEventArgs e)
         {
-            var frameworkElement = sender as FrameworkElement;
-            if(frameworkElement == null)
-            {
-                return;
-            }
-
-            ViewModel.DoStartGit(frameworkElement.Tag as Submodule, SubModuleCommand.OneDeinitForce);
+            ViewModel.DoStartGit(SubmoduleHelper.TryToGetSubmoduleFromTag(sender), SubModuleCommand.OneDeinitForce);
         }
 
         /// <summary>
@@ -106,13 +90,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleUpdate(object sender, RoutedEventArgs e)
         {
-            var frameworkElement = sender as FrameworkElement;
-            if(frameworkElement == null)
-            {
-                return;
-            }
-
-            ViewModel.DoStartGit(frameworkElement.Tag as Submodule, SubModuleCommand.OneUpdate);
+            ViewModel.DoStartGit(SubmoduleHelper.TryToGetSubmoduleFromTag(sender), SubModuleCommand.OneUpdate);
         }
 
         /// <summary>
@@ -122,13 +100,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleUpdateForce(object sender, RoutedEventArgs e)
         {
-            var frameworkElement = sender as FrameworkElement;
-            if(frameworkElement == null)
-            {
-                return;
-            }
-
-            ViewModel.DoStartGit(frameworkElement.Tag as Submodule, SubModuleCommand.OneUpdateForce);
+            ViewModel.DoStartGit(SubmoduleHelper.TryToGetSubmoduleFromTag(sender), SubModuleCommand.OneUpdateForce);
         }
 
         /// <summary>
@@ -138,14 +110,8 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmodulePullOriginMaster(object sender, RoutedEventArgs e)
         {
-            var frameworkElement = sender as FrameworkElement;
-            if(frameworkElement == null)
-            {
-                return;
-            }
-
-            ViewModel.DoStartGit(frameworkElement.Tag as Submodule, SubModuleCommand.OnePullOriginMaster);
-            ViewModel.DoStartGit(frameworkElement.Tag as Submodule, SubModuleCommand.OneStatus);
+            ViewModel.DoStartGit(SubmoduleHelper.TryToGetSubmoduleFromTag(sender), SubModuleCommand.OnePullOriginMaster);
+            ViewModel.DoStartGit(SubmoduleHelper.TryToGetSubmoduleFromTag(sender), SubModuleCommand.OneStatus);
         }
 
         /// <summary>
@@ -155,13 +121,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void CopyIdToClipboard(object sender, RoutedEventArgs e)
         {
-            var frameworkElement = sender as FrameworkElement;
-            if(frameworkElement == null)
-            {
-                return;
-            }
-
-            var submodule = frameworkElement.Tag as Submodule;
+            var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
             if(submodule == null)
             {
                 return;
@@ -177,13 +137,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void CopyTagToClipboard(object sender, RoutedEventArgs e)
         {
-            var frameworkElement = sender as FrameworkElement;
-            if(frameworkElement == null)
-            {
-                return;
-            }
-
-            var submodule = frameworkElement.Tag as Submodule;
+            var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
             if(submodule == null)
             {
                 return;
