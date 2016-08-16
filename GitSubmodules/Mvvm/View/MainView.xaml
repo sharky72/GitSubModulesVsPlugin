@@ -67,8 +67,8 @@
             <Button Grid.Row="0"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
-                    Command="{Binding CommandAllStatus}"
-                    Content="Status for all submodules"
+                    Command="{Binding CommandAllFetch}"
+                    Content="Fetch for all submodules"
                     UseLayoutRounding="False" />
 
             <Button Grid.Row="2"

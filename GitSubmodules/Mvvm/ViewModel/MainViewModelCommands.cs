@@ -5,17 +5,26 @@ using GitSubmodules.Mvvm.Model;
 
 namespace GitSubmodules.Mvvm.ViewModel
 {
+    /// <summary>
+    /// Partial class that contains all <see cref="ICommand"/>s for the <see cref="MainViewModel"/>
+    /// </summary>
     public sealed partial class MainViewModel
     {
-        public ICommand CommandAllStatus
+        /// <summary>
+        /// Command for fetch all submodules
+        /// </summary>
+        public ICommand CommandAllFetch
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllStatus),
+                return new RelayCommand(param => DoStartGit(param as Submodule, SubModuleCommand.AllFetch),
                                         param => Model.CanExecuteCommand);
             }
         }
 
+        /// <summary>
+        /// Command for init all submodules
+        /// </summary>
         public ICommand CommandAllInit
         {
             get
@@ -25,6 +34,9 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
+        /// <summary>
+        /// Command for deinit all submodules
+        /// </summary>
         public ICommand CommandAllDeinit
         {
             get
@@ -34,6 +46,9 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
+        /// <summary>
+        /// Command for force deinit all submodules
+        /// </summary>
         public ICommand CommandAllDeinitForce
         {
             get
@@ -43,6 +58,9 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
+        /// <summary>
+        /// Command for upgrade all submodules
+        /// </summary>
         public ICommand CommandAllUpdate
         {
             get
@@ -52,6 +70,9 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
+        /// <summary>
+        /// Command for force upgrade all submodules
+        /// </summary>
         public ICommand CommandAllUpdateForce
         {
             get
@@ -61,6 +82,9 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
+        /// <summary>
+        /// Command for pull from origin master for all submodules
+        /// </summary>
         public ICommand CommandAllPullOriginMaster
         {
             get
@@ -70,6 +94,9 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
+        /// <summary>
+        /// Command for init one submodules
+        /// </summary>
         public ICommand CommandOneInit
         {
             get
@@ -79,6 +106,9 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
+        /// <summary>
+        /// Command for deinit one submodules
+        /// </summary>
         public ICommand CommandOneDeinit
         {
             get
@@ -88,6 +118,9 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
+        /// <summary>
+        /// Command for force deinit one submodules
+        /// </summary>
         public ICommand CommandOneDeinitForce
         {
             get
@@ -97,6 +130,9 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
+        /// <summary>
+        /// Command for update one submodules
+        /// </summary>
         public ICommand CommandOneUpdate
         {
             get
@@ -106,6 +142,9 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
+        /// <summary>
+        /// Command for force update one submodules
+        /// </summary>
         public ICommand CommandOneUpdateForce
         {
             get
@@ -115,6 +154,9 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
+        /// <summary>
+        /// Command for pull from origin master for one submodules
+        /// </summary>
         public ICommand CommandOnePullOriginMaster
         {
             get
