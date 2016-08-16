@@ -23,11 +23,13 @@ This Visual Studio plugin is for users that need a easier way to handle with Git
 * Submodules of this repository
  * Status of the last action
  * Name of the Submodule
-  * Left-click for open in File-Explorer
+   * Left-click for open in File-Explorer
  * Id (SHA-1) of the submodule
-  * Right-click menu for copy clipboartd
- * Last commit Id (SHA-1 or Tag) of the submodule
-  * Right-click menu for copy clipboartd
+   * Right-click menu for copy to clipboard
+    * or use CTRL+C to copy to clipboard
+ * Last Tag of the submodule
+   * Right-click menu for copy to clipboard
+    * or use CTRL+C to copy to clipboard
  * Status of the submodule
 
 ##Right-click options for a submodule
@@ -37,11 +39,11 @@ This Visual Studio plugin is for users that need a easier way to handle with Git
 * Update (Force)
 * Pull origin master
 * Copy id to clipboard
-* Copy commit id to clipboard
+* Copy tag to clipboard
  
 ##Others
 * Supported any used Visual Studio theme
-* Fetch submodule status from server on first open of a soultion
+* Automatic fetch submodule status from server on first open of a soultion
 * Debug and error messages will be written on a separate output window
 * The output window is automatical actiavte on the first use and when a error occures
 
