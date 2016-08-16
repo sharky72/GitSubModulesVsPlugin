@@ -41,7 +41,6 @@
                     <TextBlock Foreground="{Binding Model.Foreground}"
                                Text="{Binding Model.CurrentSolutionPath}"
                                TextWrapping="Wrap" />
-
                 </Hyperlink>
             </TextBlock>
 
@@ -191,6 +190,16 @@
                                                   Header="Pull origin master"
                                                   Tag="{Binding}" />
 
+                                        <Separator />
+
+                                        <MenuItem Click="CopyIdToClipboard"
+                                                  Header="Copy Id to clipboard"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="CopyTagToClipboard"
+                                                  Header="Copy Tag to clipboard"
+                                                  Tag="{Binding}" />
+
                                     </ContextMenu>
                                 </Grid.ContextMenu>
 
@@ -209,8 +218,7 @@
                                             <TextBlock FontWeight="Bold"
                                                        Foreground="Black"
                                                        Text="{Binding Name,
-                                                                      Mode=OneWay}"
-                                                       TextTrimming="CharacterEllipsis" />
+                                                                      Mode=OneWay}" />
 
                                         </Hyperlink>
                                     </TextBlock>
@@ -225,12 +233,15 @@
                                         Content="Init"
                                         UseLayoutRounding="False" />
 
-                                <TextBlock Grid.Row="3"
-                                           Grid.Column="1"
-                                           VerticalAlignment="Center"
-                                           Text="{Binding Id,
-                                                          Mode=OneWay}"
-                                           TextTrimming="CharacterEllipsis" />
+                                <TextBox Grid.Row="3"
+                                         Grid.Column="1"
+                                         VerticalAlignment="Center"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         IsReadOnly="True"
+                                         Text="{Binding Id,
+                                                        Mode=OneWay}"
+                                         TextWrapping="WrapWithOverflow" />
 
                                 <StackPanel Grid.Row="3"
                                             Grid.Column="3"
@@ -252,12 +263,14 @@
 
                                 </StackPanel>
 
-                                <TextBlock Grid.Row="5"
-                                           Grid.Column="1"
-                                           VerticalAlignment="Center"
-                                           Text="{Binding CommitId,
-                                                          Mode=OneWay}"
-                                           TextTrimming="CharacterEllipsis" />
+                                <TextBox Grid.Row="5"
+                                         Grid.Column="1"
+                                         VerticalAlignment="Center"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         IsReadOnly="True"
+                                         Text="{Binding CommitId,
+                                                        Mode=OneWay}" />
 
                                 <StackPanel Grid.Row="5"
                                             Grid.Column="3"
@@ -278,6 +291,7 @@
                                             UseLayoutRounding="False" />
 
                                 </StackPanel>
+
                                 <TextBlock Grid.Row="7"
                                            Grid.Column="1"
                                            VerticalAlignment="Center"

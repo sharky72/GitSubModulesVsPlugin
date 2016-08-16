@@ -148,6 +148,50 @@ namespace GitSubmodules.Mvvm.View
             ViewModel.DoStartGit(frameworkElement.Tag as Submodule, SubModuleCommand.OneStatus);
         }
 
+        /// <summary>
+        /// Event method for copy the id of the submodule to the clipboard
+        /// </summary>
+        /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
+        /// <param name="e">The arguments for this event</param>
+        private void CopyIdToClipboard(object sender, RoutedEventArgs e)
+        {
+            var frameworkElement = sender as FrameworkElement;
+            if(frameworkElement == null)
+            {
+                return;
+            }
+
+            var submodule = frameworkElement.Tag as Submodule;
+            if(submodule == null)
+            {
+                return;
+            }
+
+            Clipboard.SetText(submodule.Id);
+        }
+
+        /// <summary>
+        /// Event method for copy the commit id of the submodule to the clipboard
+        /// </summary>
+        /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
+        /// <param name="e">The arguments for this event</param>
+        private void CopyTagToClipboard(object sender, RoutedEventArgs e)
+        {
+            var frameworkElement = sender as FrameworkElement;
+            if(frameworkElement == null)
+            {
+                return;
+            }
+
+            var submodule = frameworkElement.Tag as Submodule;
+            if(submodule == null)
+            {
+                return;
+            }
+
+            Clipboard.SetText(submodule.CommitId);
+        }
+
         #endregion Private Methods
     }
 }
