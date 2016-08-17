@@ -131,7 +131,7 @@ namespace GitSubmodules.Mvvm.View
         }
 
         /// <summary>
-        /// Event method for copy the commit id of the submodule to the clipboard
+        /// Event method for copy the complete tag of the submodule to the clipboard
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
@@ -143,7 +143,7 @@ namespace GitSubmodules.Mvvm.View
                 return;
             }
 
-            Clipboard.SetText(submodule.CommitId);
+            Clipboard.SetText(submodule.CompleteTag);
         }
 
         #endregion Private Methods

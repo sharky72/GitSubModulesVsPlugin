@@ -27,9 +27,9 @@ namespace GitSubmodules.Mvvm.Model
         public string Id { get; private set; }
 
         /// <summary>
-        /// The commit id of the submodule (SHA1)
+        /// The complete tag of the submodule, contains the tag and additional informationen)
         /// </summary>
-        public string CommitId { get; private set; }
+        public string CompleteTag { get; private set; }
 
         /// <summary>
         /// The background color for this module that indicate the crrent status of it
@@ -87,9 +87,9 @@ namespace GitSubmodules.Mvvm.Model
 
             var lineSplit = subModuleInformation.TrimStart().Split(' ');
 
-            Id       = lineSplit.FirstOrDefault();
-            Name     = lineSplit.ElementAtOrDefault(1) ?? "???";
-            CommitId = lineSplit.ElementAtOrDefault(2) ?? "???";
+            Id          = lineSplit.FirstOrDefault();
+            Name        = lineSplit.ElementAtOrDefault(1) ?? "???";
+            CompleteTag = lineSplit.ElementAtOrDefault(2) ?? "???";
 
             Id = !string.IsNullOrEmpty(Id)
                     ? Id.Replace("U", string.Empty)
@@ -98,9 +98,9 @@ namespace GitSubmodules.Mvvm.Model
                         .TrimStart()
                     : "???";
 
-            if(!string.IsNullOrEmpty(CommitId))
+            if(!string.IsNullOrEmpty(CompleteTag))
             {
-                CommitId = CommitId.TrimStart('(').TrimEnd(')');
+                CompleteTag = CompleteTag.TrimStart('(').TrimEnd(')');
             }
 
             SetSubModuleStatus(solutionPath, subModuleInformation);

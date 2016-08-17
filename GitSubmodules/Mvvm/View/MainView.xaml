@@ -269,7 +269,7 @@
                                          Background="Transparent"
                                          BorderThickness="0"
                                          IsReadOnly="True"
-                                         Text="{Binding CommitId,
+                                         Text="{Binding CompleteTag,
                                                         Mode=OneWay}" />
 
                                 <StackPanel Grid.Row="5"
