@@ -117,6 +117,8 @@
                      Height="3"
                      Margin="5,0,5,0"
                      Background="Transparent"
+                     BorderBrush="Transparent"
+                     BorderThickness="0"
                      IsEnabled="{Binding Model.ShowWatingIndicator}"
                      IsIndeterminate="{Binding Model.ShowWatingIndicator}"
                      UseLayoutRounding="False"
@@ -208,7 +210,7 @@
                                             VerticalAlignment="Center"
                                             Orientation="Horizontal">
 
-                                    <Image Source="{Binding HealthImage}" />
+                                    <Image Source="{Binding HealthImage}" ToolTip="{Binding HealthImageToolTip}" />
 
                                     <TextBlock Margin="5,0,0,0">
                                         <Hyperlink NavigateUri="http://nothing.not/"

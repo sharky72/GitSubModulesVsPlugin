@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -27,7 +28,7 @@ namespace GitSubmodules.Mvvm.Model
         public string Id { get; private set; }
 
         /// <summary>
-        /// The complete tag of the submodule, contains the tag and additional informationen)
+        /// The complete tag of the submodule, contains the tag and additional informationen
         /// </summary>
         public string CompleteTag { get; private set; }
 
@@ -58,6 +59,17 @@ namespace GitSubmodules.Mvvm.Model
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// The tooltip text for the <see cref="HealthImage"/>
+        /// </summary>
+        public string HealthImageToolTip { get; private set; }
+
+        /// <summary>
+        /// The number of additional commits for this <see cref="Submodule"/>,
+        /// based on the additional informations inside the <see cref="CompleteTag"/>
+        /// </summary>
+        public int NumberOfAdditionalCommits { get; private set; }
 
         #endregion Public Properties
 
@@ -98,14 +110,30 @@ namespace GitSubmodules.Mvvm.Model
                         .TrimStart()
                     : "???";
 
-            if(!string.IsNullOrEmpty(CompleteTag))
+            SetSubModuleStatus(solutionPath, subModuleInformation);
+            SetBackgroundColor();
+
+            if(string.IsNullOrEmpty(CompleteTag))
             {
-                CompleteTag = CompleteTag.TrimStart('(').TrimEnd(')');
+                ChangeHealthStatus(HealthStatus.Okay);
+                return;
             }
 
-            SetSubModuleStatus(solutionPath, subModuleInformation);
+            CompleteTag = CompleteTag.TrimStart('(').TrimEnd(')');
 
-            SetBackgroundColor();
+            var splittedTag = CompleteTag.Split('-');
+            if(splittedTag.Length - 2 < 1)
+            {
+                ChangeHealthStatus(HealthStatus.Okay);
+                return;
+            }
+
+            int numberOfAdditionalCommits;
+            int.TryParse(splittedTag.ElementAtOrDefault(splittedTag.Length - 2), out numberOfAdditionalCommits);
+
+            NumberOfAdditionalCommits = numberOfAdditionalCommits;
+
+            ChangeHealthStatus(NumberOfAdditionalCommits == 0 ? HealthStatus.Okay : HealthStatus.Warning);
         }
 
         #endregion Internal Constructor
@@ -229,6 +257,74 @@ namespace GitSubmodules.Mvvm.Model
             {
                 Status     = SubModuleStatus.Unknown;
                 StatusText = exception.Message;
+            }
+        }
+
+        /// <summary>
+        /// Change the health status of this <see cref="Submodule"/>
+        /// </summary>
+        /// <param name="healthStatus">The <see cref="HealthStatus"/> for this <see cref="Submodule"/></param>
+        internal void ChangeHealthStatus(HealthStatus healthStatus)
+        {
+            string healthImageFile;
+
+            switch(healthStatus)
+            {
+                case HealthStatus.Unknown:
+                    healthImageFile    = "Unknown.png";
+                    HealthImageToolTip = "Unknown submodule status, try to fetch again\n"
+                                       + "and please report this issue on GitHub, thanks.";
+                    break;
+
+                case HealthStatus.Okay:
+                    healthImageFile    = "Okay.png";
+                    HealthImageToolTip = "This submodule seems to be okay.";
+                    break;
+
+                case HealthStatus.Warning:
+                    healthImageFile    = "Warning.png";
+                    HealthImageToolTip = "They are a additional commits beetween the current id and the last server id,\n"
+                                       + "try to check if you need a pull for this submodule";
+                    break;
+
+                case HealthStatus.Error:
+                    healthImageFile    = "Error.png";
+                    HealthImageToolTip = "Error occures on last Git command,"
+                                       + "check the console [Git Submodule] for additional informations.";
+                    break;
+
+                default:
+                    healthImageFile    = "Unknown.png";
+                    HealthImageToolTip = "Unknown submodule status, try to fetch again\n"
+                                       + "and please report this issue on GitHub, thanks.";
+                    break;
+            }
+
+            var resourceName = Assembly.GetExecutingAssembly()
+                                       .GetManifestResourceNames()
+                                       .FirstOrDefault(found => found.Contains(healthImageFile));
+
+            if(string.IsNullOrEmpty(resourceName))
+            {
+                return;
+            }
+
+            try
+            {
+                using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+                {
+                    if(stream == null)
+                    {
+                        return;
+                    }
+
+                    HealthImage = BitmapFrame.Create(stream);
+                }
+            }
+            catch(Exception exception)
+            {
+                Console.WriteLine("Can't set indictor icon");
+                Console.WriteLine(exception);
             }
         }
 

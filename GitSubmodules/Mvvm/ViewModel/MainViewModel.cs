@@ -4,11 +4,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 using EnvDTE80;
 using GitSubmodules.Enumerations;
 using GitSubmodules.Helper;
@@ -118,7 +116,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                             Model.WaitingTimer.Set();
                         }
 
-                        ChangeHealthStatus(submodule, HealthStatus.Error);
+                        submodule.ChangeHealthStatus(HealthStatus.Error);
                         return;
                     }
                 }
@@ -186,8 +184,6 @@ namespace GitSubmodules.Mvvm.ViewModel
                 tempList.AddRange(splitedAnswer.Select(found => new Submodule(Model.CurrentSolutionPath, found)));
 
                 Model.ListOfSubmodules = tempList;
-
-                ChangeHealthStatus(null, HealthStatus.Okay);
 
                 if(splitedAnswer.Count == Model.ListOfSubmodules.Count())
                 {
@@ -411,82 +407,6 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
 
             Model.OutputPane.Activate();
-        }
-
-        /// <summary>
-        /// Change the health status of a <see cref="Submodule"/> or of all submodules
-        /// </summary>
-        /// <param name="submodule">The <see cref="Submodule"/> for the status change
-        /// or <c>null</c> for all submodules</param>
-        /// <param name="healthStatus">The <see cref="HealthStatus"/> for the
-        /// or all <see cref="Submodule"/>s</param>
-        internal void ChangeHealthStatus(Submodule submodule, HealthStatus healthStatus)
-        {
-            if((Model.ListOfSubmodules == null) || !Model.ListOfSubmodules.Any())
-            {
-                return;
-            }
-
-            string healthImageFile;
-
-            switch(healthStatus)
-            {
-                case HealthStatus.Unknown:
-                    healthImageFile = "Unknown.png";
-                    break;
-
-                case HealthStatus.Okay:
-                    healthImageFile = "Okay.png";
-                    break;
-
-                case HealthStatus.Warning:
-                    healthImageFile = "Warning.png";
-                    break;
-
-                case HealthStatus.Error:
-                    healthImageFile = "Error.png";
-                    break;
-
-                default:
-                    healthImageFile = "Unknown.png";
-                    break;
-            }
-
-            var resourceName = Assembly.GetExecutingAssembly()
-                                       .GetManifestResourceNames()
-                                       .FirstOrDefault(found => found.Contains(healthImageFile));
-
-            if(string.IsNullOrEmpty(resourceName))
-            {
-                return;
-            }
-
-            try
-            {
-                using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-                {
-                    if(stream == null)
-                    {
-                        return;
-                    }
-
-                    if(submodule != null)
-                    {
-                        submodule.HealthImage = BitmapFrame.Create(stream);
-                        return;
-                    }
-
-                    foreach(var module in Model.ListOfSubmodules)
-                    {
-                        module.HealthImage = BitmapFrame.Create(stream);
-                    }
-                }
-            }
-            catch(Exception exception)
-            {
-                WriteToOutputWindow(Category.Error, "Can't set indictor icon");
-                WriteToOutputWindow(Category.Error, exception.ToString());
-            }
         }
 
         /// <summary>
