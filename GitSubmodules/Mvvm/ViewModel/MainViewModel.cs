@@ -116,7 +116,22 @@ namespace GitSubmodules.Mvvm.ViewModel
                             Model.WaitingTimer.Set();
                         }
 
-                        submodule.ChangeHealthStatus(HealthStatus.Error);
+                        if(submodule != null)
+                        {
+                            submodule.ChangeHealthStatus(HealthStatus.Error);
+                            return;
+                        }
+
+                        if(Model.ListOfSubmodules == null)
+                        {
+                            return;
+                        }
+
+                        foreach(var module in Model.ListOfSubmodules)
+                        {
+                            module.ChangeHealthStatus(HealthStatus.Error);
+                        }
+
                         return;
                     }
                 }
