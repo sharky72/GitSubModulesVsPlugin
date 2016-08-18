@@ -73,6 +73,15 @@ namespace GitSubmodules.Mvvm.Model
 
         #endregion Public Properties
 
+        #region Internal Fields
+
+        /// <summary>
+        /// The current health status of this <see cref="Submodule"/>
+        /// </summary>
+        internal HealthStatus CurrentHealthStatus;
+
+        #endregion Internal Fields
+
         #region Private Fields
 
         /// <summary>
@@ -263,12 +272,19 @@ namespace GitSubmodules.Mvvm.Model
         /// <summary>
         /// Change the health status of this <see cref="Submodule"/>
         /// </summary>
-        /// <param name="healthStatus">The <see cref="HealthStatus"/> for this <see cref="Submodule"/></param>
-        internal void ChangeHealthStatus(HealthStatus healthStatus)
+        /// <param name="newHealthStatus">The <see cref="HealthStatus"/> for this <see cref="Submodule"/></param>
+        internal void ChangeHealthStatus(HealthStatus newHealthStatus)
         {
+            if((CurrentHealthStatus == HealthStatus.Error) && (newHealthStatus != HealthStatus.Okay))
+            {
+                return;
+            }
+
+            CurrentHealthStatus = newHealthStatus;
+
             string healthImageFile;
 
-            switch(healthStatus)
+            switch(newHealthStatus)
             {
                 case HealthStatus.Unknown:
                     healthImageFile    = "Unknown.png";
