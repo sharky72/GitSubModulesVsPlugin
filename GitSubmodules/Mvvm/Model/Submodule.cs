@@ -299,7 +299,8 @@ namespace GitSubmodules.Mvvm.Model
 
                 case HealthStatus.Warning:
                     healthImageFile    = "Warning.png";
-                    HealthImageToolTip = "They are a additional commits beetween the current id and the last server id,\n"
+                    HealthImageToolTip = "They are " + NumberOfAdditionalCommits
+                                       + " additional commits beetween the current id and the last Tag,\n"
                                        + "try to check if you need a pull for this submodule";
                     break;
 
