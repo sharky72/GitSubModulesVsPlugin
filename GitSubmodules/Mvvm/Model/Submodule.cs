@@ -63,7 +63,15 @@ namespace GitSubmodules.Mvvm.Model
         /// <summary>
         /// The tooltip text for the <see cref="HealthImage"/>
         /// </summary>
-        public string HealthImageToolTip { get; private set; }
+        public string HealthImageToolTip
+        {
+            get { return _healthImageToolTip; }
+            private set
+            {
+                _healthImageToolTip = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// The number of additional commits for this <see cref="Submodule"/>,
@@ -88,6 +96,11 @@ namespace GitSubmodules.Mvvm.Model
         /// The Backing-field for <see cref="HealthImage"/>
         /// </summary>
         private BitmapSource _healthImage;
+
+        /// <summary>
+        /// The Backing-Field for <see cref="HealthImageToolTip"/>
+        /// </summary>
+        private string _healthImageToolTip;
 
         #endregion Private Fields
 
