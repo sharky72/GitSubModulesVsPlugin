@@ -60,7 +60,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleInit(object sender, RoutedEventArgs e)
         {
-            ViewModel.DoStartGit(SubmoduleHelper.TryToGetSubmoduleFromTag(sender), SubModuleCommand.OneInit);
+            ViewModel.DoStartGit(SubModuleCommand.OneInit, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleDeinit(object sender, RoutedEventArgs e)
         {
-            ViewModel.DoStartGit(SubmoduleHelper.TryToGetSubmoduleFromTag(sender), SubModuleCommand.OneDeinit);
+            ViewModel.DoStartGit(SubModuleCommand.OneDeinit, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleDeinitForce(object sender, RoutedEventArgs e)
         {
-            ViewModel.DoStartGit(SubmoduleHelper.TryToGetSubmoduleFromTag(sender), SubModuleCommand.OneDeinitForce);
+            ViewModel.DoStartGit(SubModuleCommand.OneDeinitForce, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleUpdate(object sender, RoutedEventArgs e)
         {
-            ViewModel.DoStartGit(SubmoduleHelper.TryToGetSubmoduleFromTag(sender), SubModuleCommand.OneUpdate);
+            ViewModel.DoStartGit(SubModuleCommand.OneUpdate, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleUpdateForce(object sender, RoutedEventArgs e)
         {
-            ViewModel.DoStartGit(SubmoduleHelper.TryToGetSubmoduleFromTag(sender), SubModuleCommand.OneUpdateForce);
+            ViewModel.DoStartGit(SubModuleCommand.OneUpdateForce, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -110,8 +110,8 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmodulePullOriginMaster(object sender, RoutedEventArgs e)
         {
-            ViewModel.DoStartGit(SubmoduleHelper.TryToGetSubmoduleFromTag(sender), SubModuleCommand.OnePullOriginMaster);
-            ViewModel.DoStartGit(SubmoduleHelper.TryToGetSubmoduleFromTag(sender), SubModuleCommand.OneStatus);
+            ViewModel.DoStartGit(SubModuleCommand.OnePullOriginMaster, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
+            ViewModel.DoStartGit(SubModuleCommand.OneStatus, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>

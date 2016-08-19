@@ -30,10 +30,6 @@ namespace GitSubmodules.Mvvm.ViewModel
 
         public MainViewModel() : base(null)
         {
-            Caption          = "Git Submodules";
-            BitmapResourceID = 301;
-            BitmapIndex      = 1;
-
             Model = new MainModel
             {
                 ListOfSubmodules  = new Collection<Submodule>(),
@@ -44,7 +40,7 @@ namespace GitSubmodules.Mvvm.ViewModel
 
             if(!Model.GitIsPresent)
             {
-                DoStartGit(null, SubModuleCommand.OtherGitVersion);
+                DoStartGit(SubModuleCommand.OtherGitVersion);
             }
 
             VSColorTheme.ThemeChanged += delegate
@@ -52,7 +48,10 @@ namespace GitSubmodules.Mvvm.ViewModel
                 Model.Foreground = ColorHelper.GetThemedBrush(EnvironmentColors.ToolWindowTextColorKey);
             };
 
-            Content = new MainView(this);
+            Caption          = "Git Submodules";
+            BitmapResourceID = 301;
+            BitmapIndex      = 1;
+            Content          = new MainView(this);
         }
 
         #endregion Internal Constructor
@@ -62,10 +61,10 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// <summary>
         /// Start git.exe with the given arguments
         /// </summary>
-        /// <param name="submodule">The <see cref="Submodule"/> for this argument,
-        /// use <c>null</c> for all submodules</param>
         /// <param name="submoduleCommand">The <see cref="SubModuleCommand"/> for this argument</param>
-        internal void DoStartGit(Submodule submodule, SubModuleCommand submoduleCommand)
+        /// <param name="submodule">[Optional] The <see cref="Submodule"/> for this argument,
+        /// use <c>null</c> for all submodules</param>
+        internal void DoStartGit(SubModuleCommand submoduleCommand, Submodule submodule = null)
         {
             Task.Run(() =>
             {
@@ -76,14 +75,7 @@ namespace GitSubmodules.Mvvm.ViewModel
 
                 SetPathForGitProcess(submoduleCommand == SubModuleCommand.OnePullOriginMaster ? submodule : null);
 
-                var gitStartInfo = new ProcessStartInfo("git.exe")
-                {
-                    Arguments              = GitHelper.GetGitArguments(submodule, submoduleCommand),
-                    CreateNoWindow         = true,
-                    RedirectStandardError  = true,
-                    RedirectStandardOutput = true,
-                    UseShellExecute        = false
-                };
+                var gitStartInfo = GitHelper.GetProcessStartInfo(submodule, submoduleCommand);
 
                 WriteToOutputWindow(Category.Debug, string.Format("Start Git with the follow arguments: {0}", gitStartInfo.Arguments));
 
@@ -168,7 +160,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                 if(submoduleCommand != SubModuleCommand.AllStatus)
                 {
                     WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
-                    DoStartGit(null, SubModuleCommand.AllStatus);
+                    DoStartGit(SubModuleCommand.AllStatus);
                     return;
                 }
 
@@ -231,22 +223,22 @@ namespace GitSubmodules.Mvvm.ViewModel
                 {
                     foreach(var submoduleEntry in Model.ListOfSubmodules)
                     {
-                        DoStartGit(submoduleEntry, SubModuleCommand.OnePullOriginMaster);
+                        DoStartGit(SubModuleCommand.OnePullOriginMaster, submoduleEntry);
                         Model.WaitingTimer.Reset();
                         Model.WaitingTimer.WaitOne(10000);
                     }
 
-                    DoStartGit(null, SubModuleCommand.AllStatus);
+                    DoStartGit(SubModuleCommand.AllStatus);
                 });
             }
             else
             {
                 Task.Run(() =>
                 {
-                    DoStartGit(submodule, SubModuleCommand.OnePullOriginMaster);
+                    DoStartGit(SubModuleCommand.OnePullOriginMaster, submodule);
                     Model.WaitingTimer.Reset();
                     Model.WaitingTimer.WaitOne(10000);
-                    DoStartGit(null, SubModuleCommand.AllStatus);
+                    DoStartGit(SubModuleCommand.AllStatus);
                 });
             }
         }
@@ -304,21 +296,16 @@ namespace GitSubmodules.Mvvm.ViewModel
                 Model.OutputPane.Activate();
             }
 
-            if(dte2.Solution == null)
+            if((dte2.Solution == null) || (Model.CurrentSolutionFullName == dte2.Solution.FullName))
             {
                 return;
             }
 
-            if(Model.CurrentSolutionFullName == dte2.Solution.FullName)
-            {
-                return;
-            }
-
+            Model.GitCounter++;
             Model.ListOfSubmodules        = null;
             Model.CanExecuteCommand       = false;
             Model.CurrentSolutionFullName = dte2.Solution.FullName;
             Model.CurrentSolutionPath     = string.Empty;
-            Model.GitCounter++;
 
             if(string.IsNullOrEmpty(Model.CurrentSolutionFullName))
             {
@@ -332,7 +319,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                 return;
             }
 
-            DoStartGit(null, SubModuleCommand.AllFetch);
+            DoStartGit(SubModuleCommand.AllFetch);
         }
 
         /// <summary>
