@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using GitSubmodules.Enumerations;
 using GitSubmodules.Helper;
 using GitSubmodules.Mvvm.Model;
@@ -41,7 +42,7 @@ namespace GitSubmodules.Mvvm.View
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
-        private void SubmoduleOpenFolder(object sender, RoutedEventArgs e)
+        private void SubmoduleOpenFolder(object sender, EventArgs e)
         {
             var frameworkContentElement = sender as FrameworkContentElement;
             if(frameworkContentElement != null)
@@ -58,7 +59,7 @@ namespace GitSubmodules.Mvvm.View
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
-        private void SubmoduleInit(object sender, RoutedEventArgs e)
+        private void SubmoduleInit(object sender, EventArgs e)
         {
             ViewModel.DoStartGit(SubModuleCommand.OneInit, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
@@ -68,7 +69,7 @@ namespace GitSubmodules.Mvvm.View
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
-        private void SubmoduleDeinit(object sender, RoutedEventArgs e)
+        private void SubmoduleDeinit(object sender, EventArgs e)
         {
             ViewModel.DoStartGit(SubModuleCommand.OneDeinit, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
@@ -78,7 +79,7 @@ namespace GitSubmodules.Mvvm.View
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
-        private void SubmoduleDeinitForce(object sender, RoutedEventArgs e)
+        private void SubmoduleDeinitForce(object sender, EventArgs e)
         {
             ViewModel.DoStartGit(SubModuleCommand.OneDeinitForce, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
@@ -88,7 +89,7 @@ namespace GitSubmodules.Mvvm.View
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
-        private void SubmoduleUpdate(object sender, RoutedEventArgs e)
+        private void SubmoduleUpdate(object sender, EventArgs e)
         {
             ViewModel.DoStartGit(SubModuleCommand.OneUpdate, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
@@ -98,7 +99,7 @@ namespace GitSubmodules.Mvvm.View
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
-        private void SubmoduleUpdateForce(object sender, RoutedEventArgs e)
+        private void SubmoduleUpdateForce(object sender, EventArgs e)
         {
             ViewModel.DoStartGit(SubModuleCommand.OneUpdateForce, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
@@ -108,7 +109,7 @@ namespace GitSubmodules.Mvvm.View
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
-        private void SubmodulePullOriginMaster(object sender, RoutedEventArgs e)
+        private void SubmodulePullOriginMaster(object sender, EventArgs e)
         {
             ViewModel.DoStartGit(SubModuleCommand.OnePullOriginMaster, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
             ViewModel.DoStartGit(SubModuleCommand.OneStatus, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
@@ -119,7 +120,7 @@ namespace GitSubmodules.Mvvm.View
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
-        private void CopyIdToClipboard(object sender, RoutedEventArgs e)
+        private void CopyIdToClipboard(object sender, EventArgs e)
         {
             var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
             if(submodule == null)
@@ -135,7 +136,7 @@ namespace GitSubmodules.Mvvm.View
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
-        private void CopyTagToClipboard(object sender, RoutedEventArgs e)
+        private void CopyTagToClipboard(object sender, EventArgs e)
         {
             var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
             if(submodule == null)
