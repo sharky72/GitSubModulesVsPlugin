@@ -6,13 +6,19 @@
                                    Mode=OneWay,
                                    RelativeSource={RelativeSource Self}}">
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+
     <Grid Margin="2">
         <Grid.RowDefinitions>
             <RowDefinition Height="3" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="5" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="5" />
+            <RowDefinition Height="1" />
+            <RowDefinition Height="3" />
+            <RowDefinition Height="1" />
             <RowDefinition Height="*" />
             <RowDefinition Height="5" />
         </Grid.RowDefinitions>
@@ -35,7 +41,6 @@
                     <TextBlock Foreground="{Binding Model.Foreground}"
                                Text="{Binding Model.CurrentSolutionPath}"
                                TextWrapping="Wrap" />
-
                 </Hyperlink>
             </TextBlock>
 
@@ -62,8 +67,8 @@
             <Button Grid.Row="0"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
-                    Command="{Binding CommandAllStatus}"
-                    Content="Status for all submodules"
+                    Command="{Binding CommandAllFetch}"
+                    Content="Fetch for all submodules"
                     UseLayoutRounding="False" />
 
             <Button Grid.Row="2"
@@ -108,7 +113,19 @@
 
         </Grid>
 
-        <ScrollViewer Grid.Row="5"
+        <ProgressBar Grid.Row="5"
+                     Height="3"
+                     Margin="5,0,5,0"
+                     Background="Transparent"
+                     BorderBrush="Transparent"
+                     BorderThickness="0"
+                     IsEnabled="{Binding Model.ShowWatingIndicator}"
+                     IsIndeterminate="{Binding Model.ShowWatingIndicator}"
+                     UseLayoutRounding="False"
+                     Visibility="{Binding Model.ShowWatingIndicator,
+                                          Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <ScrollViewer Grid.Row="7"
                       Margin="0,5,0,0"
                       VerticalScrollBarVisibility="Auto">
             <ItemsControl Margin="0,0,2,0" ItemsSource="{Binding Model.ListOfSubmodules, Mode=OneWay}">
@@ -175,6 +192,16 @@
                                                   Header="Pull origin master"
                                                   Tag="{Binding}" />
 
+                                        <Separator />
+
+                                        <MenuItem Click="CopyIdToClipboard"
+                                                  Header="Copy Id to clipboard"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="CopyTagToClipboard"
+                                                  Header="Copy Tag to clipboard"
+                                                  Tag="{Binding}" />
+
                                     </ContextMenu>
                                 </Grid.ContextMenu>
 
@@ -183,7 +210,7 @@
                                             VerticalAlignment="Center"
                                             Orientation="Horizontal">
 
-                                    <Image Source="{Binding HealthImage}" />
+                                    <Image Source="{Binding HealthImage}" ToolTip="{Binding HealthImageToolTip}" />
 
                                     <TextBlock Margin="5,0,0,0">
                                         <Hyperlink NavigateUri="http://nothing.not/"
@@ -193,8 +220,7 @@
                                             <TextBlock FontWeight="Bold"
                                                        Foreground="Black"
                                                        Text="{Binding Name,
-                                                                      Mode=OneWay}"
-                                                       TextTrimming="CharacterEllipsis" />
+                                                                      Mode=OneWay}" />
 
                                         </Hyperlink>
                                     </TextBlock>
@@ -209,12 +235,15 @@
                                         Content="Init"
                                         UseLayoutRounding="False" />
 
-                                <TextBlock Grid.Row="3"
-                                           Grid.Column="1"
-                                           VerticalAlignment="Center"
-                                           Text="{Binding Id,
-                                                          Mode=OneWay}"
-                                           TextTrimming="CharacterEllipsis" />
+                                <TextBox Grid.Row="3"
+                                         Grid.Column="1"
+                                         VerticalAlignment="Center"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         IsReadOnly="True"
+                                         Text="{Binding Id,
+                                                        Mode=OneWay}"
+                                         TextWrapping="WrapWithOverflow" />
 
                                 <StackPanel Grid.Row="3"
                                             Grid.Column="3"
@@ -236,12 +265,14 @@
 
                                 </StackPanel>
 
-                                <TextBlock Grid.Row="5"
-                                           Grid.Column="1"
-                                           VerticalAlignment="Center"
-                                           Text="{Binding CommitId,
-                                                          Mode=OneWay}"
-                                           TextTrimming="CharacterEllipsis" />
+                                <TextBox Grid.Row="5"
+                                         Grid.Column="1"
+                                         VerticalAlignment="Center"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         IsReadOnly="True"
+                                         Text="{Binding CompleteTag,
+                                                        Mode=OneWay}" />
 
                                 <StackPanel Grid.Row="5"
                                             Grid.Column="3"
@@ -262,6 +293,7 @@
                                             UseLayoutRounding="False" />
 
                                 </StackPanel>
+
                                 <TextBlock Grid.Row="7"
                                            Grid.Column="1"
                                            VerticalAlignment="Center"

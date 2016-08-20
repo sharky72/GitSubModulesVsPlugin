@@ -4,11 +4,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 using EnvDTE80;
 using GitSubmodules.Enumerations;
 using GitSubmodules.Helper;
@@ -32,14 +30,9 @@ namespace GitSubmodules.Mvvm.ViewModel
 
         public MainViewModel() : base(null)
         {
-            Caption          = "Git Submodules";
-            BitmapResourceID = 301;
-            BitmapIndex      = 1;
-
             Model = new MainModel
             {
                 ListOfSubmodules  = new Collection<Submodule>(),
-                CanExecuteCommand = true,
                 WaitingTimer      = new AutoResetEvent(false),
                 GitVersion        = "Git is not present, please install",
                 Foreground        = ColorHelper.GetThemedBrush(EnvironmentColors.ToolWindowTextColorKey)
@@ -47,7 +40,7 @@ namespace GitSubmodules.Mvvm.ViewModel
 
             if(!Model.GitIsPresent)
             {
-                DoStartGit(null, SubModuleCommand.OtherGitVersion);
+                DoStartGit(SubModuleCommand.OtherGitVersion);
             }
 
             VSColorTheme.ThemeChanged += delegate
@@ -55,7 +48,10 @@ namespace GitSubmodules.Mvvm.ViewModel
                 Model.Foreground = ColorHelper.GetThemedBrush(EnvironmentColors.ToolWindowTextColorKey);
             };
 
-            Content = new MainView(this);
+            Caption          = "Git Submodules";
+            BitmapResourceID = 301;
+            BitmapIndex      = 1;
+            Content          = new MainView(this);
         }
 
         #endregion Internal Constructor
@@ -65,28 +61,21 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// <summary>
         /// Start git.exe with the given arguments
         /// </summary>
-        /// <param name="submodule">The <see cref="Submodule"/> for this argument,
-        /// use <c>null</c> for all submodules</param>
         /// <param name="submoduleCommand">The <see cref="SubModuleCommand"/> for this argument</param>
-        internal void DoStartGit(Submodule submodule, SubModuleCommand submoduleCommand)
+        /// <param name="submodule">[Optional] The <see cref="Submodule"/> for this argument,
+        /// use <c>null</c> for all submodules</param>
+        internal void DoStartGit(SubModuleCommand submoduleCommand, Submodule submodule = null)
         {
             Task.Run(() =>
             {
                 Model.GitCounter++;
-                Model.CanExecuteCommand = false;
+                CanExecuteCommand(false);
 
                 WriteToOutputWindow(Category.EmptyLine, null);
 
                 SetPathForGitProcess(submoduleCommand == SubModuleCommand.OnePullOriginMaster ? submodule : null);
 
-                var gitStartInfo = new ProcessStartInfo("git.exe")
-                {
-                    Arguments              = GitHelper.GetGitArguments(submodule, submoduleCommand),
-                    CreateNoWindow         = true,
-                    RedirectStandardError  = true,
-                    RedirectStandardOutput = true,
-                    UseShellExecute        = false
-                };
+                var gitStartInfo = GitHelper.GetProcessStartInfo(submodule, submoduleCommand);
 
                 WriteToOutputWindow(Category.Debug, string.Format("Start Git with the follow arguments: {0}", gitStartInfo.Arguments));
 
@@ -97,7 +86,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                     if(process == null)
                     {
                         WriteToOutputWindow(Category.Error, "Can't start Git process");
-                        Model.CanExecuteCommand = true;
+                        CanExecuteCommand(true);
                         Model.WaitingTimer.Set();
                         return;
                     }
@@ -115,11 +104,26 @@ namespace GitSubmodules.Mvvm.ViewModel
                         using(var reader = process.StandardError)
                         {
                             WriteToOutputWindow(Category.Error, reader.ReadToEnd().TrimEnd());
-                            Model.CanExecuteCommand = true;
+                            CanExecuteCommand(true);
                             Model.WaitingTimer.Set();
                         }
 
-                        ChangeHealthStatus(submodule, HealthStatus.Error);
+                        if(submodule != null)
+                        {
+                            submodule.ChangeHealthStatus(HealthStatus.Error);
+                            return;
+                        }
+
+                        if(Model.ListOfSubmodules == null)
+                        {
+                            return;
+                        }
+
+                        foreach(var module in Model.ListOfSubmodules)
+                        {
+                            module.ChangeHealthStatus(HealthStatus.Error);
+                        }
+
                         return;
                     }
                 }
@@ -156,14 +160,14 @@ namespace GitSubmodules.Mvvm.ViewModel
                 if(submoduleCommand != SubModuleCommand.AllStatus)
                 {
                     WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
-                    DoStartGit(null, SubModuleCommand.AllStatus);
+                    DoStartGit(SubModuleCommand.AllStatus);
                     return;
                 }
 
                 if(string.IsNullOrEmpty(consoleOutput))
                 {
                     WriteToOutputWindow(Category.Debug, "No submodules found");
-                    Model.CanExecuteCommand = true;
+                    CanExecuteCommand(true);
                     return;
                 }
 
@@ -188,8 +192,6 @@ namespace GitSubmodules.Mvvm.ViewModel
 
                 Model.ListOfSubmodules = tempList;
 
-                ChangeHealthStatus(null, HealthStatus.Okay);
-
                 if(splitedAnswer.Count == Model.ListOfSubmodules.Count())
                 {
                     WriteToOutputWindow(Category.Debug, string.Format("Count of Submodules: {0}", Model.ListOfSubmodules.Count()));
@@ -200,15 +202,15 @@ namespace GitSubmodules.Mvvm.ViewModel
                                                                Model.ListOfSubmodules.Count(), splitedAnswer.Count));
                 }
 
-                Model.CanExecuteCommand = true;
+                CanExecuteCommand(true);
             });
         }
 
         /// <summary>
-        /// Pull the origin master for one or all submodules
+        /// Pull the origin master for one or all <see cref="Submodule"/>
         /// </summary>
-        /// <param name="submodule">The submodule for the pull, or <c>null</c> for all modules</param>
-        internal void DoAllPullOriginMaster(Submodule submodule)
+        /// <param name="submodule">The <see cref="Submodule"/> for the pull, or <c>null</c> for all modules</param>
+        internal void DoPullOriginMaster(Submodule submodule)
         {
             if((Model.ListOfSubmodules == null) || (Model.WaitingTimer == null))
             {
@@ -221,22 +223,22 @@ namespace GitSubmodules.Mvvm.ViewModel
                 {
                     foreach(var submoduleEntry in Model.ListOfSubmodules)
                     {
-                        DoStartGit(submoduleEntry, SubModuleCommand.OnePullOriginMaster);
+                        DoStartGit(SubModuleCommand.OnePullOriginMaster, submoduleEntry);
                         Model.WaitingTimer.Reset();
                         Model.WaitingTimer.WaitOne(10000);
                     }
 
-                    DoStartGit(null, SubModuleCommand.AllStatus);
+                    DoStartGit(SubModuleCommand.AllStatus);
                 });
             }
             else
             {
                 Task.Run(() =>
                 {
-                    DoStartGit(submodule, SubModuleCommand.OnePullOriginMaster);
+                    DoStartGit(SubModuleCommand.OnePullOriginMaster, submodule);
                     Model.WaitingTimer.Reset();
                     Model.WaitingTimer.WaitOne(10000);
-                    DoStartGit(null, SubModuleCommand.AllStatus);
+                    DoStartGit(SubModuleCommand.AllStatus);
                 });
             }
         }
@@ -294,24 +296,20 @@ namespace GitSubmodules.Mvvm.ViewModel
                 Model.OutputPane.Activate();
             }
 
-            if(dte2.Solution == null)
+            if((dte2.Solution == null) || (Model.CurrentSolutionFullName == dte2.Solution.FullName))
             {
                 return;
             }
 
-            if(Model.CurrentSolutionFullName == dte2.Solution.FullName)
-            {
-                return;
-            }
-
+            Model.GitCounter++;
             Model.ListOfSubmodules        = null;
             Model.CanExecuteCommand       = false;
             Model.CurrentSolutionFullName = dte2.Solution.FullName;
-            Model.CurrentSolutionPath     = "No solution opend";
-            Model.GitCounter++;
+            Model.CurrentSolutionPath     = string.Empty;
 
             if(string.IsNullOrEmpty(Model.CurrentSolutionFullName))
             {
+                Model.CurrentSolutionPath = "No solution opend";
                 WriteToOutputWindow(Category.Debug, "No solution opend");
                 return;
             }
@@ -321,7 +319,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                 return;
             }
 
-            DoStartGit(null, SubModuleCommand.AllStatus);
+            DoStartGit(SubModuleCommand.AllFetch);
         }
 
         /// <summary>
@@ -414,79 +412,13 @@ namespace GitSubmodules.Mvvm.ViewModel
         }
 
         /// <summary>
-        /// Change the health status of a <see cref="Submodule"/> or of all submodules
+        /// Change the execution state of the functions of this extension
         /// </summary>
-        /// <param name="submodule">The <see cref="Submodule"/> for the status change
-        /// or <c>null</c> for all submodules</param>
-        /// <param name="healthStatus">The <see cref="HealthStatus"/> for the
-        /// or all <see cref="Submodule"/>s</param>
-        internal void ChangeHealthStatus(Submodule submodule, HealthStatus healthStatus)
+        /// <param name="status">The new execution state</param>
+        internal void CanExecuteCommand(bool status)
         {
-            if((Model.ListOfSubmodules == null) || !Model.ListOfSubmodules.Any())
-            {
-                return;
-            }
-
-            string healthImageFile;
-
-            switch(healthStatus)
-            {
-                case HealthStatus.Unknown:
-                    healthImageFile = "Unknown.png";
-                    break;
-
-                case HealthStatus.Okay:
-                    healthImageFile = "Okay.png";
-                    break;
-
-                case HealthStatus.Warning:
-                    healthImageFile = "Warning.png";
-                    break;
-
-                case HealthStatus.Error:
-                    healthImageFile = "Error.png";
-                    break;
-
-                default:
-                    healthImageFile = "Unknown.png";
-                    break;
-            }
-
-            var resourceName = Assembly.GetExecutingAssembly()
-                                       .GetManifestResourceNames()
-                                       .FirstOrDefault(found => found.Contains(healthImageFile));
-
-            if(string.IsNullOrEmpty(resourceName))
-            {
-                return;
-            }
-
-            try
-            {
-                using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-                {
-                    if(stream == null)
-                    {
-                        return;
-                    }
-
-                    if(submodule != null)
-                    {
-                        submodule.HealthImage = BitmapFrame.Create(stream);
-                        return;
-                    }
-
-                    foreach(var module in Model.ListOfSubmodules)
-                    {
-                        module.HealthImage = BitmapFrame.Create(stream);
-                    }
-                }
-            }
-            catch(Exception exception)
-            {
-                WriteToOutputWindow(Category.Error, "Can't set indictor icon");
-                WriteToOutputWindow(Category.Error, exception.ToString());
-            }
+            Model.CanExecuteCommand   = status;
+            Model.ShowWatingIndicator = !status;
         }
 
         #endregion Internal Methods

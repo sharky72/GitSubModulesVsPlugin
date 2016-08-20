@@ -10,7 +10,7 @@ This Visual Studio plugin is for users that need a easier way to handle with Git
 4. Menu -> View -> Other Windows -> Git Submodules
 
 ##Supported Git functions for each and all submodules
-* Status
+* Fetch
 * Init
 * Deinit (Force)
 * Update (Force)
@@ -18,12 +18,18 @@ This Visual Studio plugin is for users that need a easier way to handle with Git
 
 ##Shown information
 * Git version
-* Path to the current open solution (clickable -> Open in File-Explorer)
+* Path to the current open solution
+ * Left-click for open in File-Explorer
 * Submodules of this repository
  * Status of the last action
- * Name of the Submodule (clickable -> Open in File-Explorer)
+ * Name of the Submodule
+   * Left-click for open in File-Explorer
  * Id (SHA-1) of the submodule
- * Last commit Id (SHA-1 or Tag) of the submodule
+   * Right-click menu for copy to clipboard
+    * or use CTRL+C to copy to clipboard
+ * Last Tag of the submodule
+   * Right-click menu for copy to clipboard
+    * or use CTRL+C to copy to clipboard
  * Status of the submodule
 
 ##Right-click options for a submodule
@@ -32,18 +38,34 @@ This Visual Studio plugin is for users that need a easier way to handle with Git
 * Deinit (Force)
 * Update (Force)
 * Pull origin master
+* Copy id to clipboard
+* Copy tag to clipboard
  
 ##Others
 * Supported any used Visual Studio theme
+* Automatic fetch submodule status from server on first open of a soultion
 * Debug and error messages will be written on a separate output window
 * The output window is automatical actiavte on the first use and when a error occures
 
 ##Pictures
+On dark theme
+![picture](picture1.png)
+
 On blue theme
 ![picture](picture2.png)
 
-On dark theme
+On light theme
 ![picture](picture3.png)
+
+##Submodule status colours
+| Submodule status               | Colour           |
+| ------------------------------ | ---------------- |
+| Unknown Status (Please Report) | LightGray        |
+| Submodule is not initialized   | LightCoral (Red) |
+| Submodule is initialized       | Yellow           |
+| Submodule has merge conflicts  | DarkOrange       |
+| Submodule is current           | YellowGreen      |
+| Submodule is not current       | LightSkyBlue     |
 
 ##System requirements
 * Visual Studio 2012, 2013, 2015
@@ -73,4 +95,3 @@ On dark theme
 
 ##Whats next?
 * [See milestones inside bugtracker](https://github.com/Dark-Water/GitSubModulesVsPlugin/milestones)
-

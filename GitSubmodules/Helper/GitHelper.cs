@@ -1,4 +1,5 @@
-﻿using GitSubmodules.Enumerations;
+﻿using System.Diagnostics;
+using GitSubmodules.Enumerations;
 using GitSubmodules.Mvvm.Model;
 
 namespace GitSubmodules.Helper
@@ -8,21 +9,36 @@ namespace GitSubmodules.Helper
     /// </summary>
     internal static class GitHelper
     {
+        internal static ProcessStartInfo GetProcessStartInfo(Submodule submodule,SubModuleCommand subModuleCommand)
+        {
+            return new ProcessStartInfo("git.exe")
+            {
+                Arguments              = GetArguments(submodule, subModuleCommand),
+                CreateNoWindow         = true,
+                RedirectStandardError  = true,
+                RedirectStandardOutput = true,
+                UseShellExecute        = false
+            };
+        }
+
         /// <summary>
         /// Returns a argument <see cref="string"/> for Git based on the given <see cref="Submodule"/>
         /// and <see cref="SubModuleCommand"/>
         /// </summary>
         /// <param name="submodule">The <see cref="Submodule"/> for this argument, use <c>null</c> for all submodules</param>
-        /// <param name="submoduleCommand">The <see cref="SubModuleCommand"/> for this argument</param>
+        /// <param name="subModuleCommand">The <see cref="SubModuleCommand"/> for this argument</param>
         /// <returns>Argument <see cref="string"/> for Git</returns>
-        internal static string GetGitArguments(Submodule submodule, SubModuleCommand submoduleCommand)
+        internal static string GetArguments(Submodule submodule, SubModuleCommand subModuleCommand)
         {
             var submoduleName = (submodule != null) && !string.IsNullOrEmpty(submodule.Name)
                 ? submodule.Name
                 : string.Empty;
 
-            switch(submoduleCommand)
+            switch(subModuleCommand)
             {
+                case SubModuleCommand.AllFetch:
+                    return "fetch --recurse-submodules";
+
                 case SubModuleCommand.AllStatus:
                     return "submodule status";
 

@@ -6,6 +6,11 @@
     internal enum SubModuleCommand
     {
         /// <summary>
+        /// Command for the fetch of all submodules
+        /// </summary>
+        AllFetch,
+
+        /// <summary>
         /// Command for the status of all submodules
         /// </summary>
         AllStatus,
