@@ -207,10 +207,10 @@ namespace GitSubmodules.Mvvm.ViewModel
         }
 
         /// <summary>
-        /// Pull the origin master for one or all submodules
+        /// Pull the origin master for one or all <see cref="Submodule"/>
         /// </summary>
-        /// <param name="submodule">The submodule for the pull, or <c>null</c> for all modules</param>
-        internal void DoAllPullOriginMaster(Submodule submodule)
+        /// <param name="submodule">The <see cref="Submodule"/> for the pull, or <c>null</c> for all modules</param>
+        internal void DoPullOriginMaster(Submodule submodule)
         {
             if((Model.ListOfSubmodules == null) || (Model.WaitingTimer == null))
             {

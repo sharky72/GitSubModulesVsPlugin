@@ -89,7 +89,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             get
             {
-                return new RelayCommand(param => DoAllPullOriginMaster(null),
+                return new RelayCommand(param => DoPullOriginMaster(null),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -161,7 +161,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             get
             {
-                return new RelayCommand(param => DoAllPullOriginMaster(param as Submodule),
+                return new RelayCommand(param => DoPullOriginMaster(param as Submodule),
                                         param => Model.CanExecuteCommand);
             }
         }

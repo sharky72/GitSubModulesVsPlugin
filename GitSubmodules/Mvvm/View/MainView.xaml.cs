@@ -111,8 +111,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmodulePullOriginMaster(object sender, EventArgs e)
         {
-            ViewModel.DoStartGit(SubModuleCommand.OnePullOriginMaster, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
-            ViewModel.DoStartGit(SubModuleCommand.OneStatus, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
+            ViewModel.DoPullOriginMaster(SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
