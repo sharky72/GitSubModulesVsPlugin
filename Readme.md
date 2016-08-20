@@ -54,6 +54,16 @@ On dark theme
 On blue theme
 ![picture](picture2.png)
 
+##Submodule status colours
+| Submodule status               | Colour           |
+| ------------------------------ | ---------------- |
+| Unknown Status (Please Report) | LightGray        |
+| Submodule is not initialized   | LightCoral (Red) |
+| Submodule is initialized       | Yellow           |
+| Submodule has merge conflicts  | DarkOrange       |
+| Submodule is current           | YellowGreen      |
+| Submodule is not current       | LightSkyBlue     |
+
 ##System requirements
 * Visual Studio 2012, 2013, 2015
 * [.NET Framework 4.5](https://www.microsoft.com/de-de/download/details.aspx?id=30653)
