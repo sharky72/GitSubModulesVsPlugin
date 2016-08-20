@@ -54,6 +54,9 @@ On dark theme
 On blue theme
 ![picture](picture2.png)
 
+On light theme
+![picture](picture3.png)
+
 ##Submodule status colours
 | Submodule status               | Colour           |
 | ------------------------------ | ---------------- |
