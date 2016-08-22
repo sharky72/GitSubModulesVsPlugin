@@ -7,13 +7,13 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using EnvDTE80;
 using GitSubmodules.Enumerations;
 using GitSubmodules.Helper;
 using GitSubmodules.Mvvm.Model;
 using GitSubmodules.Mvvm.View;
 using GitSubmodules.Other;
-using Microsoft.VisualStudio.PlatformUI;
 
 namespace GitSubmodules.Mvvm.ViewModel
 {
@@ -22,12 +22,18 @@ namespace GitSubmodules.Mvvm.ViewModel
     {
         #region Public Properties
 
+        /// <summary>
+        /// The model that contains all used data of the view-model
+        /// </summary>
         public MainModel Model { get; private set; }
 
         #endregion Public Properties
 
         #region Internal Constructor
 
+        /// <summary>
+        /// Constructor of <see cref="MainViewModel"/>
+        /// </summary>
         public MainViewModel() : base(null)
         {
             Model = new MainModel
@@ -35,7 +41,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                 ListOfSubmodules  = new Collection<Submodule>(),
                 WaitingTimer      = new AutoResetEvent(false),
                 GitVersion        = "Git is not present, please install",
-                Foreground        = ColorHelper.GetThemedBrush(EnvironmentColors.ToolWindowTextColorKey)
+                Foreground        = ThemeHelper.GetWindowTextColor()
             };
 
             if(!Model.GitIsPresent)
@@ -43,10 +49,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                 DoStartGit(SubModuleCommand.OtherGitVersion);
             }
 
-            VSColorTheme.ThemeChanged += delegate
-            {
-                Model.Foreground = ColorHelper.GetThemedBrush(EnvironmentColors.ToolWindowTextColorKey);
-            };
+            ThemeHelper.SubscribeThemeChanged(OnThemeChanged);
 
             Caption          = "Git Submodules";
             BitmapResourceID = 301;
@@ -419,6 +422,16 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             Model.CanExecuteCommand   = status;
             Model.ShowWatingIndicator = !status;
+        }
+
+        /// <summary>
+        /// Event is called when the Visual Studio theme has changed
+        /// </summary>
+        /// <param name="sender">The sender of this event</param>
+        /// <param name="newBrush">The <see cref="Brush"/> for the foreground</param>
+        internal void OnThemeChanged(object sender, Brush newBrush)
+        {
+            Model.Foreground = newBrush;
         }
 
         #endregion Internal Methods
