@@ -7,13 +7,13 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Media;
 using EnvDTE80;
 using GitSubmodules.Enumerations;
 using GitSubmodules.Helper;
 using GitSubmodules.Mvvm.Model;
 using GitSubmodules.Mvvm.View;
 using GitSubmodules.Other;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace GitSubmodules.Mvvm.ViewModel
 {
@@ -48,8 +48,6 @@ namespace GitSubmodules.Mvvm.ViewModel
             {
                 DoStartGit(SubModuleCommand.OtherGitVersion);
             }
-
-            ThemeHelper.SubscribeThemeChanged(OnThemeChanged);
 
             Caption          = "Git Submodules";
             BitmapResourceID = 301;
@@ -286,7 +284,8 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// Update the used Visual Studio object
         /// </summary>
         /// <param name="dte2">The Visual Studio object</param>
-        internal void UpdateDte2(DTE2 dte2)
+        /// <param name="iVsUiShell2">The <see cref="IVsUIShell2"/> for surface handling inside Visual Studio</param>
+        internal void UpdateDte2(DTE2 dte2, IVsUIShell2 iVsUiShell2)
         {
             if(dte2 == null)
             {
@@ -298,6 +297,8 @@ namespace GitSubmodules.Mvvm.ViewModel
                 Model.OutputPane = dte2.ToolWindows.OutputWindow.OutputWindowPanes.Add("Git submodules");
                 Model.OutputPane.Activate();
             }
+
+            Model.Foreground = ThemeHelper.GetWindowTextColor(iVsUiShell2);
 
             if((dte2.Solution == null) || (Model.CurrentSolutionFullName == dte2.Solution.FullName))
             {
@@ -422,16 +423,6 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             Model.CanExecuteCommand   = status;
             Model.ShowWatingIndicator = !status;
-        }
-
-        /// <summary>
-        /// Event is called when the Visual Studio theme has changed
-        /// </summary>
-        /// <param name="sender">The sender of this event</param>
-        /// <param name="newBrush">The <see cref="Brush"/> for the foreground</param>
-        internal void OnThemeChanged(object sender, Brush newBrush)
-        {
-            Model.Foreground = newBrush;
         }
 
         #endregion Internal Methods

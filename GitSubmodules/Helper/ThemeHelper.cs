@@ -1,7 +1,6 @@
-﻿using System;
-using System.Windows.Media;
-using Microsoft.VisualStudio.PlatformUI;
-using Microsoft.VisualStudio.Shell;
+﻿using System.Windows.Media;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace GitSubmodules.Helper
 {
@@ -10,41 +9,37 @@ namespace GitSubmodules.Helper
     /// </summary>
     internal static class ThemeHelper
     {
-        // All elements inside these class need Visual Studio 2012 SDK or higher
-        //
-        // - Microsoft.VisualStudio.Shell.ThemeResourceKey
-        // - Microsoft.VisualStudio.PlatformUI.EnvironmentColors
-        // - Microsoft.VisualStudio.PlatformUI.VSColorTheme
-
         /// <summary>
-        /// Convert a ThemeResourceKey to a <see cref="Brush"/>
+        /// Convert a Win32 colour value to a <see cref="System.Windows.Media.Brush"/>
         /// </summary>
-        /// <param name="themeResourceKey">The ThemeResourceKey to convert</param>
-        /// <returns>The converted <see cref="Brush"/></returns>
-        internal static Brush GetThemedBrush(ThemeResourceKey themeResourceKey)
+        /// <param name="win32ColorValue">The Win32 colour value for the compatible <see cref="Brush"/></param>
+        /// <returns>The converted <see cref="System.Windows.Media.Brush"/></returns>
+        internal static Brush GetThemedBrush(uint win32ColorValue)
         {
-            return ColorHelper.GetBrush(VSColorTheme.GetThemedColor(themeResourceKey));
+            return win32ColorValue <= int.MaxValue
+                       ? ColorHelper.GetBrush(System.Drawing.ColorTranslator.FromWin32((int)win32ColorValue))
+                       : Brushes.Black;
         }
 
         /// <summary>
         /// Return a compatible <see cref="Brush"/> for the ToolWindowTextColorKey
         /// </summary>
+        /// <param name="iVsUiShell2">The <see cref="IVsUIShell2"/> for surface handling inside Visual Studio</param>
         /// <returns>A compatible <see cref="Brush"/></returns>
-        internal static Brush GetWindowTextColor()
+        internal static Brush GetWindowTextColor(IVsUIShell2 iVsUiShell2 = null)
         {
-            return GetThemedBrush(EnvironmentColors.ToolWindowTextColorKey);
-        }
+            if(iVsUiShell2 == null)
+            {
+                return Brushes.Black;
+            }
 
-        /// <summary>
-        /// Subscribe the theme changed event
-        /// </summary>
-        /// <param name="themeChangedMethod">The callback method for the event</param>
-        internal static void SubscribeThemeChanged(EventHandler<Brush> themeChangedMethod)
-        {
-            VSColorTheme.ThemeChanged += delegate
-                                         {
-                                             themeChangedMethod(null, GetWindowTextColor());
-                                         };
+            const int systemColor = (int)__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_TEXT;
+
+            uint color;
+
+            return iVsUiShell2.GetVSSysColorEx(systemColor, out color) == VSConstants.S_OK
+                ? GetThemedBrush(color)
+                : Brushes.Black;
         }
     }
 }

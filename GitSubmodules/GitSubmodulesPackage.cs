@@ -42,16 +42,18 @@ namespace GitSubmodules
                 return;
             }
 
-            var dte2 = GetGlobalService(typeof(DTE)) as DTE2;
-            if(dte2 == null)
+            var dte2        = GetGlobalService(typeof(DTE)) as DTE2;
+            var iVsUiShell2 = GetService(typeof(SVsUIShell)) as IVsUIShell2;
+
+            if((dte2 == null) || (iVsUiShell2 == null))
             {
                 return;
             }
 
-            dte2.Events.WindowEvents.WindowActivated += delegate { mainViewModel.UpdateDte2(dte2); };
+            dte2.Events.WindowEvents.WindowActivated += delegate { mainViewModel.UpdateDte2(dte2, iVsUiShell2); };
 
-            dte2.Events.SolutionEvents.BeforeClosing += () => mainViewModel.UpdateDte2(dte2);
-            dte2.Events.SolutionEvents.Opened        += () => mainViewModel.UpdateDte2(dte2);
+            dte2.Events.SolutionEvents.BeforeClosing += () => mainViewModel.UpdateDte2(dte2, iVsUiShell2);
+            dte2.Events.SolutionEvents.Opened        += () => mainViewModel.UpdateDte2(dte2, iVsUiShell2);
         }
 
         #endregion Package Members
