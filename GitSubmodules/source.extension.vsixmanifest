@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="cafa6f8c-7480-4f3f-bd5b-ab4828afb375" Version="1.3.0" Language="en-US" Publisher="Tobias Sekan" />
+        <Identity Id="cafa6f8c-7480-4f3f-bd5b-ab4828afb375" Version="1.4.0" Language="en-US" Publisher="Tobias Sekan" />
         <DisplayName>Git Submodules</DisplayName>
         <Description xml:space="preserve">Visual Studio plugin for easier handle with Git submodules</Description>
         <MoreInfo>https://github.com/Dark-Water/GitSubModulesVsPlugin</MoreInfo>
