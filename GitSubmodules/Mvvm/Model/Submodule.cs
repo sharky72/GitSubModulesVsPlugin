@@ -137,6 +137,12 @@ namespace GitSubmodules.Mvvm.Model
 
             if(string.IsNullOrEmpty(CompleteTag))
             {
+                ChangeHealthStatus(HealthStatus.Unknown);
+                return;
+            }
+
+            if(Id.StartsWith(CompleteTag, StringComparison.Ordinal))
+            {
                 ChangeHealthStatus(HealthStatus.Okay);
                 return;
             }
@@ -146,7 +152,7 @@ namespace GitSubmodules.Mvvm.Model
             var splittedTag = CompleteTag.Split('-');
             if(splittedTag.Length - 2 < 1)
             {
-                ChangeHealthStatus(HealthStatus.Okay);
+                ChangeHealthStatus(HealthStatus.Unknown);
                 return;
             }
 
@@ -155,7 +161,7 @@ namespace GitSubmodules.Mvvm.Model
 
             NumberOfAdditionalCommits = numberOfAdditionalCommits;
 
-            ChangeHealthStatus(NumberOfAdditionalCommits == 0 ? HealthStatus.Okay : HealthStatus.Warning);
+            ChangeHealthStatus(NumberOfAdditionalCommits == 0 ? HealthStatus.Unknown : HealthStatus.Warning);
         }
 
         #endregion Internal Constructor
