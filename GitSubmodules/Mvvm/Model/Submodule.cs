@@ -319,7 +319,7 @@ namespace GitSubmodules.Mvvm.Model
 
                 case HealthStatus.Head:
                     healthImageFile = "Star.png";
-                    HealthImageToolTip = "This submodule is the newestseems to be okay.";
+                    HealthImageToolTip = "This submodule is the newest version.";
                     break;
 
                 case HealthStatus.Okay:
