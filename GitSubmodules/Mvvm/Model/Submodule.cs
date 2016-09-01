@@ -147,6 +147,12 @@ namespace GitSubmodules.Mvvm.Model
                 return;
             }
 
+            if(CompleteTag.EndsWith("HEAD", StringComparison.Ordinal))
+            {
+                ChangeHealthStatus(HealthStatus.Head);
+                return;
+            }
+
             CompleteTag = CompleteTag.TrimStart('(').TrimEnd(')');
 
             var splittedTag = CompleteTag.Split('-');
@@ -309,6 +315,11 @@ namespace GitSubmodules.Mvvm.Model
                     healthImageFile    = "Unknown.png";
                     HealthImageToolTip = "Unknown submodule status, try to fetch again\n"
                                        + "and please report this issue on GitHub, thanks.";
+                    break;
+
+                case HealthStatus.Head:
+                    healthImageFile = "Star.png";
+                    HealthImageToolTip = "This submodule is the newestseems to be okay.";
                     break;
 
                 case HealthStatus.Okay:
