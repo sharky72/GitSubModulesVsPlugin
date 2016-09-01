@@ -175,6 +175,7 @@
     <EmbeddedResource Include="Resources\HealthStatus\Okay.png" />
     <EmbeddedResource Include="Resources\HealthStatus\Unknown.png" />
     <EmbeddedResource Include="Resources\HealthStatus\Warning.png" />
+    <Resource Include="Resources\HealthStatus\Star.png" />
     <Content Include="Resources\miniPicture.png">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
