@@ -169,7 +169,6 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Resources\Git-Icon.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <EmbeddedResource Include="Resources\HealthStatus\Error.png" />
@@ -177,11 +176,9 @@
     <EmbeddedResource Include="Resources\HealthStatus\Unknown.png" />
     <EmbeddedResource Include="Resources\HealthStatus\Warning.png" />
     <Content Include="Resources\miniPicture.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Resources\Package.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
   </ItemGroup>
