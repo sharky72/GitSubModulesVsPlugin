@@ -141,11 +141,7 @@ namespace GitSubmodules.Mvvm.Model
                 return;
             }
 
-            if(Id.StartsWith(CompleteTag, StringComparison.Ordinal))
-            {
-                ChangeHealthStatus(HealthStatus.Okay);
-                return;
-            }
+            CompleteTag = CompleteTag.TrimStart('(').TrimEnd(')');
 
             if(CompleteTag.EndsWith("HEAD", StringComparison.Ordinal))
             {
@@ -153,10 +149,21 @@ namespace GitSubmodules.Mvvm.Model
                 return;
             }
 
-            CompleteTag = CompleteTag.TrimStart('(').TrimEnd(')');
+            if(Id.StartsWith(CompleteTag, StringComparison.Ordinal))
+            {
+                ChangeHealthStatus(HealthStatus.Okay);
+                return;
+            }
+
+            if(CompleteTag.StartsWith("heads", StringComparison.Ordinal)
+            && !CompleteTag.Contains("-"))
+            {
+                ChangeHealthStatus(HealthStatus.Okay);
+                return;
+            }
 
             var splittedTag = CompleteTag.Split('-');
-            if(splittedTag.Length - 2 < 1)
+            if(splittedTag.Length - 2 < 1 )
             {
                 ChangeHealthStatus(HealthStatus.Unknown);
                 return;
