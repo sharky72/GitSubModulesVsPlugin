@@ -90,19 +90,19 @@ namespace GitSubmodules.Mvvm.Model
 
         #endregion Internal Fields
 
-        #region Private Fields
+        #region Private Backing-Fields
 
         /// <summary>
-        /// The Backing-field for <see cref="HealthImage"/>
+        /// The backing-field for <see cref="HealthImage"/>
         /// </summary>
         private BitmapSource _healthImage;
 
         /// <summary>
-        /// The Backing-Field for <see cref="HealthImageToolTip"/>
+        /// The backing-field for <see cref="HealthImageToolTip"/>
         /// </summary>
         private string _healthImageToolTip;
 
-        #endregion Private Fields
+        #endregion Private Backing-Fields
 
         #region Internal Constructor
 
