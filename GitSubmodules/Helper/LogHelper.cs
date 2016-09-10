@@ -16,7 +16,7 @@ namespace GitSubmodules.Helper
         /// <param name="memberName">The member name that hat call this method</param>
         /// <param name="codelineNumber">The code line number from this this method have called</param>
         internal static void Log(string messages, [CallerMemberName] string memberName = null,
-                                      [CallerLineNumber] int codelineNumber = 0)
+                                 [CallerLineNumber] int codelineNumber = 0)
         {
             using(var fileStream = new StreamWriter(new FileStream("D:\\GitSubmodule.log",
                                                                    FileMode.Append,
@@ -28,6 +28,12 @@ namespace GitSubmodules.Helper
                                      codelineNumber,
                                      messages);
             }
+        }
+
+        internal static void Log(Exception exception, [CallerMemberName] string memberName = null,
+                                 [CallerLineNumber] int codelineNumber = 0)
+        {
+            Log(exception.ToString(), memberName, codelineNumber);
         }
     }
 }
