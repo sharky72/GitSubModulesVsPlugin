@@ -132,6 +132,7 @@
     <Compile Include="Enumerations\SubModuleStatus.cs" />
     <Compile Include="Helper\ColorHelper.cs" />
     <Compile Include="Helper\GitHelper.cs" />
+    <Compile Include="Helper\LogHelper.cs" />
     <Compile Include="Helper\ModelBase.cs" />
     <Compile Include="Helper\SubmoduleHelper.cs" />
     <Compile Include="Helper\ThemeHelper.cs" />

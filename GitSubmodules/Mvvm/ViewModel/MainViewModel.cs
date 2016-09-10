@@ -36,6 +36,13 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// </summary>
         public MainViewModel() : base(null)
         {
+            LogHelper.Log("Starte: Set ToolWindowPane parameter");
+            Caption          = "Git Submodules";
+            BitmapResourceID = 301;
+            BitmapIndex      = 1;
+            LogHelper.Log("Leave: Set ToolWindowPane parameter");
+
+            LogHelper.Log("Strat: Create MainModel");
             Model = new MainModel
             {
                 ListOfSubmodules  = new Collection<Submodule>(),
@@ -43,16 +50,18 @@ namespace GitSubmodules.Mvvm.ViewModel
                 GitVersion        = "Git is not present, please install",
                 Foreground        = ThemeHelper.GetWindowTextColor()
             };
+            LogHelper.Log("Leave: Create MainModel");
 
             if(!Model.GitIsPresent)
             {
+                LogHelper.Log("Start: DoStartGit(SubModuleCommand.OtherGitVersion)");
                 DoStartGit(SubModuleCommand.OtherGitVersion);
+                LogHelper.Log("Leave: DoStartGit(SubModuleCommand.OtherGitVersion)");
             }
 
-            Caption          = "Git Submodules";
-            BitmapResourceID = 301;
-            BitmapIndex      = 1;
-            Content          = new MainView(this);
+            LogHelper.Log("Start: Content = new MainView(this)");
+            Content = new MainView(this);
+            LogHelper.Log("Leave: Content = new MainView(this)");
         }
 
         #endregion Internal Constructor
