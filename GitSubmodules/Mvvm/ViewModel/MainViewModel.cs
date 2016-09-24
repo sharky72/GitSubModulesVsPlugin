@@ -29,52 +29,36 @@ namespace GitSubmodules.Mvvm.ViewModel
 
         #endregion Public Properties
 
-        #region Internal Constructor
+        #region Public Constructor
 
         /// <summary>
         /// Constructor of <see cref="MainViewModel"/>
         /// </summary>
-        public MainViewModel() : base(null)
+        public MainViewModel()
         {
-            try
+            Caption          = "Git Submodules";
+            BitmapResourceID = 301;
+            BitmapIndex      = 1;
+
+            Model = new MainModel
             {
-                LogHelper.Log("Start: Set ToolWindowPane parameter");
-                Caption = "Git Submodules";
-                BitmapResourceID = 301;
-                BitmapIndex = 1;
-                LogHelper.Log("Leave: Set ToolWindowPane parameter");
+                ListOfSubmodules = new Collection<Submodule>(),
+                WaitingTimer     = new AutoResetEvent(false),
+                GitVersion       = "Git is not present, please install",
+                Foreground       = ThemeHelper.GetWindowTextColor()
+            };
 
-                LogHelper.Log("Strat: Create MainModel");
-                Model = new MainModel
-                {
-                    ListOfSubmodules = new Collection<Submodule>(),
-                    WaitingTimer = new AutoResetEvent(false),
-                    GitVersion = "Git is not present, please install",
-                    Foreground = ThemeHelper.GetWindowTextColor()
-                };
-                LogHelper.Log("Leave: Create MainModel");
-
-                if(!Model.GitIsPresent)
-                {
-                    LogHelper.Log("Start: DoStartGit(SubModuleCommand.OtherGitVersion)");
-                    DoStartGit(SubModuleCommand.OtherGitVersion);
-                    LogHelper.Log("Leave: DoStartGit(SubModuleCommand.OtherGitVersion)");
-                }
-
-                LogHelper.Log("Start: Content = new MainView(this)");
-                Content = new MainView(this);
-                LogHelper.Log("Leave: Content = new MainView(this)");
-
-            }
-            catch(Exception exception)
+            if(!Model.GitIsPresent)
             {
-                LogHelper.Log(exception);
+                DoStartGit(SubModuleCommand.OtherGitVersion);
             }
+
+            Content = new MainView(this);
         }
 
         #endregion Internal Constructor
 
-        #region Command Methods
+        #region Internal Command Methods
 
         /// <summary>
         /// Start git.exe with the given arguments
@@ -293,7 +277,7 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
-        #endregion Command Methods
+        #endregion Internal Command Methods
 
         #region Internal Methods
 
