@@ -90,19 +90,19 @@ namespace GitSubmodules.Mvvm.Model
 
         #endregion Internal Fields
 
-        #region Private Fields
+        #region Private Backing-Fields
 
         /// <summary>
-        /// The Backing-field for <see cref="HealthImage"/>
+        /// The backing-field for <see cref="HealthImage"/>
         /// </summary>
         private BitmapSource _healthImage;
 
         /// <summary>
-        /// The Backing-Field for <see cref="HealthImageToolTip"/>
+        /// The backing-field for <see cref="HealthImageToolTip"/>
         /// </summary>
         private string _healthImageToolTip;
 
-        #endregion Private Fields
+        #endregion Private Backing-Fields
 
         #region Internal Constructor
 
@@ -137,16 +137,35 @@ namespace GitSubmodules.Mvvm.Model
 
             if(string.IsNullOrEmpty(CompleteTag))
             {
-                ChangeHealthStatus(HealthStatus.Okay);
+                ChangeHealthStatus(HealthStatus.Unknown);
                 return;
             }
 
             CompleteTag = CompleteTag.TrimStart('(').TrimEnd(')');
 
-            var splittedTag = CompleteTag.Split('-');
-            if(splittedTag.Length - 2 < 1)
+            if(CompleteTag.EndsWith("HEAD", StringComparison.Ordinal))
+            {
+                ChangeHealthStatus(HealthStatus.Head);
+                return;
+            }
+
+            if(Id.StartsWith(CompleteTag, StringComparison.Ordinal))
             {
                 ChangeHealthStatus(HealthStatus.Okay);
+                return;
+            }
+
+            if(CompleteTag.StartsWith("heads", StringComparison.Ordinal)
+            && !CompleteTag.Contains("-"))
+            {
+                ChangeHealthStatus(HealthStatus.Okay);
+                return;
+            }
+
+            var splittedTag = CompleteTag.Split('-');
+            if(splittedTag.Length - 2 < 1 )
+            {
+                ChangeHealthStatus(HealthStatus.Unknown);
                 return;
             }
 
@@ -155,7 +174,7 @@ namespace GitSubmodules.Mvvm.Model
 
             NumberOfAdditionalCommits = numberOfAdditionalCommits;
 
-            ChangeHealthStatus(NumberOfAdditionalCommits == 0 ? HealthStatus.Okay : HealthStatus.Warning);
+            ChangeHealthStatus(NumberOfAdditionalCommits == 0 ? HealthStatus.Unknown : HealthStatus.Warning);
         }
 
         #endregion Internal Constructor
@@ -303,6 +322,11 @@ namespace GitSubmodules.Mvvm.Model
                     healthImageFile    = "Unknown.png";
                     HealthImageToolTip = "Unknown submodule status, try to fetch again\n"
                                        + "and please report this issue on GitHub, thanks.";
+                    break;
+
+                case HealthStatus.Head:
+                    healthImageFile    = "Star.png";
+                    HealthImageToolTip = "This submodule is the newest version.";
                     break;
 
                 case HealthStatus.Okay:

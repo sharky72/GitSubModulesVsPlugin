@@ -11,6 +11,11 @@
         EmptyLine,
 
         /// <summary>
+        /// Message is a trace infromation
+        /// </summary>
+        Trace,
+
+        /// <summary>
         /// Message is a debug information
         /// </summary>
         Debug,

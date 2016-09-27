@@ -13,6 +13,11 @@ namespace GitSubmodules.Enumerations
         Unknown,
 
         /// <summary>
+        /// <see cref="Submodule"/> is the HEAD version
+        /// </summary>
+        Head,
+
+        /// <summary>
         /// <see cref="Submodule"/> is okay
         /// </summary>
         Okay,

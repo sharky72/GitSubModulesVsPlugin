@@ -18,7 +18,7 @@ namespace GitSubmodules
     [Guid(GuidList.GuidVsPackage3PkgString)]
     public sealed class GitSubmodulesPackage : Package
     {
-        #region Package Members
+        #region Overrides of Package
 
         /// <summary>
         /// Called when the VSPackage is loaded by Visual Studio
@@ -27,14 +27,15 @@ namespace GitSubmodules
         {
             base.Initialize();
 
-            var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-            if(mcs == null)
+            var oleMenuCommandService = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            if(oleMenuCommandService == null)
             {
                 return;
             }
 
-            mcs.AddCommand(new MenuCommand(ShowToolWindow, new CommandID(GuidList.GuidVsPackage3CmdSet,
-                                                                         Convert.ToInt32(PkgCmdIdList.CmdidMyTool))));
+            var commandId    = new CommandID(GuidList.GuidVsPackage3CmdSet, Convert.ToInt32(PkgCmdIdList.CmdidMyTool));
+            var menueCommand = new MenuCommand(ShowToolWindow, commandId);
+            oleMenuCommandService.AddCommand(menueCommand);
 
             var mainViewModel = FindToolWindow(typeof(MainViewModel), 0, true) as MainViewModel;
             if(mainViewModel == null)
@@ -42,19 +43,52 @@ namespace GitSubmodules
                 return;
             }
 
-            var dte2 = GetGlobalService(typeof(DTE)) as DTE2;
-            if(dte2 == null)
+            var dte2        = GetGlobalService(typeof(DTE)) as DTE2;
+            var iVsUiShell2 = GetService(typeof(SVsUIShell)) as IVsUIShell2;
+            if((dte2 == null) || (iVsUiShell2 == null))
             {
                 return;
             }
 
-            dte2.Events.WindowEvents.WindowActivated += delegate { mainViewModel.UpdateDte2(dte2); };
-
-            dte2.Events.SolutionEvents.BeforeClosing += () => mainViewModel.UpdateDte2(dte2);
-            dte2.Events.SolutionEvents.Opened        += () => mainViewModel.UpdateDte2(dte2);
+            dte2.Events.WindowEvents.WindowActivated += delegate { mainViewModel.UpdateDte2(dte2, iVsUiShell2); };
+            dte2.Events.SolutionEvents.BeforeClosing += () => mainViewModel.UpdateDte2(dte2, iVsUiShell2);
+            dte2.Events.SolutionEvents.Opened        += () => mainViewModel.UpdateDte2(dte2, iVsUiShell2);
         }
 
-        #endregion Package Members
+        /// <summary>
+        /// Called when Visual Studio shutdown the <see cref="Package"/>
+        /// </summary>
+        /// <param name="canClose">Indicate that the <see cref="Package"/> can shutdown (or not)</param>
+        /// <returns>Return state from the <see cref="Package"/> shutdown</returns>
+        protected override int QueryClose(out bool canClose)
+        {
+            var dte2 = GetGlobalService(typeof(DTE)) as DTE2;
+            if(dte2 == null)
+            {
+                return base.QueryClose(out canClose);
+            }
+
+            if((dte2.Version == "14.0") || (dte2.Version == "12.0") || (dte2.Version == "11.0"))
+            {
+                return base.QueryClose(out canClose);
+            }
+
+            var vsWindowFrame = TryToGetToolWindowFrame();
+            if(vsWindowFrame == null)
+            {
+                return base.QueryClose(out canClose);
+            }
+
+            // INFO: DON'T REMOVE THE NEXT LINES!
+            // Auto close the frame to avoid partial WPF crash
+            // inside Visual Studio 2010 on restore the ToolWindow on startup
+            vsWindowFrame.Hide();
+            vsWindowFrame.CloseFrame(Convert.ToUInt32(__FRAMECLOSE.FRAMECLOSE_NoSave));
+
+            return base.QueryClose(out canClose);
+        }
+
+        #endregion Overrides of Package
 
         #region Private Methods
 
@@ -65,20 +99,28 @@ namespace GitSubmodules
         /// <param name="e">The arguments for this event</param>
         private void ShowToolWindow(object sender, EventArgs e)
         {
-            var window = FindToolWindow(typeof(MainViewModel), 0, false) as MainViewModel;
-            if((window == null) || (window.Frame == null))
-            {
-                return;
-            }
-
-            var vsWindowFrame = window.Frame as IVsWindowFrame;
+            var vsWindowFrame = TryToGetToolWindowFrame();
             if(vsWindowFrame == null)
             {
                 return;
             }
 
-
             ErrorHandler.ThrowOnFailure(vsWindowFrame.Show());
+        }
+
+        /// <summary>
+        /// Return the <see cref="IVsWindowFrame"/> of the <see cref="MainViewModel"/>
+        /// </summary>
+        /// <returns>The <see cref="IVsWindowFrame"/> when found, otherwise <c>null</c></returns>
+        private IVsWindowFrame TryToGetToolWindowFrame()
+        {
+            var window = FindToolWindow(typeof(MainViewModel), 0, false) as MainViewModel;
+            if((window == null) || (window.Frame == null))
+            {
+                return null;
+            }
+
+            return window.Frame as IVsWindowFrame;
         }
 
         #endregion Private Methods

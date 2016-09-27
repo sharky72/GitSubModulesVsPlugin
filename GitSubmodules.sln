@@ -7,12 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitSubmodules", "GitSubmodu
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		2010|Any CPU = 2010|Any CPU
 		2012|Any CPU = 2012|Any CPU
 		2013|Any CPU = 2013|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F2C26160-6EAA-4217-94F9-CB4F6CD1261F}.2010|Any CPU.ActiveCfg = 2010|Any CPU
+		{F2C26160-6EAA-4217-94F9-CB4F6CD1261F}.2010|Any CPU.Build.0 = 2010|Any CPU
 		{F2C26160-6EAA-4217-94F9-CB4F6CD1261F}.2012|Any CPU.ActiveCfg = VS2012|Any CPU
 		{F2C26160-6EAA-4217-94F9-CB4F6CD1261F}.2012|Any CPU.Build.0 = VS2012|Any CPU
 		{F2C26160-6EAA-4217-94F9-CB4F6CD1261F}.2013|Any CPU.ActiveCfg = VS2013|Any CPU

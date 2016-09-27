@@ -13,7 +13,7 @@ using GitSubmodules.Helper;
 using GitSubmodules.Mvvm.Model;
 using GitSubmodules.Mvvm.View;
 using GitSubmodules.Other;
-using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace GitSubmodules.Mvvm.ViewModel
 {
@@ -22,20 +22,30 @@ namespace GitSubmodules.Mvvm.ViewModel
     {
         #region Public Properties
 
+        /// <summary>
+        /// The model that contains all used data of the view-model
+        /// </summary>
         public MainModel Model { get; private set; }
 
         #endregion Public Properties
 
-        #region Internal Constructor
+        #region Public Constructor
 
-        public MainViewModel() : base(null)
+        /// <summary>
+        /// Constructor of <see cref="MainViewModel"/>
+        /// </summary>
+        public MainViewModel()
         {
+            Caption          = "Git Submodules";
+            BitmapResourceID = 301;
+            BitmapIndex      = 1;
+
             Model = new MainModel
             {
-                ListOfSubmodules  = new Collection<Submodule>(),
-                WaitingTimer      = new AutoResetEvent(false),
-                GitVersion        = "Git is not present, please install",
-                Foreground        = ColorHelper.GetThemedBrush(EnvironmentColors.ToolWindowTextColorKey)
+                ListOfSubmodules = new Collection<Submodule>(),
+                WaitingTimer     = new AutoResetEvent(false),
+                GitVersion       = "Git is not present, please install",
+                Foreground       = ThemeHelper.GetWindowTextColor()
             };
 
             if(!Model.GitIsPresent)
@@ -43,20 +53,12 @@ namespace GitSubmodules.Mvvm.ViewModel
                 DoStartGit(SubModuleCommand.OtherGitVersion);
             }
 
-            VSColorTheme.ThemeChanged += delegate
-            {
-                Model.Foreground = ColorHelper.GetThemedBrush(EnvironmentColors.ToolWindowTextColorKey);
-            };
-
-            Caption          = "Git Submodules";
-            BitmapResourceID = 301;
-            BitmapIndex      = 1;
-            Content          = new MainView(this);
+            Content = new MainView(this);
         }
 
         #endregion Internal Constructor
 
-        #region Command Methods
+        #region Internal Command Methods
 
         /// <summary>
         /// Start git.exe with the given arguments
@@ -275,7 +277,7 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
-        #endregion Command Methods
+        #endregion Internal Command Methods
 
         #region Internal Methods
 
@@ -283,7 +285,8 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// Update the used Visual Studio object
         /// </summary>
         /// <param name="dte2">The Visual Studio object</param>
-        internal void UpdateDte2(DTE2 dte2)
+        /// <param name="iVsUiShell2">The <see cref="IVsUIShell2"/> for surface handling inside Visual Studio</param>
+        internal void UpdateDte2(DTE2 dte2, IVsUIShell2 iVsUiShell2)
         {
             if(dte2 == null)
             {
@@ -295,6 +298,8 @@ namespace GitSubmodules.Mvvm.ViewModel
                 Model.OutputPane = dte2.ToolWindows.OutputWindow.OutputWindowPanes.Add("Git submodules");
                 Model.OutputPane.Activate();
             }
+
+            Model.Foreground = ThemeHelper.GetWindowTextColor(iVsUiShell2);
 
             if((dte2.Solution == null) || (Model.CurrentSolutionFullName == dte2.Solution.FullName))
             {

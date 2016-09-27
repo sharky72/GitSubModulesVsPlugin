@@ -1,6 +1,4 @@
 ﻿using System.Windows.Media;
-using Microsoft.VisualStudio.PlatformUI;
-using Microsoft.VisualStudio.Shell;
 
 namespace GitSubmodules.Helper
 {
@@ -20,13 +18,13 @@ namespace GitSubmodules.Helper
         }
 
         /// <summary>
-        /// Convert a <see cref="ThemeResourceKey"/> to a <see cref="Brush"/>
+        /// Return a comptible <see cref="Brush"/> for a given <see cref="System.Drawing.Color"/>
         /// </summary>
-        /// <param name="themeResourceKey">The <see cref="ThemeResourceKey"/> to convert</param>
-        /// <returns>The converted <see cref="Brush"/></returns>
-        internal static Brush GetThemedBrush(ThemeResourceKey themeResourceKey)
+        /// <param name="color">The <see cref="System.Drawing.Color"/> for the <see cref="Brush"/></param>
+        /// <returns>The new <see cref="Brush"/></returns>
+        internal static Brush GetBrush(System.Drawing.Color color)
         {
-            return new SolidColorBrush(Convert(VSColorTheme.GetThemedColor(themeResourceKey)));
+            return new SolidColorBrush(Convert(color));
         }
     }
 }
