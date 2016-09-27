@@ -14,6 +14,11 @@ This Visual Studio extension is for users that need a easier way to handle with 
 3. Restart Visual Studio
 4. Menu -> View -> Other Windows -> Git Submodules
 
+## For Visual Studio 2010 users
+* The tool window is automatic close on visual studio 2010 shutdown
+* It's currently not possible to restore the window on startup without a partial crash inside visual studio 2010
+* When you know about this problem and you have a solution, please write me
+
 ## Whats next?
 * [See milestones inside bugtracker](https://github.com/Dark-Water/GitSubModulesVsPlugin/milestones)
 
