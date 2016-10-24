@@ -1,5 +1,7 @@
 # Git Submodules
 
+[![Build status](https://ci.appveyor.com/api/projects/status/a61sbrynb0krd831?svg=true)](https://ci.appveyor.com/project/Dark-Water/gitsubmodulesvsplugin)
+
 ## Info
 This Visual Studio extension is for users that need a easier way to handle with Git submodules inside Visual Studio.
 
