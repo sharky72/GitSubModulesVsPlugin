@@ -81,8 +81,13 @@
         OnePullOriginMaster,
 
         /// <summary>
-        /// Commd to check the current installed git version
+        /// Command to check the current installed git version
         /// </summary>
-        OtherGitVersion
+        OtherGitVersion,
+
+        /// <summary>
+        /// Command to get a list of all branches of the current repository
+        /// </summary>
+        OtherBranchList
     }
 }

@@ -44,6 +44,31 @@
                 </Hyperlink>
             </TextBlock>
 
+            <StackPanel Orientation="Horizontal">
+
+                <TextBlock FontWeight="Bold"
+                           Foreground="{Binding Model.Foreground}"
+                           Text="Branch (of " />
+
+                <TextBlock FontWeight="Bold"
+                           Foreground="{Binding Model.Foreground}"
+                           Text="{Binding Model.CountOfBranches}" />
+
+                <TextBlock FontWeight="Bold"
+                           Foreground="{Binding Model.Foreground}"
+                           Text=")" />
+
+            </StackPanel>
+
+            <TextBlock Foreground="{Binding Model.Foreground}" Text="{Binding Model.CurrentBranch}">
+                <TextBlock.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold" Text="Branches" />
+                        <ItemsControl ItemsSource="{Binding Model.ListOfBranches}" />
+                    </StackPanel>
+                </TextBlock.ToolTip>
+            </TextBlock>
+
         </StackPanel>
 
         <Grid Grid.Row="3" Margin="5">

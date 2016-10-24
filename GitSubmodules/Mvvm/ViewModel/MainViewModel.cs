@@ -130,33 +130,61 @@ namespace GitSubmodules.Mvvm.ViewModel
                     }
                 }
 
-                if(submoduleCommand == SubModuleCommand.OtherGitVersion)
+                switch(submoduleCommand)
                 {
-                    WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
+                    case SubModuleCommand.OtherGitVersion:
+                        WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
 
-                    if(string.IsNullOrEmpty(consoleOutput))
-                    {
-                        WriteToOutputWindow(Category.Error, "Can't get version number from git");
+                        if(string.IsNullOrEmpty(consoleOutput))
+                        {
+                            WriteToOutputWindow(Category.Error, "Can't get version number from git");
+                            return;
+                        }
+
+                        var versionNumberString = consoleOutput.Split(' ').LastOrDefault();
+                        if(string.IsNullOrEmpty(versionNumberString))
+                        {
+                            WriteToOutputWindow(Category.Error, "Can't parse version number from git");
+                            return;
+                        }
+
+                        Model.GitVersion = versionNumberString;
+                        Model.GitIsPresent = true;
+                        Model.WaitingTimer.Set();
+                        CanExecuteCommand(true);
                         return;
-                    }
 
-                    var versionNumberString = consoleOutput.Split(' ').LastOrDefault();
-                    if(string.IsNullOrEmpty(versionNumberString))
-                    {
-                        WriteToOutputWindow(Category.Error, "Can't parse version number from git");
+                    case SubModuleCommand.OtherBranchList:
+                        WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
+
+                        Model.ListOfBranches  = new Collection<string>();
+                        Model.CountOfBranches = 0;
+                        Model.CurrentBranch   = string.Empty;
+
+                        if(string.IsNullOrEmpty(consoleOutput))
+                        {
+                            WriteToOutputWindow(Category.Error, "Can't get branch name");
+                            return;
+                        }
+
+                        Model.ListOfBranches  = consoleOutput.Split('\n');
+                        Model.CountOfBranches = Model.ListOfBranches.Count();
+
+                        var branch = Model.ListOfBranches.FirstOrDefault(found => found.StartsWith("*", StringComparison.Ordinal));
+                        if(string.IsNullOrEmpty(branch))
+                        {
+                            WriteToOutputWindow(Category.Error, "Can't parse branch name");
+                            return;
+                        }
+
+                        Model.CurrentBranch = branch.TrimStart('*', ' ');
+                        Model.WaitingTimer.Set();
                         return;
-                    }
 
-                    Model.GitVersion = versionNumberString;
-                    Model.GitIsPresent = true;
-                    Model.WaitingTimer.Set();
-                }
-
-                if(submoduleCommand == SubModuleCommand.OnePullOriginMaster)
-                {
-                    WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
-                    Model.WaitingTimer.Set();
-                    return;
+                    case SubModuleCommand.OnePullOriginMaster:
+                        WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
+                        Model.WaitingTimer.Set();
+                        return;
                 }
 
                 if(submoduleCommand != SubModuleCommand.AllStatus)
@@ -324,6 +352,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                 return;
             }
 
+            DoStartGit(SubModuleCommand.OtherBranchList);
             DoStartGit(SubModuleCommand.AllFetch);
         }
 

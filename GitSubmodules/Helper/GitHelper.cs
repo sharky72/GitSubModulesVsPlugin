@@ -84,6 +84,9 @@ namespace GitSubmodules.Helper
                 case SubModuleCommand.OtherGitVersion:
                     return "--version";
 
+                case SubModuleCommand.OtherBranchList:
+                    return "branch";
+
                 default:
                     return string.Empty;
             }
