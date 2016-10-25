@@ -96,7 +96,27 @@
                     Content="Fetch for all submodules"
                     UseLayoutRounding="False" />
 
+
             <Button Grid.Row="2"
+                    Grid.Column="0"
+                    Command="{Binding CommandAllUpdate}"
+                    Content="Update all submodules"
+                    UseLayoutRounding="False" />
+
+            <Button Grid.Row="2"
+                    Grid.Column="1"
+                    Command="{Binding CommandAllUpdateForce}"
+                    Content=" Force "
+                    UseLayoutRounding="False" />
+
+            <Button Grid.Row="4"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Command="{Binding CommandAllPullOriginMaster}"
+                    Content="Pull origion master for all submodules"
+                    UseLayoutRounding="False" />
+
+            <Button Grid.Row="6"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     Command="{Binding CommandAllInit}"
@@ -104,36 +124,16 @@
                     UseLayoutRounding="False" />
 
 
-            <Button Grid.Row="4"
+            <Button Grid.Row="8"
                     Grid.Column="0"
                     Command="{Binding CommandAllDeinit}"
                     Content="Deinit all submodules"
                     UseLayoutRounding="False" />
 
-            <Button Grid.Row="4"
+            <Button Grid.Row="8"
                     Grid.Column="1"
                     Command="{Binding CommandAllDeinitForce}"
                     Content=" Force "
-                    UseLayoutRounding="False" />
-
-
-            <Button Grid.Row="6"
-                    Grid.Column="0"
-                    Command="{Binding CommandAllUpdate}"
-                    Content="Update all submodules"
-                    UseLayoutRounding="False" />
-
-            <Button Grid.Row="6"
-                    Grid.Column="1"
-                    Command="{Binding CommandAllUpdateForce}"
-                    Content=" Force "
-                    UseLayoutRounding="False" />
-
-            <Button Grid.Row="8"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Command="{Binding CommandAllPullOriginMaster}"
-                    Content="Pull origion master for all submodules"
                     UseLayoutRounding="False" />
 
         </Grid>
@@ -174,33 +174,15 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                 </Grid.RowDefinitions>
 
                                 <Grid.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Click="SubmoduleOpenFolder"
                                                   Header="Open in File-Explorer"
-                                                  Tag="{Binding}" />
-
-                                        <Separator />
-
-                                        <MenuItem Click="SubmoduleInit"
-                                                  Header="Init"
-                                                  Tag="{Binding}" />
-
-                                        <MenuItem Click="SubmoduleDeinit"
-                                                  Header="Deinit"
-                                                  Tag="{Binding}" />
-
-                                        <MenuItem Click="SubmoduleDeinitForce"
-                                                  Header="Force Deinit"
                                                   Tag="{Binding}" />
 
                                         <Separator />
@@ -215,6 +197,20 @@
 
                                         <MenuItem Click="SubmodulePullOriginMaster"
                                                   Header="Pull origin master"
+                                                  Tag="{Binding}" />
+
+                                        <Separator />
+
+                                        <MenuItem Click="SubmoduleInit"
+                                                  Header="Init"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="SubmoduleDeinit"
+                                                  Header="Deinit"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="SubmoduleDeinitForce"
+                                                  Header="Force Deinit"
                                                   Tag="{Binding}" />
 
                                         <Separator />
@@ -252,55 +248,9 @@
 
                                 </StackPanel>
 
-                                <Button Grid.Row="1"
-                                        Grid.Column="3"
-                                        Command="{Binding DataContext.CommandOneInit,
-                                                          RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                        CommandParameter="{Binding}"
-                                        Content="Init"
-                                        UseLayoutRounding="False" />
-
-                                <TextBox Grid.Row="3"
-                                         Grid.Column="1"
-                                         VerticalAlignment="Center"
-                                         Background="Transparent"
-                                         BorderThickness="0"
-                                         IsReadOnly="True"
-                                         Text="{Binding Id,
-                                                        Mode=OneWay}"
-                                         TextWrapping="WrapWithOverflow" />
-
-                                <StackPanel Grid.Row="3"
+                                <StackPanel Grid.Row="1"
                                             Grid.Column="3"
-                                            Orientation="Horizontal">
-
-                                    <Button Width="50"
-                                            Command="{Binding DataContext.CommandOneDeinit,
-                                                              RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                            CommandParameter="{Binding}"
-                                            Content="Deinit"
-                                            UseLayoutRounding="False" />
-
-                                    <Button Width="15"
-                                            Command="{Binding DataContext.CommandOneDeinitForce,
-                                                              RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                            CommandParameter="{Binding}"
-                                            Content="F"
-                                            UseLayoutRounding="False" />
-
-                                </StackPanel>
-
-                                <TextBox Grid.Row="5"
-                                         Grid.Column="1"
-                                         VerticalAlignment="Center"
-                                         Background="Transparent"
-                                         BorderThickness="0"
-                                         IsReadOnly="True"
-                                         Text="{Binding CompleteTag,
-                                                        Mode=OneWay}" />
-
-                                <StackPanel Grid.Row="5"
-                                            Grid.Column="3"
+                                            Margin="0, 0, 0, 5"
                                             Orientation="Horizontal">
 
                                     <Button Width="50"
@@ -319,20 +269,70 @@
 
                                 </StackPanel>
 
-                                <TextBlock Grid.Row="7"
+                                <TextBox Grid.Row="2"
+                                         Grid.Column="1"
+                                         VerticalAlignment="Center"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         IsReadOnly="True"
+                                         Text="{Binding Id,
+                                                        Mode=OneWay}"
+                                         TextWrapping="WrapWithOverflow" />
+
+                                <Button Grid.Row="2"
+                                        Grid.Column="3"
+                                        Margin="0, 0, 0, 5"
+                                        Command="{Binding DataContext.CommandOnePullOriginMaster,
+                                                          RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding}"
+                                        Content="Pull o/m"
+                                        UseLayoutRounding="False" />
+
+                                <TextBox Grid.Row="3"
+                                         Grid.Column="1"
+                                         VerticalAlignment="Center"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         IsReadOnly="True"
+                                         Text="{Binding CompleteTag,
+                                                        Mode=OneWay}" />
+
+                                <Button Grid.Row="3"
+                                        Grid.Column="3"
+                                        Margin="0, 0, 0, 5"
+                                        Command="{Binding DataContext.CommandOneInit,
+                                                          RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding}"
+                                        Content="Init"
+                                        UseLayoutRounding="False" />
+
+                                <TextBlock Grid.Row="4"
                                            Grid.Column="1"
                                            VerticalAlignment="Center"
                                            Text="{Binding StatusText,
                                                           Mode=OneWay}"
                                            TextTrimming="CharacterEllipsis" />
 
-                                <Button Grid.Row="7"
-                                        Grid.Column="3"
-                                        Command="{Binding DataContext.CommandOnePullOriginMaster,
-                                                          RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                        CommandParameter="{Binding}"
-                                        Content="Pull o/m"
-                                        UseLayoutRounding="False" />
+                                <StackPanel Grid.Row="4"
+                                            Grid.Column="3"
+                                            Margin="0, 0, 0, 5"
+                                            Orientation="Horizontal">
+
+                                    <Button Width="50"
+                                            Command="{Binding DataContext.CommandOneDeinit,
+                                                              RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                            CommandParameter="{Binding}"
+                                            Content="Deinit"
+                                            UseLayoutRounding="False" />
+
+                                    <Button Width="15"
+                                            Command="{Binding DataContext.CommandOneDeinitForce,
+                                                              RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                            CommandParameter="{Binding}"
+                                            Content="F"
+                                            UseLayoutRounding="False" />
+
+                                </StackPanel>
 
                             </Grid>
 
