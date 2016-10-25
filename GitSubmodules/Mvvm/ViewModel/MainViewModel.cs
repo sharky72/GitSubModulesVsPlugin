@@ -399,7 +399,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                     Model.ListOfBranches = consoleOutput.Split('\n').Select(found => found.TrimStart('*', ' '));
                     Model.CountOfBranches = Model.ListOfBranches.Count();
 
-                    var branch = Model.ListOfBranches.FirstOrDefault(found => found.StartsWith("*", StringComparison.Ordinal));
+                    var branch = consoleOutput.Split('\n').FirstOrDefault(found => found.StartsWith("*", StringComparison.Ordinal));
                     if(string.IsNullOrEmpty(branch))
                     {
                         WriteToOutputWindow(Category.Error, "Can't parse branch name");
