@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -79,6 +80,45 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public int NumberOfAdditionalCommits { get; private set; }
 
+        /// <summary>
+        /// List with all branches of the submodule
+        /// </summary>
+        public IEnumerable<string> ListOfBranches
+        {
+            get { return _listOfBranches; }
+            internal set
+            {
+                _listOfBranches = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Count of all branches of the submodule
+        /// </summary>
+        public int CountOfBranches
+        {
+            get { return _countOfBranches; }
+            internal set
+            {
+                _countOfBranches = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// The name of the current branch of the submodule
+        /// </summary>
+        public string CurrentBranch
+        {
+            get { return _currentBranch; }
+            internal set
+            {
+                _currentBranch = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion Public Properties
 
         #region Internal Fields
@@ -101,6 +141,21 @@ namespace GitSubmodules.Mvvm.Model
         /// The backing-field for <see cref="HealthImageToolTip"/>
         /// </summary>
         private string _healthImageToolTip;
+
+        /// <summary>
+        /// The Backing-filed for <see cref="ListOfBranches"/>
+        /// </summary>
+        private IEnumerable<string> _listOfBranches;
+
+        /// <summary>
+        /// The Backing-field for <see cref="CountOfBranches"/>
+        /// </summary>
+        private int _countOfBranches;
+
+        /// <summary>
+        /// The Backing-field for <see cref="CurrentBranch"/>
+        /// </summary>
+        private string _currentBranch;
 
         #endregion Private Backing-Fields
 
