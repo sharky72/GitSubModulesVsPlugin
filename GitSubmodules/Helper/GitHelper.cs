@@ -9,7 +9,14 @@ namespace GitSubmodules.Helper
     /// </summary>
     internal static class GitHelper
     {
-        internal static ProcessStartInfo GetProcessStartInfo(Submodule submodule,SubModuleCommand subModuleCommand)
+        /// <summary>
+        /// Returns the <see cref="ProcessStartInfo"/> for the git <see cref="Process"/>
+        /// </summary>
+        /// <param name="submodule">The <see cref="Submodule"/> for the given <paramref name="subModuleCommand"/>,
+        /// use <c>null</c> for all submodules</param>
+        /// <param name="subModuleCommand">The <see cref="SubModuleCommand"/> for the git <see cref="Process"/></param>
+        /// <returns>The <see cref="ProcessStartInfo"/> for the git <see cref="Process"/></returns>
+        internal static ProcessStartInfo GetProcessStartInfo(Submodule submodule, SubModuleCommand subModuleCommand)
         {
             return new ProcessStartInfo("git.exe")
             {
