@@ -61,7 +61,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleInit(object sender, EventArgs e)
         {
-            ViewModel.DoStartGit(SubModuleCommand.OneInit, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
+            ViewModel.DoStartGit(SubmoduleCommand.OneInit, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleDeinit(object sender, EventArgs e)
         {
-            ViewModel.DoStartGit(SubModuleCommand.OneDeinit, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
+            ViewModel.DoStartGit(SubmoduleCommand.OneDeinit, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleDeinitForce(object sender, EventArgs e)
         {
-            ViewModel.DoStartGit(SubModuleCommand.OneDeinitForce, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
+            ViewModel.DoStartGit(SubmoduleCommand.OneDeinitForce, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleUpdate(object sender, EventArgs e)
         {
-            ViewModel.DoStartGit(SubModuleCommand.OneUpdate, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
+            ViewModel.DoStartGit(SubmoduleCommand.OneUpdate, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleUpdateForce(object sender, EventArgs e)
         {
-            ViewModel.DoStartGit(SubModuleCommand.OneUpdateForce, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
+            ViewModel.DoStartGit(SubmoduleCommand.OneUpdateForce, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>

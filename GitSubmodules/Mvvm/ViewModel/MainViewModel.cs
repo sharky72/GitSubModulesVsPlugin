@@ -50,7 +50,7 @@ namespace GitSubmodules.Mvvm.ViewModel
 
             if(!Model.GitIsPresent)
             {
-                DoStartGit(SubModuleCommand.OtherGitVersion);
+                DoStartGit(SubmoduleCommand.OtherGitVersion);
             }
 
             Content = new MainView(this);
@@ -63,10 +63,10 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// <summary>
         /// Start git.exe with the given arguments
         /// </summary>
-        /// <param name="submoduleCommand">The <see cref="SubModuleCommand"/> for this argument</param>
+        /// <param name="submoduleCommand">The <see cref="SubmoduleCommand"/> for this argument</param>
         /// <param name="submodule">[Optional] The <see cref="Submodule"/> for this argument,
         /// use <c>null</c> for all submodules</param>
-        internal void DoStartGit(SubModuleCommand submoduleCommand, Submodule submodule = null)
+        internal void DoStartGit(SubmoduleCommand submoduleCommand, Submodule submodule = null)
         {
             Task.Run(() =>
             {
@@ -75,13 +75,11 @@ namespace GitSubmodules.Mvvm.ViewModel
 
                 WriteToOutputWindow(Category.EmptyLine, null);
 
-                SetPathForGitProcess(submoduleCommand == SubModuleCommand.OnePullOriginMaster ? submodule : null);
+                SetPathForGitProcess(submoduleCommand == SubmoduleCommand.OnePullOriginMaster ? submodule : null);
 
                 var gitStartInfo = GitHelper.GetProcessStartInfo(submodule, submoduleCommand);
 
                 WriteToOutputWindow(Category.Debug, string.Format("Start Git with the follow arguments: {0}", gitStartInfo.Arguments));
-
-                string consoleOutput;
 
                 using(var process = Process.Start(gitStartInfo))
                 {
@@ -93,146 +91,45 @@ namespace GitSubmodules.Mvvm.ViewModel
                         return;
                     }
 
+                    string consoleOutput;
+
                     using(var reader = process.StandardOutput)
                     {
                         consoleOutput = reader.ReadToEnd().TrimEnd();
                     }
 
-                    if(process.ExitCode != 0)
+                    if(process.ExitCode == 0)
                     {
-                        WriteToOutputWindow(Category.Error, string.Format("Error on Git process with command: {0}", gitStartInfo.Arguments));
-                        WriteToOutputWindow(Category.Error, string.Format("Git process end with errorcode: {0}", process.ExitCode));
-
-                        using(var reader = process.StandardError)
-                        {
-                            WriteToOutputWindow(Category.Error, reader.ReadToEnd().TrimEnd());
-                            CanExecuteCommand(true);
-                            Model.WaitingTimer.Set();
-                        }
-
-                        if(submodule != null)
-                        {
-                            submodule.ChangeHealthStatus(HealthStatus.Error);
-                            return;
-                        }
-
-                        if(Model.ListOfSubmodules == null)
-                        {
-                            return;
-                        }
-
-                        foreach(var module in Model.ListOfSubmodules)
-                        {
-                            module.ChangeHealthStatus(HealthStatus.Error);
-                        }
-
+                        AnalyzeConsoleOutput(consoleOutput, submoduleCommand);
                         return;
                     }
-                }
 
-                switch(submoduleCommand)
-                {
-                    case SubModuleCommand.OtherGitVersion:
-                        WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
+                    WriteToOutputWindow(Category.Error, string.Format("Error on Git process with command: {0}", gitStartInfo.Arguments));
+                    WriteToOutputWindow(Category.Error, string.Format("Git process end with errorcode: {0}", process.ExitCode));
 
-                        if(string.IsNullOrEmpty(consoleOutput))
-                        {
-                            WriteToOutputWindow(Category.Error, "Can't get version number from git");
-                            return;
-                        }
-
-                        var versionNumberString = consoleOutput.Split(' ').LastOrDefault();
-                        if(string.IsNullOrEmpty(versionNumberString))
-                        {
-                            WriteToOutputWindow(Category.Error, "Can't parse version number from git");
-                            return;
-                        }
-
-                        Model.GitVersion = versionNumberString;
-                        Model.GitIsPresent = true;
-                        Model.WaitingTimer.Set();
+                    using(var reader = process.StandardError)
+                    {
+                        WriteToOutputWindow(Category.Error, reader.ReadToEnd().TrimEnd());
                         CanExecuteCommand(true);
-                        return;
-
-                    case SubModuleCommand.OtherBranchList:
-                        WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
-
-                        Model.ListOfBranches  = new Collection<string>();
-                        Model.CountOfBranches = 0;
-                        Model.CurrentBranch   = string.Empty;
-
-                        if(string.IsNullOrEmpty(consoleOutput))
-                        {
-                            WriteToOutputWindow(Category.Error, "Can't get branch name");
-                            return;
-                        }
-
-                        Model.ListOfBranches  = consoleOutput.Split('\n');
-                        Model.CountOfBranches = Model.ListOfBranches.Count();
-
-                        var branch = Model.ListOfBranches.FirstOrDefault(found => found.StartsWith("*", StringComparison.Ordinal));
-                        if(string.IsNullOrEmpty(branch))
-                        {
-                            WriteToOutputWindow(Category.Error, "Can't parse branch name");
-                            return;
-                        }
-
-                        Model.CurrentBranch = branch.TrimStart('*', ' ');
                         Model.WaitingTimer.Set();
+                    }
+
+                    if(submodule != null)
+                    {
+                        submodule.ChangeHealthStatus(HealthStatus.Error);
                         return;
+                    }
 
-                    case SubModuleCommand.OnePullOriginMaster:
-                        WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
-                        Model.WaitingTimer.Set();
+                    if(Model.ListOfSubmodules == null)
+                    {
                         return;
+                    }
+
+                    foreach(var module in Model.ListOfSubmodules)
+                    {
+                        module.ChangeHealthStatus(HealthStatus.Error);
+                    }
                 }
-
-                if(submoduleCommand != SubModuleCommand.AllStatus)
-                {
-                    WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
-                    DoStartGit(SubModuleCommand.AllStatus);
-                    return;
-                }
-
-                if(string.IsNullOrEmpty(consoleOutput))
-                {
-                    WriteToOutputWindow(Category.Debug, "No submodules found");
-                    CanExecuteCommand(true);
-                    return;
-                }
-
-                var tempList = new List<Submodule>();
-
-                var splitedAnswer = consoleOutput.Split('\n').Where(found => !string.IsNullOrEmpty(found)).ToList();
-
-                WriteToOutputWindow(Category.Debug, "Console output from Git process:");
-                WriteToOutputWindow(Category.Debug, string.Empty.PadRight(40, '-'));
-
-                foreach(var line in splitedAnswer)
-                {
-                    WriteToOutputWindow(Category.Debug, line);
-                }
-
-                WriteToOutputWindow(Category.Debug, string.Empty.PadRight(40, '-'));
-
-                WriteToOutputWindow(Category.Debug, string.Format("Git console output have {0} lines, that should be {0} submodules",
-                                                                  splitedAnswer.Count));
-
-                tempList.AddRange(splitedAnswer.Select(found => new Submodule(Model.CurrentSolutionPath, found)));
-
-                Model.ListOfSubmodules = tempList;
-
-                if(splitedAnswer.Count == Model.ListOfSubmodules.Count())
-                {
-                    WriteToOutputWindow(Category.Debug, string.Format("Count of Submodules: {0}", Model.ListOfSubmodules.Count()));
-                }
-                else
-                {
-                    WriteToOutputWindow(Category.Error, string.Format("Count of Submodules {0} are not identical with count of lines {1}",
-                                                               Model.ListOfSubmodules.Count(), splitedAnswer.Count));
-                }
-
-                CanExecuteCommand(true);
             });
         }
 
@@ -253,22 +150,22 @@ namespace GitSubmodules.Mvvm.ViewModel
                 {
                     foreach(var submoduleEntry in Model.ListOfSubmodules)
                     {
-                        DoStartGit(SubModuleCommand.OnePullOriginMaster, submoduleEntry);
+                        DoStartGit(SubmoduleCommand.OnePullOriginMaster, submoduleEntry);
                         Model.WaitingTimer.Reset();
                         Model.WaitingTimer.WaitOne(10000);
                     }
 
-                    DoStartGit(SubModuleCommand.AllStatus);
+                    DoStartGit(SubmoduleCommand.AllStatus);
                 });
             }
             else
             {
                 Task.Run(() =>
                 {
-                    DoStartGit(SubModuleCommand.OnePullOriginMaster, submodule);
+                    DoStartGit(SubmoduleCommand.OnePullOriginMaster, submodule);
                     Model.WaitingTimer.Reset();
                     Model.WaitingTimer.WaitOne(10000);
-                    DoStartGit(SubModuleCommand.AllStatus);
+                    DoStartGit(SubmoduleCommand.AllStatus);
                 });
             }
         }
@@ -352,8 +249,8 @@ namespace GitSubmodules.Mvvm.ViewModel
                 return;
             }
 
-            DoStartGit(SubModuleCommand.OtherBranchList);
-            DoStartGit(SubModuleCommand.AllFetch);
+            DoStartGit(SubmoduleCommand.OtherBranchList);
+            DoStartGit(SubmoduleCommand.AllFetch);
         }
 
         /// <summary>
@@ -453,6 +350,139 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             Model.CanExecuteCommand   = status;
             Model.ShowWatingIndicator = !status;
+        }
+
+        /// <summary>
+        /// Analyze the console output, based on the given <see cref="SubmoduleCommand"/>
+        /// </summary>
+        /// <param name="consoleOutput">The output of the console to analyze</param>
+        /// <param name="submoduleCommand">The <see cref="SubmoduleCommand"/> for the analyze</param>
+        internal void AnalyzeConsoleOutput(string consoleOutput, SubmoduleCommand submoduleCommand)
+        {
+            switch(submoduleCommand)
+            {
+                case SubmoduleCommand.OtherGitVersion:
+                    WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
+
+                    if(string.IsNullOrEmpty(consoleOutput))
+                    {
+                        WriteToOutputWindow(Category.Error, "Can't get version number from git");
+                        return;
+                    }
+
+                    var versionNumberString = consoleOutput.Split(' ').LastOrDefault();
+                    if(string.IsNullOrEmpty(versionNumberString))
+                    {
+                        WriteToOutputWindow(Category.Error, "Can't parse version number from git");
+                        return;
+                    }
+
+                    Model.GitVersion = versionNumberString;
+                    Model.GitIsPresent = true;
+                    Model.WaitingTimer.Set();
+                    CanExecuteCommand(true);
+                    return;
+
+                case SubmoduleCommand.OtherBranchList:
+                    WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
+
+                    Model.ListOfBranches = new Collection<string>();
+                    Model.CountOfBranches = 0;
+                    Model.CurrentBranch = string.Empty;
+
+                    if(string.IsNullOrEmpty(consoleOutput))
+                    {
+                        WriteToOutputWindow(Category.Error, "Can't get branch name");
+                        return;
+                    }
+
+                    Model.ListOfBranches = consoleOutput.Split('\n').Select(found => found.TrimStart('*', ' '));
+                    Model.CountOfBranches = Model.ListOfBranches.Count();
+
+                    var branch = Model.ListOfBranches.FirstOrDefault(found => found.StartsWith("*", StringComparison.Ordinal));
+                    if(string.IsNullOrEmpty(branch))
+                    {
+                        WriteToOutputWindow(Category.Error, "Can't parse branch name");
+                        return;
+                    }
+
+                    Model.CurrentBranch = branch.TrimStart('*', ' ');
+                    Model.WaitingTimer.Set();
+                    return;
+
+                case SubmoduleCommand.OnePullOriginMaster:
+                    WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
+                    Model.WaitingTimer.Set();
+                    return;
+
+                case SubmoduleCommand.AllDeinit:
+                case SubmoduleCommand.AllDeinitForce:
+                case SubmoduleCommand.AllFetch:
+                case SubmoduleCommand.AllInit:
+                case SubmoduleCommand.AllPullOriginMaster:
+                case SubmoduleCommand.AllUpdate:
+                case SubmoduleCommand.AllUpdateForce:
+                case SubmoduleCommand.OneDeinit:
+                case SubmoduleCommand.OneDeinitForce:
+                case SubmoduleCommand.OneInit:
+                case SubmoduleCommand.OneStatus:
+                case SubmoduleCommand.OneUpdate:
+                case SubmoduleCommand.OneUpdateForce:
+                    WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
+                    DoStartGit(SubmoduleCommand.AllStatus);
+                    return;
+
+                default:
+                    WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
+                    DoStartGit(SubmoduleCommand.AllStatus);
+                    return;
+
+                case SubmoduleCommand.AllStatus:
+                    if(string.IsNullOrEmpty(consoleOutput))
+                    {
+                        WriteToOutputWindow(Category.Debug, "No submodules found");
+                        CanExecuteCommand(true);
+                        return;
+                    }
+
+                    var tempList = new List<Submodule>();
+
+                    var splitedAnswer = consoleOutput.Split('\n').Where(found => !string.IsNullOrEmpty(found)).ToList();
+
+                    WriteToOutputWindow(Category.Debug, "Console output from Git process:");
+                    WriteToOutputWindow(Category.Debug, string.Empty.PadRight(40, '-'));
+
+                    foreach(var line in splitedAnswer)
+                    {
+                        WriteToOutputWindow(Category.Debug, line);
+                    }
+
+                    WriteToOutputWindow(Category.Debug, string.Empty.PadRight(40, '-'));
+
+                    WriteToOutputWindow(Category.Debug,
+                                        string.Format("Git console output have {0} lines, that should be {0} submodules",
+                                                      splitedAnswer.Count));
+
+                    tempList.AddRange(splitedAnswer.Select(found => new Submodule(Model.CurrentSolutionPath, found)));
+
+                    Model.ListOfSubmodules = tempList;
+
+                    if(splitedAnswer.Count == Model.ListOfSubmodules.Count())
+                    {
+                        WriteToOutputWindow(Category.Debug,
+                                            string.Format("Count of Submodules: {0}", Model.ListOfSubmodules.Count()));
+                    }
+                    else
+                    {
+                        WriteToOutputWindow(Category.Error,
+                                            string.Format("Count of Submodules {0} are not identical with count of lines {1}",
+                                                          Model.ListOfSubmodules.Count(),
+                                                          splitedAnswer.Count));
+                    }
+
+                    CanExecuteCommand(true);
+                    break;
+            }
         }
 
         #endregion Internal Methods

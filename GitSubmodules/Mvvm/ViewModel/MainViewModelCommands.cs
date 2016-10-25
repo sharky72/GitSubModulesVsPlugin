@@ -17,7 +17,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(SubModuleCommand.AllFetch),
+                return new RelayCommand(param => DoStartGit(SubmoduleCommand.AllFetch),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -29,7 +29,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(SubModuleCommand.AllInit),
+                return new RelayCommand(param => DoStartGit(SubmoduleCommand.AllInit),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -41,7 +41,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(SubModuleCommand.AllDeinit),
+                return new RelayCommand(param => DoStartGit(SubmoduleCommand.AllDeinit),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -53,7 +53,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(SubModuleCommand.AllDeinitForce),
+                return new RelayCommand(param => DoStartGit(SubmoduleCommand.AllDeinitForce),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -65,7 +65,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(SubModuleCommand.AllUpdate),
+                return new RelayCommand(param => DoStartGit(SubmoduleCommand.AllUpdate),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -77,7 +77,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(SubModuleCommand.AllUpdateForce),
+                return new RelayCommand(param => DoStartGit(SubmoduleCommand.AllUpdateForce),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -101,7 +101,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(SubModuleCommand.OneInit, param as Submodule),
+                return new RelayCommand(param => DoStartGit(SubmoduleCommand.OneInit, param as Submodule),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -113,7 +113,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(SubModuleCommand.OneDeinit, param as Submodule),
+                return new RelayCommand(param => DoStartGit(SubmoduleCommand.OneDeinit, param as Submodule),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -125,7 +125,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(SubModuleCommand.OneDeinitForce, param as Submodule),
+                return new RelayCommand(param => DoStartGit(SubmoduleCommand.OneDeinitForce, param as Submodule),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -137,7 +137,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(SubModuleCommand.OneUpdate, param as Submodule),
+                return new RelayCommand(param => DoStartGit(SubmoduleCommand.OneUpdate, param as Submodule),
                                         param => Model.CanExecuteCommand);
             }
         }
@@ -149,7 +149,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         {
             get
             {
-                return new RelayCommand(param => DoStartGit(SubModuleCommand.OneUpdateForce, param as Submodule),
+                return new RelayCommand(param => DoStartGit(SubmoduleCommand.OneUpdateForce, param as Submodule),
                                         param => Model.CanExecuteCommand);
             }
         }

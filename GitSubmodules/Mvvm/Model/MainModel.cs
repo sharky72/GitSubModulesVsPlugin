@@ -198,7 +198,6 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         private bool _showWatingIndicator;
 
-
         #endregion Private Backing-Fields
     }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// This enumeration contains all supported git commands by this application
     /// </summary>
-    internal enum SubModuleCommand
+    internal enum SubmoduleCommand
     {
         /// <summary>
         /// Command for the fetch of all submodules
