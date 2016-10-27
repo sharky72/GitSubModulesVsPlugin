@@ -218,7 +218,7 @@ namespace GitSubmodules.Mvvm.Model
             }
 
             var splittedTag = CompleteTag.Split('-');
-            if(splittedTag.Length - 2 < 1 )
+            if((splittedTag.Length - 2) < 1 )
             {
                 ChangeHealthStatus(HealthStatus.Unknown);
                 return;
