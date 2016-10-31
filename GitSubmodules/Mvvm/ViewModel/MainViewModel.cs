@@ -359,6 +359,8 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// <param name="submoduleCommand">The <see cref="SubmoduleCommand"/> for the analyze</param>
         internal void AnalyzeConsoleOutput(string consoleOutput, SubmoduleCommand submoduleCommand)
         {
+            // TODO: cleanup this switch case
+
             switch(submoduleCommand)
             {
                 case SubmoduleCommand.OtherGitVersion:
@@ -377,8 +379,9 @@ namespace GitSubmodules.Mvvm.ViewModel
                         return;
                     }
 
-                    Model.GitVersion = versionNumberString;
+                    Model.GitVersion   = versionNumberString;
                     Model.GitIsPresent = true;
+
                     Model.WaitingTimer.Set();
                     CanExecuteCommand(true);
                     return;
@@ -386,9 +389,9 @@ namespace GitSubmodules.Mvvm.ViewModel
                 case SubmoduleCommand.OtherBranchList:
                     WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
 
-                    Model.ListOfBranches = new Collection<string>();
+                    Model.ListOfBranches  = new Collection<string>();
                     Model.CountOfBranches = 0;
-                    Model.CurrentBranch = string.Empty;
+                    Model.CurrentBranch   = string.Empty;
 
                     if(string.IsNullOrEmpty(consoleOutput))
                     {
@@ -483,6 +486,8 @@ namespace GitSubmodules.Mvvm.ViewModel
                     CanExecuteCommand(true);
                     break;
             }
+
+            // TODO: cleanup this switch case
         }
 
         #endregion Internal Methods
