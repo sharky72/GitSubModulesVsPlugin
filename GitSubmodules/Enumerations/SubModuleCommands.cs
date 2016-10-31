@@ -81,6 +81,11 @@
         OnePullOriginMaster,
 
         /// <summary>
+        /// Command to get a list of all branches of the current submodule
+        /// </summary>
+        OneBranchList,
+
+        /// <summary>
         /// Command to check the current installed git version
         /// </summary>
         OtherGitVersion,
