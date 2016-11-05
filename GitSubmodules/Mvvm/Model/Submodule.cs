@@ -24,9 +24,14 @@ namespace GitSubmodules.Mvvm.Model
         public string Name { get; private set; }
 
         /// <summary>
-        /// The id of the submodule (SHA1)
+        /// The full id of the submodule (SHA1)
         /// </summary>
-        public string Id { get; private set; }
+        public string FullId { get; private set; }
+
+        /// <summary>
+        /// The short id of the submodule (SHA1)
+        /// </summary>
+        public string ShortId { get; private set; }
 
         /// <summary>
         /// The complete tag of the submodule, contains the tag and additional informationen
@@ -119,6 +124,32 @@ namespace GitSubmodules.Mvvm.Model
             }
         }
 
+        /// <summary>
+        /// Indicate that the extened submodule informations are shown
+        /// </summary>
+        public bool ShowExtendedInformations
+        {
+            get { return _showExtendedInformations; }
+            internal set
+            {
+                _showExtendedInformations = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Indicate that the slim submodule informations are shown
+        /// </summary>
+        public bool ShowSlimInformations
+        {
+            get { return _showSlimInformations; }
+            set
+            {
+                _showSlimInformations = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion Public Properties
 
         #region Internal Fields
@@ -157,6 +188,16 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         private string _currentBranch;
 
+        /// <summary>
+        /// The Backing-field for <see cref="ShowExtendedInformations"/>
+        /// </summary>
+        private bool _showExtendedInformations;
+
+        /// <summary>
+        /// The Backing-field for <see cref="ShowSlimInformations"/>
+        /// </summary>
+        private bool _showSlimInformations;
+
         #endregion Private Backing-Fields
 
         #region Internal Constructor
@@ -169,6 +210,8 @@ namespace GitSubmodules.Mvvm.Model
         /// that contains informations of the submodule</param>
         internal Submodule(string solutionPath, string subModuleInformation)
         {
+            ShowSlimInformations = true;
+
             if(string.IsNullOrEmpty(subModuleInformation))
             {
                 return;
@@ -176,20 +219,22 @@ namespace GitSubmodules.Mvvm.Model
 
             var lineSplit = subModuleInformation.TrimStart().Split(' ');
 
-            Id          = lineSplit.FirstOrDefault();
+            FullId      = lineSplit.FirstOrDefault();
             Name        = lineSplit.ElementAtOrDefault(1) ?? "???";
             CompleteTag = lineSplit.ElementAtOrDefault(2) ?? "???";
 
-            Id = !string.IsNullOrEmpty(Id)
-                    ? Id.Replace("U", string.Empty)
-                        .Replace("+",string.Empty)
-                        .Replace("-",string.Empty)
-                        .TrimStart()
-                    : "???";
+            FullId      = !string.IsNullOrEmpty(FullId)
+                            ? FullId.Replace("U", string.Empty)
+                                    .Replace("+",string.Empty)
+                                    .Replace("-",string.Empty)
+                                    .TrimStart()
+                            : "???";
+
 
             SetSubModuleStatus(solutionPath, subModuleInformation);
             SetBackgroundColor();
 
+            // TODO: this if is useless, should be remove?
             if(string.IsNullOrEmpty(CompleteTag))
             {
                 ChangeHealthStatus(HealthStatus.Unknown);
@@ -197,6 +242,7 @@ namespace GitSubmodules.Mvvm.Model
             }
 
             CompleteTag = CompleteTag.TrimStart('(').TrimEnd(')');
+            ShortId     = FullId.Substring(0, 7) + " - " + CompleteTag;
 
             if(CompleteTag.EndsWith("HEAD", StringComparison.Ordinal))
             {
@@ -204,14 +250,13 @@ namespace GitSubmodules.Mvvm.Model
                 return;
             }
 
-            if(Id.StartsWith(CompleteTag, StringComparison.Ordinal))
+            if(FullId.StartsWith(CompleteTag, StringComparison.Ordinal))
             {
                 ChangeHealthStatus(HealthStatus.Okay);
                 return;
             }
 
-            if(CompleteTag.StartsWith("heads", StringComparison.Ordinal)
-            && !CompleteTag.Contains("-"))
+            if(CompleteTag.StartsWith("heads", StringComparison.Ordinal) && !CompleteTag.Contains("-"))
             {
                 ChangeHealthStatus(HealthStatus.Okay);
                 return;

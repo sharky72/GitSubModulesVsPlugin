@@ -127,7 +127,7 @@ namespace GitSubmodules.Mvvm.View
                 return;
             }
 
-            Clipboard.SetText(submodule.Id);
+            Clipboard.SetText(submodule.FullId);
         }
 
         /// <summary>
@@ -144,6 +144,24 @@ namespace GitSubmodules.Mvvm.View
             }
 
             Clipboard.SetText(submodule.CompleteTag);
+        }
+
+        /// <summary>
+        /// Event method to change the information visibility for each module,
+        /// show full information on mouse enter and show slim information on mouse leave
+        /// </summary>
+        /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
+        /// <param name="e">The arguments for this event</param>
+        private void ChangeSubmoduleVisibility(object sender, EventArgs e)
+        {
+            var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
+            if(submodule == null)
+            {
+                return;
+            }
+
+            submodule.ShowSlimInformations     = !submodule.ShowSlimInformations;
+            submodule.ShowExtendedInformations = !submodule.ShowExtendedInformations;
         }
 
         #endregion Private Methods
