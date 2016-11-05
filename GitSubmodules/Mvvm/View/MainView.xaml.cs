@@ -115,11 +115,11 @@ namespace GitSubmodules.Mvvm.View
         }
 
         /// <summary>
-        /// Event method for copy the id of the submodule to the clipboard
+        /// Event method for copy the <see cref="Submodule.CompleteId"/> of the submodule to the <see cref="Clipboard"/>
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
-        private void CopyIdToClipboard(object sender, EventArgs e)
+        private void CopyCompleteIdToClipboard(object sender, EventArgs e)
         {
             var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
             if(submodule == null)
@@ -127,15 +127,31 @@ namespace GitSubmodules.Mvvm.View
                 return;
             }
 
-            Clipboard.SetText(submodule.FullId);
+            Clipboard.SetText(submodule.CompleteId);
         }
 
         /// <summary>
-        /// Event method for copy the complete tag of the submodule to the clipboard
+        /// Event method for copy the <see cref="Submodule.ShortId"/>  id of the submodule to the <see cref="Clipboard"/>
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
-        private void CopyTagToClipboard(object sender, EventArgs e)
+        private void CopyShortIdToClipboard(object sender, EventArgs e)
+        {
+            var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
+            if(submodule == null)
+            {
+                return;
+            }
+
+            Clipboard.SetText(submodule.ShortId);
+        }
+
+        /// <summary>
+        /// Event method for copy the <see cref="Submodule.CompleteTag"/> of the submodule to the <see cref="Clipboard"/>
+        /// </summary>
+        /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
+        /// <param name="e">The arguments for this event</param>
+        private void CopyCompleteTagToClipboard(object sender, EventArgs e)
         {
             var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
             if(submodule == null)

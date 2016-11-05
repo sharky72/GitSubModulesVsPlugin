@@ -24,9 +24,9 @@ namespace GitSubmodules.Mvvm.Model
         public string Name { get; private set; }
 
         /// <summary>
-        /// The full id of the submodule (SHA1)
+        /// The complete id of the submodule (SHA1)
         /// </summary>
-        public string FullId { get; private set; }
+        public string CompleteId { get; private set; }
 
         /// <summary>
         /// The short id of the submodule (SHA1)
@@ -219,17 +219,18 @@ namespace GitSubmodules.Mvvm.Model
 
             var lineSplit = subModuleInformation.TrimStart().Split(' ');
 
-            FullId      = lineSplit.FirstOrDefault();
+            CompleteId  = lineSplit.FirstOrDefault();
             Name        = lineSplit.ElementAtOrDefault(1) ?? "???";
             CompleteTag = lineSplit.ElementAtOrDefault(2) ?? "???";
 
-            FullId      = !string.IsNullOrEmpty(FullId)
-                            ? FullId.Replace("U", string.Empty)
-                                    .Replace("+",string.Empty)
-                                    .Replace("-",string.Empty)
-                                    .TrimStart()
-                            : "???";
+            CompleteId  = !string.IsNullOrEmpty(CompleteId)
+                               ? CompleteId.Replace("U", string.Empty)
+                                           .Replace("+",string.Empty)
+                                           .Replace("-",string.Empty)
+                                           .TrimStart()
+                               : "???";
 
+            ShortId = CompleteId.Substring(0, 7);
 
             SetSubModuleStatus(solutionPath, subModuleInformation);
             SetBackgroundColor();
@@ -242,7 +243,6 @@ namespace GitSubmodules.Mvvm.Model
             }
 
             CompleteTag = CompleteTag.TrimStart('(').TrimEnd(')');
-            ShortId     = FullId.Substring(0, 7) + " - " + CompleteTag;
 
             if(CompleteTag.EndsWith("HEAD", StringComparison.Ordinal))
             {
@@ -250,7 +250,7 @@ namespace GitSubmodules.Mvvm.Model
                 return;
             }
 
-            if(FullId.StartsWith(CompleteTag, StringComparison.Ordinal))
+            if(CompleteId.StartsWith(CompleteTag, StringComparison.Ordinal))
             {
                 ChangeHealthStatus(HealthStatus.Okay);
                 return;

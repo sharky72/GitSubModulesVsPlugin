@@ -215,12 +215,16 @@
 
                                         <Separator />
 
-                                        <MenuItem Click="CopyIdToClipboard"
-                                                  Header="Copy FullId to clipboard"
+                                        <MenuItem Click="CopyCompleteIdToClipboard"
+                                                  Header="Copy complete id to clipboard"
                                                   Tag="{Binding}" />
 
-                                        <MenuItem Click="CopyTagToClipboard"
-                                                  Header="Copy Tag to clipboard"
+                                        <MenuItem Click="CopyShortIdToClipboard"
+                                                  Header="Copy short id to clipboard"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="CopyCompleteTagToClipboard"
+                                                  Header="Copy complete tag to clipboard"
                                                   Tag="{Binding}" />
 
                                     </ContextMenu>
@@ -282,7 +286,7 @@
                                          Background="Transparent"
                                          BorderThickness="0"
                                          IsReadOnly="True"
-                                         Text="{Binding FullId, Mode=OneWay}"
+                                         Text="{Binding CompleteId, Mode=OneWay}"
                                          TextWrapping="WrapWithOverflow"
                                          Visibility="{Binding ShowExtendedInformations, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
