@@ -128,7 +128,7 @@ namespace GitSubmodules.Mvvm.View
                 return;
             }
 
-            Clipboard.SetText(submodule.CompleteId);
+            TryToSetTextToClipboard(submodule.CompleteId);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace GitSubmodules.Mvvm.View
                 return;
             }
 
-            Clipboard.SetText(submodule.ShortId);
+            TryToSetTextToClipboard(submodule.ShortId);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace GitSubmodules.Mvvm.View
                 return;
             }
 
-            Clipboard.SetText(submodule.CompleteTag);
+            TryToSetTextToClipboard(submodule.CompleteTag);
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace GitSubmodules.Mvvm.View
                 return;
             }
 
-            Clipboard.SetText(submodule.CurrentBranch);
+            TryToSetTextToClipboard(submodule.CurrentBranch);
         }
 
         /// <summary>
@@ -187,12 +187,32 @@ namespace GitSubmodules.Mvvm.View
         private void CopyBranchListToClipboard(object sender, EventArgs e)
         {
             var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
-            if(submodule == null)
+            if((submodule == null) || (submodule.ListOfBranches == null))
             {
                 return;
             }
 
-            Clipboard.SetText(submodule.ListOfBranches.Aggregate(string.Empty, (current, next) => current + "\n" + next));
+            TryToSetTextToClipboard(submodule.ListOfBranches.Aggregate(string.Empty, (current, next) => current + "\n" + next));
+        }
+
+        /// <summary>
+        /// Try to set a <see cref="string"/> to the <see cref="Clipboard"/>
+        /// </summary>
+        /// <param name="textForClipboard">The <see cref="string"/> for the <see cref="Clipboard"/></param>
+        private static void TryToSetTextToClipboard(string textForClipboard)
+        {
+            if(string.IsNullOrEmpty(textForClipboard))
+            {
+                return;
+            }
+
+            try
+            {
+                Clipboard.SetText(textForClipboard);
+            }
+            catch
+            {
+            }
         }
 
         /// <summary>
