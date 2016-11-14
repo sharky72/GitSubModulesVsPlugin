@@ -75,7 +75,10 @@ namespace GitSubmodules.Mvvm.ViewModel
 
                 WriteToOutputWindow(Category.EmptyLine, null);
 
-                SetPathForGitProcess(submoduleCommand == SubmoduleCommand.OnePullOriginMaster ? submodule : null);
+                SetPathForGitProcess((submoduleCommand == SubmoduleCommand.OnePullOriginMaster)
+                                  || (submoduleCommand == SubmoduleCommand.OneBranchList)
+                                         ? submodule
+                                         : null);
 
                 var gitStartInfo = GitHelper.GetProcessStartInfo(submodule, submoduleCommand);
 
@@ -168,6 +171,19 @@ namespace GitSubmodules.Mvvm.ViewModel
                     DoStartGit(SubmoduleCommand.AllStatus);
                 });
             }
+        }
+
+        internal void DoCollectBranchList()
+        {
+            Task.Run(() =>
+            {
+                foreach(var submoduleEntry in Model.ListOfSubmodules)
+                {
+                    DoStartGit(SubmoduleCommand.OneBranchList, submoduleEntry);
+                    Model.WaitingTimer.Reset();
+                    Model.WaitingTimer.WaitOne(10000);
+                }
+            });
         }
 
         /// <summary>
@@ -413,6 +429,38 @@ namespace GitSubmodules.Mvvm.ViewModel
                     Model.WaitingTimer.Set();
                     return;
 
+                case SubmoduleCommand.OneBranchList:
+                    var currentDirectory = Directory.GetCurrentDirectory();
+                    var submodule = Model.ListOfSubmodules.FirstOrDefault(found => currentDirectory.EndsWith(found.Name, StringComparison.Ordinal));
+                    if(submodule == null)
+                    {
+                        WriteToOutputWindow(Category.Error, "Can't found submodule for branch list");
+                        Model.WaitingTimer.Set();
+                        return;
+                    }
+
+                    if(string.IsNullOrEmpty(consoleOutput))
+                    {
+                        WriteToOutputWindow(Category.Error, "Can't get branch list for submodule");
+                        return;
+                    }
+
+                    submodule.ListOfBranches = consoleOutput.Split('\n').Select(found => found.TrimStart('*', ' '));
+                    submodule.CountOfBranches = submodule.ListOfBranches.Count();
+
+                    var submoduleBranch = consoleOutput.Split('\n').FirstOrDefault(found => found.StartsWith("*", StringComparison.Ordinal));
+                    if(string.IsNullOrEmpty(submoduleBranch))
+                    {
+                        WriteToOutputWindow(Category.Error, "Can't parse branch name");
+                        return;
+                    }
+
+                    submodule.CurrentBranch = submoduleBranch.TrimStart('*', ' ', '(').TrimEnd(')');
+
+                    Model.WaitingTimer.Set();
+                    CanExecuteCommand(true);
+                    return;
+
                 case SubmoduleCommand.OnePullOriginMaster:
                     WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
                     Model.WaitingTimer.Set();
@@ -484,6 +532,9 @@ namespace GitSubmodules.Mvvm.ViewModel
                     }
 
                     CanExecuteCommand(true);
+
+                    DoCollectBranchList();
+
                     break;
             }
 

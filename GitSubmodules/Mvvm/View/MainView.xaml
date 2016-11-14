@@ -120,7 +120,6 @@
                     Content="Init all submodules"
                     UseLayoutRounding="False" />
 
-
             <Button Grid.Row="8"
                     Grid.Column="0"
                     Command="{Binding CommandAllDeinit}"
@@ -173,6 +172,7 @@
 
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
@@ -316,12 +316,40 @@
                                         UseLayoutRounding="False"
                                         Visibility="{Binding ShowExtendedInformations, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                                <TextBlock Grid.Row="4"
+                                <StackPanel Grid.Row="4"
+                                            Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Visibility="{Binding ShowExtendedInformations, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                                    <TextBlock Text="Branch (of " />
+                                    <TextBlock Text="{Binding CountOfBranches, Mode=OneWay}" />
+                                    <TextBlock Text="): " />
+
+                                </StackPanel>
+
+                                <TextBlock Grid.Row="5"
                                            Grid.Column="1"
-                                           VerticalAlignment="Center"
+                                           Grid.ColumnSpan="3"
+                                           Margin="0,0,0,5"
                                            Text="{Binding StatusText, Mode=OneWay}"
+                                           TextAlignment="Right"
                                            TextTrimming="CharacterEllipsis"
                                            Visibility="{Binding ShowExtendedInformations, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                                <TextBlock Grid.Row="5"
+                                           Grid.Column="1"
+                                           Text="{Binding CurrentBranch, Mode=OneWay}"
+                                           Visibility="{Binding ShowExtendedInformations, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                                    <TextBlock.ToolTip>
+                                        <StackPanel>
+                                            <TextBlock FontWeight="Bold" Text="Branches" />
+                                            <ItemsControl ItemsSource="{Binding ListOfBranches}" />
+                                        </StackPanel>
+                                    </TextBlock.ToolTip>
+
+                                </TextBlock>
 
                                 <StackPanel Grid.Row="4"
                                             Grid.Column="3"
