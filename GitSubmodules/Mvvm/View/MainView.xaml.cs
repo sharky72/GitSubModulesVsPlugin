@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using GitSubmodules.Enumerations;
 using GitSubmodules.Helper;
@@ -160,6 +161,38 @@ namespace GitSubmodules.Mvvm.View
             }
 
             Clipboard.SetText(submodule.CompleteTag);
+        }
+
+        /// <summary>
+        /// Event method for copy the <see cref="Submodule.CurrentBranch"/> of the submodule to the <see cref="Clipboard"/>
+        /// </summary>
+        /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
+        /// <param name="e">The arguments for this event</param>
+        private void CopyCurrentBranchToClipboard(object sender, EventArgs e)
+        {
+            var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
+            if(submodule == null)
+            {
+                return;
+            }
+
+            Clipboard.SetText(submodule.CurrentBranch);
+        }
+
+        /// <summary>
+        /// Event method for copy the <see cref="Submodule.ListOfBranches"/> of the submodule to the <see cref="Clipboard"/>
+        /// </summary>
+        /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
+        /// <param name="e">The arguments for this event</param>
+        private void CopyBranchListToClipboard(object sender, EventArgs e)
+        {
+            var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
+            if(submodule == null)
+            {
+                return;
+            }
+
+            Clipboard.SetText(submodule.ListOfBranches.Aggregate(string.Empty, (current, next) => current + "\n" + next));
         }
 
         /// <summary>

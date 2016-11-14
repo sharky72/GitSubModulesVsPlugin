@@ -227,7 +227,18 @@
                                                   Header="Copy complete tag to clipboard"
                                                   Tag="{Binding}" />
 
+                                        <Separator />
+
+                                        <MenuItem Click="CopyCurrentBranchToClipboard"
+                                                  Header="Copy branch name to clipboard"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="CopyBranchListToClipboard"
+                                                  Header="Copy branch list to clipboard"
+                                                  Tag="{Binding}" />
+
                                     </ContextMenu>
+
                                 </Grid.ContextMenu>
 
                                 <StackPanel Grid.Row="1"
