@@ -137,7 +137,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         }
 
         /// <summary>
-        /// Pull the origin master for one or all <see cref="Submodule"/>
+        /// Pull the origin master for one or all <see cref="Submodule"/>s
         /// </summary>
         /// <param name="submodule">The <see cref="Submodule"/> for the pull, or <c>null</c> for all modules</param>
         internal void DoPullOriginMaster(Submodule submodule)
@@ -173,6 +173,9 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
         }
 
+        /// <summary>
+        /// Collect all branches of all <see cref="Submodule"/>s
+        /// </summary>
         internal void DoCollectBranchList()
         {
             Task.Run(() =>
