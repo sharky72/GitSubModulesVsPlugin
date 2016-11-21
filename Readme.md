@@ -68,7 +68,7 @@ This Visual Studio extension is for users that need a easier way to handle with 
 * Copy branch list to clipboard
  
 ## Others
-* Show all informations and all fnunctions only for the current entered submodule
+* Show all informations and all functions only for the current entered submodule
   * All other submodules show only name, short id and buttons for update and pull orgin master
 * Supported any used Visual Studio theme
 * Automatic fetch submodule status from server on first open of a soultion
