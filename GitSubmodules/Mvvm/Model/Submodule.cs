@@ -101,7 +101,7 @@ namespace GitSubmodules.Mvvm.Model
         /// <summary>
         /// Count of all branches of the submodule
         /// </summary>
-        public int CountOfBranches
+        public string CountOfBranches
         {
             get { return _countOfBranches; }
             internal set
@@ -181,7 +181,7 @@ namespace GitSubmodules.Mvvm.Model
         /// <summary>
         /// The Backing-field for <see cref="CountOfBranches"/>
         /// </summary>
-        private int _countOfBranches;
+        private string _countOfBranches;
 
         /// <summary>
         /// The Backing-field for <see cref="CurrentBranch"/>

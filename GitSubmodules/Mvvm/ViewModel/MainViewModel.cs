@@ -410,7 +410,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                     WriteToOutputWindow(Category.Debug, "Finished Git process with no error");
 
                     Model.ListOfBranches  = new Collection<string>();
-                    Model.CountOfBranches = 0;
+                    Model.CountOfBranches = "Branch (of 0)";
                     Model.CurrentBranch   = string.Empty;
 
                     if(string.IsNullOrEmpty(consoleOutput))
@@ -420,7 +420,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                     }
 
                     Model.ListOfBranches = consoleOutput.Split('\n').Select(found => found.TrimStart('*', ' '));
-                    Model.CountOfBranches = Model.ListOfBranches.Count();
+                    Model.CountOfBranches = string.Format("Branch (of {0})", Model.ListOfBranches.Count());
 
                     var branch = consoleOutput.Split('\n').FirstOrDefault(found => found.StartsWith("*", StringComparison.Ordinal));
                     if(string.IsNullOrEmpty(branch))
@@ -450,7 +450,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                     }
 
                     submodule.ListOfBranches = consoleOutput.Split('\n').Select(found => found.TrimStart('*', ' '));
-                    submodule.CountOfBranches = submodule.ListOfBranches.Count();
+                    submodule.CountOfBranches = string.Format("Branch (of {0})", submodule.ListOfBranches.Count());
 
                     var submoduleBranch = consoleOutput.Split('\n').FirstOrDefault(found => found.StartsWith("*", StringComparison.Ordinal));
                     if(string.IsNullOrEmpty(submoduleBranch))

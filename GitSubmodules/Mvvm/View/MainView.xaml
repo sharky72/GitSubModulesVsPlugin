@@ -42,28 +42,18 @@
                 </Hyperlink>
             </TextBlock>
 
-            <StackPanel Orientation="Horizontal">
+            <TextBlock FontWeight="Bold"
+                       Foreground="{Binding Model.Foreground}"
+                       Text="{Binding Model.CountOfBranches}">
 
-                <TextBlock FontWeight="Bold"
-                           Foreground="{Binding Model.Foreground}"
-                           Text="Branch (of " />
-
-                <TextBlock FontWeight="Bold"
-                           Foreground="{Binding Model.Foreground}"
-                           Text="{Binding Model.CountOfBranches}" />
-
-                <TextBlock FontWeight="Bold"
-                           Foreground="{Binding Model.Foreground}"
-                           Text=")" />
-
-                <StackPanel.ToolTip>
+                <TextBlock.ToolTip>
                     <StackPanel>
                         <TextBlock FontWeight="Bold" Text="Branches" />
                         <ItemsControl ItemsSource="{Binding Model.ListOfBranches}" />
                     </StackPanel>
-                </StackPanel.ToolTip>
+                </TextBlock.ToolTip>
 
-            </StackPanel>
+            </TextBlock>
 
             <TextBlock Foreground="{Binding Model.Foreground}" Text="{Binding Model.CurrentBranch}">
                 <TextBlock.ToolTip>
@@ -339,17 +329,14 @@
                                             Orientation="Horizontal"
                                             Visibility="{Binding ShowExtendedInformations, Converter={StaticResource BooleanToVisibilityConverter}}">
 
-                                    <TextBlock Text="Branch (of " />
-                                    <TextBlock Text="{Binding CountOfBranches, Mode=OneWay}" />
-                                    <TextBlock Text="): " />
-
-                                    <StackPanel.ToolTip>
-                                        <StackPanel>
-                                            <TextBlock FontWeight="Bold" Text="Branches" />
-                                            <ItemsControl ItemsSource="{Binding ListOfBranches}" />
-                                        </StackPanel>
-                                    </StackPanel.ToolTip>
-
+                                    <TextBlock Text="{Binding CountOfBranches, Mode=OneWay}">
+                                        <TextBlock.ToolTip>
+                                            <StackPanel>
+                                                <TextBlock FontWeight="Bold" Text="Branches" />
+                                                <ItemsControl ItemsSource="{Binding ListOfBranches}" />
+                                            </StackPanel>
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
                                 </StackPanel>
 
                                 <TextBlock Grid.Row="5"
