@@ -56,6 +56,13 @@
                            Foreground="{Binding Model.Foreground}"
                            Text=")" />
 
+                <StackPanel.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold" Text="Branches" />
+                        <ItemsControl ItemsSource="{Binding Model.ListOfBranches}" />
+                    </StackPanel>
+                </StackPanel.ToolTip>
+
             </StackPanel>
 
             <TextBlock Foreground="{Binding Model.Foreground}" Text="{Binding Model.CurrentBranch}">
@@ -335,6 +342,13 @@
                                     <TextBlock Text="Branch (of " />
                                     <TextBlock Text="{Binding CountOfBranches, Mode=OneWay}" />
                                     <TextBlock Text="): " />
+
+                                    <StackPanel.ToolTip>
+                                        <StackPanel>
+                                            <TextBlock FontWeight="Bold" Text="Branches" />
+                                            <ItemsControl ItemsSource="{Binding ListOfBranches}" />
+                                        </StackPanel>
+                                    </StackPanel.ToolTip>
 
                                 </StackPanel>
 
