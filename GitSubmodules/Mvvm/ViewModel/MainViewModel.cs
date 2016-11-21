@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using EnvDTE80;
 using GitSubmodules.Enumerations;
 using GitSubmodules.Helper;
@@ -567,6 +568,27 @@ namespace GitSubmodules.Mvvm.ViewModel
                     submodule.ShowSlimInformations     = true;
                     submodule.ShowExtendedInformations = false;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Try to set a <see cref="string"/> to the <see cref="Clipboard"/>
+        /// </summary>
+        /// <param name="textForClipboard">The <see cref="string"/> for the <see cref="Clipboard"/></param>
+        internal void TryToSetTextToClipboard(string textForClipboard)
+        {
+            if(string.IsNullOrEmpty(textForClipboard))
+            {
+                return;
+            }
+
+            try
+            {
+                Clipboard.SetText(textForClipboard);
+            }
+            catch(Exception exception)
+            {
+                WriteToOutputWindow(Category.Error, exception.ToString());
             }
         }
 
