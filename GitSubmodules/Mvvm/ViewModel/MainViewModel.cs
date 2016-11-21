@@ -544,6 +544,32 @@ namespace GitSubmodules.Mvvm.ViewModel
             // TODO: cleanup this switch case
         }
 
+        /// <summary>
+        /// Expand the view of aone<see cref="Submodule"/> from the list of submodules
+        /// </summary>
+        /// <param name="submoduleToExpand">The submodule to expand</param>
+        internal void ExpandOneSubmodule(Submodule submoduleToExpand)
+        {
+            if((submoduleToExpand == null) || (Model == null) || (Model.ListOfSubmodules == null))
+            {
+                return;
+            }
+
+            foreach(var submodule in Model.ListOfSubmodules)
+            {
+                if(submodule == submoduleToExpand)
+                {
+                    submodule.ShowSlimInformations     = false;
+                    submodule.ShowExtendedInformations = true;
+                }
+                else
+                {
+                    submodule.ShowSlimInformations     = true;
+                    submodule.ShowExtendedInformations = false;
+                }
+            }
+        }
+
         #endregion Internal Methods
     }
 }

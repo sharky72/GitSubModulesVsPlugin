@@ -221,16 +221,10 @@ namespace GitSubmodules.Mvvm.View
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
-        private void ChangeSubmoduleVisibility(object sender, EventArgs e)
+        private void ExpandOneSubmodule(object sender, EventArgs e)
         {
-            var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
-            if(submodule == null)
-            {
-                return;
-            }
 
-            submodule.ShowSlimInformations     = !submodule.ShowSlimInformations;
-            submodule.ShowExtendedInformations = !submodule.ShowExtendedInformations;
+            ViewModel.ExpandOneSubmodule(SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         #endregion Private Methods
