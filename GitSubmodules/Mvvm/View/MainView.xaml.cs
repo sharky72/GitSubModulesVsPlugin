@@ -27,7 +27,7 @@ namespace GitSubmodules.Mvvm.View
         /// <summary>
         /// Constructor for the <see cref="MainView"/>
         /// </summary>
-        /// <param name="viewModel"></param>
+        /// <param name="viewModel">The view-model for this view</param>
         internal MainView(MainViewModel viewModel)
         {
             ViewModel = viewModel;
@@ -45,6 +45,11 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleOpenFolder(object sender, EventArgs e)
         {
+            if(ViewModel == null)
+            {
+                return;
+            }
+
             var frameworkContentElement = sender as FrameworkContentElement;
             if(frameworkContentElement != null)
             {
