@@ -335,17 +335,17 @@ namespace GitSubmodules.Mvvm.Model
             {
                 case ' ':
                     Status     = SubModuleStatus.Current;
-                    StatusText = "Submodule is current";
+                    StatusText = "Current";
                     break;
 
                 case 'U':
                     Status     = SubModuleStatus.MergeConflict;
-                    StatusText = "Submodule has merge conflicts";
+                    StatusText = "Merge conflicts";
                     break;
 
                 case '+':
                     Status     = SubModuleStatus.NotCurrent;
-                    StatusText = "Submodule is not current";
+                    StatusText = "Not current";
                     break;
 
                 case '-':
@@ -354,7 +354,7 @@ namespace GitSubmodules.Mvvm.Model
 
                 default:
                     Status     = SubModuleStatus.Unknown;
-                    StatusText = "Submodule status is unknown";
+                    StatusText = "Unknown";
                     break;
             }
         }
@@ -386,12 +386,12 @@ namespace GitSubmodules.Mvvm.Model
                     if(streamReader.ReadToEnd().Contains("[submodule \"" + Name + "\"]"))
                     {
                         Status     = SubModuleStatus.Initialized;
-                        StatusText = "Submodule is initialized";
+                        StatusText = "Initialized";
                         return;
                     }
 
                     Status     = SubModuleStatus.NotInitialized;
-                    StatusText = "Submodule is not initialized";
+                    StatusText = "Not initialized";
                 }
             }
             catch(Exception exception)
