@@ -256,6 +256,9 @@ namespace GitSubmodules.Mvvm.ViewModel
             Model.CanExecuteCommand       = false;
             Model.CurrentSolutionFullName = dte2.Solution.FullName;
             Model.CurrentSolutionPath     = string.Empty;
+            Model.ListOfBranches          = new Collection<string>();
+            Model.CountOfBranches         = "Branch (of 0)";
+            Model.CurrentBranch           = string.Empty;
 
             if(string.IsNullOrEmpty(Model.CurrentSolutionFullName))
             {
@@ -419,7 +422,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                         return;
                     }
 
-                    Model.ListOfBranches = consoleOutput.Split('\n').Select(found => found.TrimStart('*', ' '));
+                    Model.ListOfBranches = consoleOutput.Split('\n').Select(found => found.TrimStart('*', ' ', '(').TrimEnd(')'));
                     Model.CountOfBranches = string.Format("Branch (of {0})", Model.ListOfBranches.Count());
 
                     var branch = consoleOutput.Split('\n').FirstOrDefault(found => found.StartsWith("*", StringComparison.Ordinal));
@@ -449,8 +452,8 @@ namespace GitSubmodules.Mvvm.ViewModel
                         return;
                     }
 
-                    submodule.ListOfBranches = consoleOutput.Split('\n').Select(found => found.TrimStart('*', ' '));
-                    submodule.CountOfBranches = string.Format("Branch (of {0})", submodule.ListOfBranches.Count());
+                    submodule.ListOfBranches = consoleOutput.Split('\n').Select(found => found.TrimStart('*', ' ', '(').TrimEnd(')'));
+                    submodule.CountOfBranches = string.Format("Branch (of {0}):", submodule.ListOfBranches.Count());
 
                     var submoduleBranch = consoleOutput.Split('\n').FirstOrDefault(found => found.StartsWith("*", StringComparison.Ordinal));
                     if(string.IsNullOrEmpty(submoduleBranch))
