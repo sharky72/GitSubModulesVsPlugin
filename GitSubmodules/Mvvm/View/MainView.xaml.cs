@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using GitSubmodules.Enumerations;
 using GitSubmodules.Helper;
@@ -26,7 +27,7 @@ namespace GitSubmodules.Mvvm.View
         /// <summary>
         /// Constructor for the <see cref="MainView"/>
         /// </summary>
-        /// <param name="viewModel"></param>
+        /// <param name="viewModel">The view-model for this view</param>
         internal MainView(MainViewModel viewModel)
         {
             ViewModel = viewModel;
@@ -44,6 +45,11 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleOpenFolder(object sender, EventArgs e)
         {
+            if(ViewModel == null)
+            {
+                return;
+            }
+
             var frameworkContentElement = sender as FrameworkContentElement;
             if(frameworkContentElement != null)
             {
@@ -61,7 +67,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleInit(object sender, EventArgs e)
         {
-            ViewModel.DoStartGit(SubModuleCommand.OneInit, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
+            ViewModel.DoStartGit(SubmoduleCommand.OneInit, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -71,7 +77,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleDeinit(object sender, EventArgs e)
         {
-            ViewModel.DoStartGit(SubModuleCommand.OneDeinit, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
+            ViewModel.DoStartGit(SubmoduleCommand.OneDeinit, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -81,7 +87,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleDeinitForce(object sender, EventArgs e)
         {
-            ViewModel.DoStartGit(SubModuleCommand.OneDeinitForce, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
+            ViewModel.DoStartGit(SubmoduleCommand.OneDeinitForce, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -91,7 +97,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleUpdate(object sender, EventArgs e)
         {
-            ViewModel.DoStartGit(SubModuleCommand.OneUpdate, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
+            ViewModel.DoStartGit(SubmoduleCommand.OneUpdate, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -101,7 +107,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void SubmoduleUpdateForce(object sender, EventArgs e)
         {
-            ViewModel.DoStartGit(SubModuleCommand.OneUpdateForce, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
+            ViewModel.DoStartGit(SubmoduleCommand.OneUpdateForce, SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>
@@ -115,35 +121,100 @@ namespace GitSubmodules.Mvvm.View
         }
 
         /// <summary>
-        /// Event method for copy the id of the submodule to the clipboard
+        /// Event method for copy the <see cref="Submodule.CompleteId"/> of the submodule to the <see cref="Clipboard"/>
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
-        private void CopyIdToClipboard(object sender, EventArgs e)
+        private void CopyCompleteIdToClipboard(object sender, EventArgs e)
         {
             var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
-            if(submodule == null)
+            if((submodule == null) || (ViewModel == null))
             {
                 return;
             }
 
-            Clipboard.SetText(submodule.Id);
+            ViewModel.TryToSetTextToClipboard(submodule.CompleteId);
         }
 
         /// <summary>
-        /// Event method for copy the complete tag of the submodule to the clipboard
+        /// Event method for copy the <see cref="Submodule.ShortId"/>  id of the submodule to the <see cref="Clipboard"/>
         /// </summary>
         /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
         /// <param name="e">The arguments for this event</param>
-        private void CopyTagToClipboard(object sender, EventArgs e)
+        private void CopyShortIdToClipboard(object sender, EventArgs e)
         {
             var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
-            if(submodule == null)
+            if((submodule == null) || (ViewModel == null))
             {
                 return;
             }
 
-            Clipboard.SetText(submodule.CompleteTag);
+            ViewModel.TryToSetTextToClipboard(submodule.ShortId);
+        }
+
+        /// <summary>
+        /// Event method for copy the <see cref="Submodule.CompleteTag"/> of the submodule to the <see cref="Clipboard"/>
+        /// </summary>
+        /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
+        /// <param name="e">The arguments for this event</param>
+        private void CopyCompleteTagToClipboard(object sender, EventArgs e)
+        {
+            var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
+            if((submodule == null) || (ViewModel == null))
+            {
+                return;
+            }
+
+            ViewModel.TryToSetTextToClipboard(submodule.CompleteTag);
+        }
+
+        /// <summary>
+        /// Event method for copy the <see cref="Submodule.CurrentBranch"/> of the submodule to the <see cref="Clipboard"/>
+        /// </summary>
+        /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
+        /// <param name="e">The arguments for this event</param>
+        private void CopyCurrentBranchToClipboard(object sender, EventArgs e)
+        {
+            var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
+            if((submodule == null) || (ViewModel == null))
+            {
+                return;
+            }
+
+            ViewModel.TryToSetTextToClipboard(submodule.CurrentBranch);
+        }
+
+        /// <summary>
+        /// Event method for copy the <see cref="Submodule.ListOfBranches"/> of the submodule to the <see cref="Clipboard"/>
+        /// </summary>
+        /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
+        /// <param name="e">The arguments for this event</param>
+        private void CopyBranchListToClipboard(object sender, EventArgs e)
+        {
+            var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
+            if((submodule == null) || (submodule.ListOfBranches == null) || (ViewModel == null))
+            {
+                return;
+            }
+
+            ViewModel.TryToSetTextToClipboard(submodule.ListOfBranches.Aggregate(string.Empty,
+                                                                                 (current, next) => current + "\n" + next));
+        }
+
+        /// <summary>
+        /// Event method to change the information visibility for each module,
+        /// show full information on mouse enter and show slim information on mouse leave
+        /// </summary>
+        /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
+        /// <param name="e">The arguments for this event</param>
+        private void ExpandOneSubmodule(object sender, EventArgs e)
+        {
+            if(ViewModel == null)
+            {
+                return;
+            }
+
+            ViewModel.ExpandOneSubmodule(SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         #endregion Private Methods

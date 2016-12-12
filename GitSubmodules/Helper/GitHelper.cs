@@ -9,11 +9,18 @@ namespace GitSubmodules.Helper
     /// </summary>
     internal static class GitHelper
     {
-        internal static ProcessStartInfo GetProcessStartInfo(Submodule submodule,SubModuleCommand subModuleCommand)
+        /// <summary>
+        /// Returns the <see cref="ProcessStartInfo"/> for the git <see cref="Process"/>
+        /// </summary>
+        /// <param name="submodule">The <see cref="Submodule"/> for the given <paramref name="submoduleCommand"/>,
+        /// use <c>null</c> for all submodules</param>
+        /// <param name="submoduleCommand">The <see cref="SubmoduleCommand"/> for the git <see cref="Process"/></param>
+        /// <returns>The <see cref="ProcessStartInfo"/> for the git <see cref="Process"/></returns>
+        internal static ProcessStartInfo GetProcessStartInfo(Submodule submodule, SubmoduleCommand submoduleCommand)
         {
             return new ProcessStartInfo("git.exe")
             {
-                Arguments              = GetArguments(submodule, subModuleCommand),
+                Arguments              = GetArguments(submodule, submoduleCommand),
                 CreateNoWindow         = true,
                 RedirectStandardError  = true,
                 RedirectStandardOutput = true,
@@ -23,66 +30,70 @@ namespace GitSubmodules.Helper
 
         /// <summary>
         /// Returns a argument <see cref="string"/> for Git based on the given <see cref="Submodule"/>
-        /// and <see cref="SubModuleCommand"/>
+        /// and <see cref="SubmoduleCommand"/>
         /// </summary>
         /// <param name="submodule">The <see cref="Submodule"/> for this argument, use <c>null</c> for all submodules</param>
-        /// <param name="subModuleCommand">The <see cref="SubModuleCommand"/> for this argument</param>
+        /// <param name="submoduleCommand">The <see cref="SubmoduleCommand"/> for this argument</param>
         /// <returns>Argument <see cref="string"/> for Git</returns>
-        internal static string GetArguments(Submodule submodule, SubModuleCommand subModuleCommand)
+        internal static string GetArguments(Submodule submodule, SubmoduleCommand submoduleCommand)
         {
             var submoduleName = (submodule != null) && !string.IsNullOrEmpty(submodule.Name)
                 ? submodule.Name
                 : string.Empty;
 
-            switch(subModuleCommand)
+            switch(submoduleCommand)
             {
-                case SubModuleCommand.AllFetch:
+                case SubmoduleCommand.AllFetch:
                     return "fetch --recurse-submodules";
 
-                case SubModuleCommand.AllStatus:
+                case SubmoduleCommand.AllStatus:
                     return "submodule status";
 
-                case SubModuleCommand.AllInit:
+                case SubmoduleCommand.AllInit:
                     return "submodule init";
 
-                case SubModuleCommand.AllDeinit:
+                case SubmoduleCommand.AllDeinit:
                     return "submodule deinit --all";
 
-                case SubModuleCommand.AllDeinitForce:
+                case SubmoduleCommand.AllDeinitForce:
                     return "submodule deinit --all --force";
 
-                case SubModuleCommand.AllUpdate:
+                case SubmoduleCommand.AllUpdate:
                     return "submodule update";
 
-                case SubModuleCommand.AllUpdateForce:
+                case SubmoduleCommand.AllUpdateForce:
                     return "submodule update --force";
 
-                case SubModuleCommand.AllPullOriginMaster:
+                case SubmoduleCommand.AllPullOriginMaster:
                     return "FOREACH command is still broken under windows";
 
-                case SubModuleCommand.OneStatus:
+                case SubmoduleCommand.OneStatus:
                     return "submodule status " + submoduleName;
 
-                case SubModuleCommand.OneInit:
+                case SubmoduleCommand.OneInit:
                     return "submodule init " + submoduleName;
 
-                case SubModuleCommand.OneDeinit:
+                case SubmoduleCommand.OneDeinit:
                     return "submodule deinit " + submoduleName;
 
-                case SubModuleCommand.OneDeinitForce:
+                case SubmoduleCommand.OneDeinitForce:
                     return "submodule deinit --force " + submoduleName;
 
-                case SubModuleCommand.OneUpdate:
+                case SubmoduleCommand.OneUpdate:
                     return "submodule update " + submoduleName;
 
-                case SubModuleCommand.OneUpdateForce:
+                case SubmoduleCommand.OneUpdateForce:
                     return "submodule update --force " + submoduleName;
 
-                case SubModuleCommand.OnePullOriginMaster:
+                case SubmoduleCommand.OnePullOriginMaster:
                     return "pull origin master";
 
-                case SubModuleCommand.OtherGitVersion:
+                case SubmoduleCommand.OtherGitVersion:
                     return "--version";
+
+                case SubmoduleCommand.OneBranchList:
+                case SubmoduleCommand.OtherBranchList:
+                    return "branch";
 
                 default:
                     return string.Empty;

@@ -3,7 +3,7 @@
     /// <summary>
     /// This enumeration contains all supported git commands by this application
     /// </summary>
-    internal enum SubModuleCommand
+    internal enum SubmoduleCommand
     {
         /// <summary>
         /// Command for the fetch of all submodules
@@ -81,8 +81,18 @@
         OnePullOriginMaster,
 
         /// <summary>
-        /// Commd to check the current installed git version
+        /// Command to get a list of all branches of the current submodule
         /// </summary>
-        OtherGitVersion
+        OneBranchList,
+
+        /// <summary>
+        /// Command to check the current installed git version
+        /// </summary>
+        OtherGitVersion,
+
+        /// <summary>
+        /// Command to get a list of all branches of the current repository
+        /// </summary>
+        OtherBranchList
     }
 }

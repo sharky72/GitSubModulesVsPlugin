@@ -1,6 +1,7 @@
 # Git Submodules
 
 [![Build status](https://ci.appveyor.com/api/projects/status/a61sbrynb0krd831?svg=true)](https://ci.appveyor.com/project/Dark-Water/gitsubmodulesvsplugin)
+[![Coverage Status](https://coveralls.io/repos/github/Dark-Water/GitSubModulesVsPlugin/badge.svg)](https://coveralls.io/github/Dark-Water/GitSubModulesVsPlugin)
 
 ## Info
 This Visual Studio extension is for users that need a easier way to handle with Git submodules inside Visual Studio.
@@ -26,37 +27,49 @@ This Visual Studio extension is for users that need a easier way to handle with 
 
 ## Supported Git functions for each and all submodules
 * Fetch
-* Init
-* Deinit (Force)
 * Update (Force)
 * Pull origin master
+* Init
+* Deinit (Force)
 
 ## Shown information
 * Git version
 * Path to the current open solution
- * Left-click for open in File-Explorer
+  * Left-click for open in File-Explorer
+* Current brach and count of all local branches of the repository
+  * Tool-Tip with list of all local branches of the repository
 * Submodules of this repository
- * Status of the last action
- * Name of the Submodule
-   * Left-click for open in File-Explorer
- * Id (SHA-1) of the submodule
-   * Right-click menu for copy to clipboard
-    * or use CTRL+C to copy to clipboard
- * Last Tag of the submodule
-   * Right-click menu for copy to clipboard
-    * or use CTRL+C to copy to clipboard
- * Status of the submodule
+  * Status of the submodule (HEAD, Current, Error, Unkown)
+  * Name of the Submodule
+    * Left-click for open in File-Explorer
+  * Id (SHA-1) of the submodule
+    * Full version on expaned info, otherwise short version 
+    * Mark and use CTRL+C to copy to clipboard
+  * Current branch and count of branches of this submodule
+    * Tool-Tip with list of all local branches of the repository
+  * Last Tag of the submodule
+    * Mark and use CTRL+C to copy to clipboard
+  * Status of the submodule
 
 ## Right-click options for a submodule
 * Open in File-Explorer
-* Init
-* Deinit (Force)
+* -
 * Update (Force)
 * Pull origin master
-* Copy id to clipboard
-* Copy tag to clipboard
+* -
+* Init
+* Deinit (Force)
+* -
+* Copy complete id to clipboard
+* Copy short id to clipboard
+* Copy complete tag to clipboard
+* -
+* Copy branch name to clipboard
+* Copy branch list to clipboard
  
 ## Others
+* Show all informations and all functions only for the current entered submodule
+  * All other submodules show only name, short id and buttons for update and pull orgin master
 * Supported any used Visual Studio theme
 * Automatic fetch submodule status from server on first open of a soultion
 * Debug and error messages will be written on a separate output window
@@ -85,9 +98,9 @@ On light theme
 ## Test matrix
 | Visual Studio | Community / Express        | Professional   | Premium        | Ultimate / Enterprise |
 |-------------- | -------------------------- | -------------- | -------------- | --------------------- |
-| 2010          | ???                        | on testing     | Should be work | **tested**            |
-| 2012          | *Extensions not supported* | **tested**     | Should be work | Should be work        |
-| 2013          | ???                        | **tested**     | Should be work | **tested**            |
+| 2010          | -                          | Should be work | Should be work | **tested**            |
+| 2012          | -                          | **tested**     | Should be work | Should be work        |
+| 2013          | -                          | **tested**     | Should be work | **tested**            |
 | 2015          | **tested**                 | **tested**     | -              | Should be work        |
 
 ## Copyrights and Copylefts

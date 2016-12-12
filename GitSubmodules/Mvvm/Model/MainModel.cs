@@ -56,6 +56,45 @@ namespace GitSubmodules.Mvvm.Model
         }
 
         /// <summary>
+        /// List with all branches of the repository
+        /// </summary>
+        public IEnumerable<string> ListOfBranches
+        {
+            get { return _listOfBranches; }
+            internal set
+            {
+                _listOfBranches = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Count of all branches of the repository
+        /// </summary>
+        public string CountOfBranches
+        {
+            get { return _countOfBranches; }
+            internal set
+            {
+                _countOfBranches = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// The name of the current branch of the repository
+        /// </summary>
+        public string CurrentBranch
+        {
+            get { return _currentBranch; }
+            internal set
+            {
+                _currentBranch = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// The main forground color for all text elements
         /// </summary>
         public Brush Foreground
@@ -133,6 +172,21 @@ namespace GitSubmodules.Mvvm.Model
         /// The Backing-field for <see cref="GitVersion"/>
         /// </summary>
         private string _gitVersion;
+
+        /// <summary>
+        /// The Backing-filed for <see cref="ListOfBranches"/>
+        /// </summary>
+        private IEnumerable<string> _listOfBranches;
+
+        /// <summary>
+        /// The Backing-field for <see cref="CountOfBranches"/>
+        /// </summary>
+        private string _countOfBranches;
+
+        /// <summary>
+        /// The Backing-field for <see cref="CurrentBranch"/>
+        /// </summary>
+        private string _currentBranch;
 
         /// <summary>
         /// The Backing-field for <see cref="Foreground"/>

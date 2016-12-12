@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,9 +24,14 @@ namespace GitSubmodules.Mvvm.Model
         public string Name { get; private set; }
 
         /// <summary>
-        /// The id of the submodule (SHA1)
+        /// The complete id of the submodule (SHA1)
         /// </summary>
-        public string Id { get; private set; }
+        public string CompleteId { get; private set; }
+
+        /// <summary>
+        /// The short id of the submodule (SHA1)
+        /// </summary>
+        public string ShortId { get; private set; }
 
         /// <summary>
         /// The complete tag of the submodule, contains the tag and additional informationen
@@ -79,6 +85,71 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public int NumberOfAdditionalCommits { get; private set; }
 
+        /// <summary>
+        /// List with all branches of the submodule
+        /// </summary>
+        public IEnumerable<string> ListOfBranches
+        {
+            get { return _listOfBranches; }
+            internal set
+            {
+                _listOfBranches = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Count of all branches of the submodule
+        /// </summary>
+        public string CountOfBranches
+        {
+            get { return _countOfBranches; }
+            internal set
+            {
+                _countOfBranches = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// The name of the current branch of the submodule
+        /// </summary>
+        public string CurrentBranch
+        {
+            get { return _currentBranch; }
+            internal set
+            {
+                _currentBranch = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Indicate that the extened submodule informations are shown
+        /// </summary>
+        public bool ShowExtendedInformations
+        {
+            get { return _showExtendedInformations; }
+            internal set
+            {
+                _showExtendedInformations = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Indicate that the slim submodule informations are shown
+        /// </summary>
+        public bool ShowSlimInformations
+        {
+            get { return _showSlimInformations; }
+            set
+            {
+                _showSlimInformations = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion Public Properties
 
         #region Internal Fields
@@ -102,6 +173,31 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         private string _healthImageToolTip;
 
+        /// <summary>
+        /// The Backing-filed for <see cref="ListOfBranches"/>
+        /// </summary>
+        private IEnumerable<string> _listOfBranches;
+
+        /// <summary>
+        /// The Backing-field for <see cref="CountOfBranches"/>
+        /// </summary>
+        private string _countOfBranches;
+
+        /// <summary>
+        /// The Backing-field for <see cref="CurrentBranch"/>
+        /// </summary>
+        private string _currentBranch;
+
+        /// <summary>
+        /// The Backing-field for <see cref="ShowExtendedInformations"/>
+        /// </summary>
+        private bool _showExtendedInformations;
+
+        /// <summary>
+        /// The Backing-field for <see cref="ShowSlimInformations"/>
+        /// </summary>
+        private bool _showSlimInformations;
+
         #endregion Private Backing-Fields
 
         #region Internal Constructor
@@ -114,6 +210,8 @@ namespace GitSubmodules.Mvvm.Model
         /// that contains informations of the submodule</param>
         internal Submodule(string solutionPath, string subModuleInformation)
         {
+            ShowSlimInformations = true;
+
             if(string.IsNullOrEmpty(subModuleInformation))
             {
                 return;
@@ -121,20 +219,23 @@ namespace GitSubmodules.Mvvm.Model
 
             var lineSplit = subModuleInformation.TrimStart().Split(' ');
 
-            Id          = lineSplit.FirstOrDefault();
+            CompleteId  = lineSplit.FirstOrDefault();
             Name        = lineSplit.ElementAtOrDefault(1) ?? "???";
             CompleteTag = lineSplit.ElementAtOrDefault(2) ?? "???";
 
-            Id = !string.IsNullOrEmpty(Id)
-                    ? Id.Replace("U", string.Empty)
-                        .Replace("+",string.Empty)
-                        .Replace("-",string.Empty)
-                        .TrimStart()
-                    : "???";
+            CompleteId  = !string.IsNullOrEmpty(CompleteId)
+                               ? CompleteId.Replace("U", string.Empty)
+                                           .Replace("+",string.Empty)
+                                           .Replace("-",string.Empty)
+                                           .TrimStart()
+                               : "???";
+
+            ShortId = CompleteId.Substring(0, 7);
 
             SetSubModuleStatus(solutionPath, subModuleInformation);
             SetBackgroundColor();
 
+            // TODO: this if is useless, should be remove?
             if(string.IsNullOrEmpty(CompleteTag))
             {
                 ChangeHealthStatus(HealthStatus.Unknown);
@@ -149,21 +250,20 @@ namespace GitSubmodules.Mvvm.Model
                 return;
             }
 
-            if(Id.StartsWith(CompleteTag, StringComparison.Ordinal))
+            if(CompleteId.StartsWith(CompleteTag, StringComparison.Ordinal))
             {
                 ChangeHealthStatus(HealthStatus.Okay);
                 return;
             }
 
-            if(CompleteTag.StartsWith("heads", StringComparison.Ordinal)
-            && !CompleteTag.Contains("-"))
+            if(CompleteTag.StartsWith("heads", StringComparison.Ordinal) && !CompleteTag.Contains("-"))
             {
                 ChangeHealthStatus(HealthStatus.Okay);
                 return;
             }
 
             var splittedTag = CompleteTag.Split('-');
-            if(splittedTag.Length - 2 < 1 )
+            if((splittedTag.Length - 2) < 1 )
             {
                 ChangeHealthStatus(HealthStatus.Unknown);
                 return;
@@ -235,17 +335,17 @@ namespace GitSubmodules.Mvvm.Model
             {
                 case ' ':
                     Status     = SubModuleStatus.Current;
-                    StatusText = "Submodule is current";
+                    StatusText = "Current";
                     break;
 
                 case 'U':
                     Status     = SubModuleStatus.MergeConflict;
-                    StatusText = "Submodule has merge conflicts";
+                    StatusText = "Merge conflicts";
                     break;
 
                 case '+':
                     Status     = SubModuleStatus.NotCurrent;
-                    StatusText = "Submodule is not current";
+                    StatusText = "Not current";
                     break;
 
                 case '-':
@@ -254,7 +354,7 @@ namespace GitSubmodules.Mvvm.Model
 
                 default:
                     Status     = SubModuleStatus.Unknown;
-                    StatusText = "Submodule status is unknown";
+                    StatusText = "Unknown";
                     break;
             }
         }
@@ -286,12 +386,12 @@ namespace GitSubmodules.Mvvm.Model
                     if(streamReader.ReadToEnd().Contains("[submodule \"" + Name + "\"]"))
                     {
                         Status     = SubModuleStatus.Initialized;
-                        StatusText = "Submodule is initialized";
+                        StatusText = "Initialized";
                         return;
                     }
 
                     Status     = SubModuleStatus.NotInitialized;
-                    StatusText = "Submodule is not initialized";
+                    StatusText = "Not initialized";
                 }
             }
             catch(Exception exception)

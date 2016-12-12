@@ -2,9 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:ClassModifier="internal"
-             DataContext="{Binding ViewModel,
-                                   Mode=OneWay,
-                                   RelativeSource={RelativeSource Self}}">
+             DataContext="{Binding ViewModel, Mode=OneWay, RelativeSource={RelativeSource Self}}">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -44,6 +42,28 @@
                 </Hyperlink>
             </TextBlock>
 
+            <TextBlock FontWeight="Bold"
+                       Foreground="{Binding Model.Foreground}"
+                       Text="{Binding Model.CountOfBranches}">
+
+                <TextBlock.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold" Text="Branches" />
+                        <ItemsControl ItemsSource="{Binding Model.ListOfBranches}" />
+                    </StackPanel>
+                </TextBlock.ToolTip>
+
+            </TextBlock>
+
+            <TextBlock Foreground="{Binding Model.Foreground}" Text="{Binding Model.CurrentBranch}">
+                <TextBlock.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold" Text="Branches" />
+                        <ItemsControl ItemsSource="{Binding Model.ListOfBranches}" />
+                    </StackPanel>
+                </TextBlock.ToolTip>
+            </TextBlock>
+
         </StackPanel>
 
         <Grid Grid.Row="3" Margin="5">
@@ -73,42 +93,40 @@
 
             <Button Grid.Row="2"
                     Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Command="{Binding CommandAllInit}"
-                    Content="Init all submodules"
-                    UseLayoutRounding="False" />
-
-
-            <Button Grid.Row="4"
-                    Grid.Column="0"
-                    Command="{Binding CommandAllDeinit}"
-                    Content="Deinit all submodules"
-                    UseLayoutRounding="False" />
-
-            <Button Grid.Row="4"
-                    Grid.Column="1"
-                    Command="{Binding CommandAllDeinitForce}"
-                    Content=" Force "
-                    UseLayoutRounding="False" />
-
-
-            <Button Grid.Row="6"
-                    Grid.Column="0"
                     Command="{Binding CommandAllUpdate}"
                     Content="Update all submodules"
                     UseLayoutRounding="False" />
 
-            <Button Grid.Row="6"
+            <Button Grid.Row="2"
                     Grid.Column="1"
                     Command="{Binding CommandAllUpdateForce}"
                     Content=" Force "
                     UseLayoutRounding="False" />
 
-            <Button Grid.Row="8"
+            <Button Grid.Row="4"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     Command="{Binding CommandAllPullOriginMaster}"
                     Content="Pull origion master for all submodules"
+                    UseLayoutRounding="False" />
+
+            <Button Grid.Row="6"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Command="{Binding CommandAllInit}"
+                    Content="Init all submodules"
+                    UseLayoutRounding="False" />
+
+            <Button Grid.Row="8"
+                    Grid.Column="0"
+                    Command="{Binding CommandAllDeinit}"
+                    Content="Deinit all submodules"
+                    UseLayoutRounding="False" />
+
+            <Button Grid.Row="8"
+                    Grid.Column="1"
+                    Command="{Binding CommandAllDeinitForce}"
+                    Content=" Force "
                     UseLayoutRounding="False" />
 
         </Grid>
@@ -122,12 +140,12 @@
                      IsEnabled="{Binding Model.ShowWatingIndicator}"
                      IsIndeterminate="{Binding Model.ShowWatingIndicator}"
                      UseLayoutRounding="False"
-                     Visibility="{Binding Model.ShowWatingIndicator,
-                                          Converter={StaticResource BooleanToVisibilityConverter}}" />
+                     Visibility="{Binding Model.ShowWatingIndicator, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <ScrollViewer Grid.Row="7"
                       Margin="0,5,0,0"
                       VerticalScrollBarVisibility="Auto">
+
             <ItemsControl Margin="0,0,2,0" ItemsSource="{Binding Model.ListOfSubmodules, Mode=OneWay}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -136,7 +154,9 @@
                                 BorderBrush="Black"
                                 BorderThickness="1">
 
-                            <Grid Background="{Binding BackgroundColor, Mode=OneWay}">
+                            <Grid Background="{Binding BackgroundColor, Mode=OneWay}"
+                                  MouseEnter="ExpandOneSubmodule"
+                                  Tag="{Binding}">
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="5" />
@@ -149,33 +169,16 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <Grid.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Click="SubmoduleOpenFolder"
                                                   Header="Open in File-Explorer"
-                                                  Tag="{Binding}" />
-
-                                        <Separator />
-
-                                        <MenuItem Click="SubmoduleInit"
-                                                  Header="Init"
-                                                  Tag="{Binding}" />
-
-                                        <MenuItem Click="SubmoduleDeinit"
-                                                  Header="Deinit"
-                                                  Tag="{Binding}" />
-
-                                        <MenuItem Click="SubmoduleDeinitForce"
-                                                  Header="Force Deinit"
                                                   Tag="{Binding}" />
 
                                         <Separator />
@@ -194,15 +197,44 @@
 
                                         <Separator />
 
-                                        <MenuItem Click="CopyIdToClipboard"
-                                                  Header="Copy Id to clipboard"
+                                        <MenuItem Click="SubmoduleInit"
+                                                  Header="Init"
                                                   Tag="{Binding}" />
 
-                                        <MenuItem Click="CopyTagToClipboard"
-                                                  Header="Copy Tag to clipboard"
+                                        <MenuItem Click="SubmoduleDeinit"
+                                                  Header="Deinit"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="SubmoduleDeinitForce"
+                                                  Header="Force Deinit"
+                                                  Tag="{Binding}" />
+
+                                        <Separator />
+
+                                        <MenuItem Click="CopyCompleteIdToClipboard"
+                                                  Header="Copy complete id to clipboard"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="CopyShortIdToClipboard"
+                                                  Header="Copy short id to clipboard"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="CopyCompleteTagToClipboard"
+                                                  Header="Copy complete tag to clipboard"
+                                                  Tag="{Binding}" />
+
+                                        <Separator />
+
+                                        <MenuItem Click="CopyCurrentBranchToClipboard"
+                                                  Header="Copy branch name to clipboard"
+                                                  Tag="{Binding}" />
+
+                                        <MenuItem Click="CopyBranchListToClipboard"
+                                                  Header="Copy branch list to clipboard"
                                                   Tag="{Binding}" />
 
                                     </ContextMenu>
+
                                 </Grid.ContextMenu>
 
                                 <StackPanel Grid.Row="1"
@@ -219,20 +251,58 @@
 
                                             <TextBlock FontWeight="Bold"
                                                        Foreground="Black"
-                                                       Text="{Binding Name,
-                                                                      Mode=OneWay}" />
+                                                       Text="{Binding Name, Mode=OneWay}" />
 
                                         </Hyperlink>
                                     </TextBlock>
 
                                 </StackPanel>
 
-                                <Button Grid.Row="1"
+                                <StackPanel Grid.Row="1"
+                                            Grid.Column="3"
+                                            Margin="0,0,0,5"
+                                            Orientation="Horizontal">
+
+                                    <Button Width="50"
+                                            Command="{Binding DataContext.CommandOneUpdate, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                            CommandParameter="{Binding}"
+                                            Content="Update"
+                                            UseLayoutRounding="False" />
+
+                                    <Button Width="15"
+                                            Command="{Binding DataContext.CommandOneUpdateForce, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                            CommandParameter="{Binding}"
+                                            Content="F"
+                                            UseLayoutRounding="False" />
+
+                                </StackPanel>
+
+                                <TextBox Grid.Row="2"
+                                         Grid.Column="1"
+                                         VerticalAlignment="Center"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         IsReadOnly="True"
+                                         Text="{Binding ShortId, Mode=OneWay}"
+                                         TextWrapping="WrapWithOverflow"
+                                         Visibility="{Binding ShowSlimInformations, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                                <TextBox Grid.Row="2"
+                                         Grid.Column="1"
+                                         VerticalAlignment="Center"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         IsReadOnly="True"
+                                         Text="{Binding CompleteId, Mode=OneWay}"
+                                         TextWrapping="WrapWithOverflow"
+                                         Visibility="{Binding ShowExtendedInformations, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                                <Button Grid.Row="2"
                                         Grid.Column="3"
-                                        Command="{Binding DataContext.CommandOneInit,
-                                                          RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                        Margin="0,0,0,5"
+                                        Command="{Binding DataContext.CommandOnePullOriginMaster, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                         CommandParameter="{Binding}"
-                                        Content="Init"
+                                        Content="Pull o/m"
                                         UseLayoutRounding="False" />
 
                                 <TextBox Grid.Row="3"
@@ -241,73 +311,76 @@
                                          Background="Transparent"
                                          BorderThickness="0"
                                          IsReadOnly="True"
-                                         Text="{Binding Id,
-                                                        Mode=OneWay}"
-                                         TextWrapping="WrapWithOverflow" />
+                                         Text="{Binding CompleteTag, Mode=OneWay}"
+                                         Visibility="{Binding ShowExtendedInformations, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                                <StackPanel Grid.Row="3"
+                                <Button Grid.Row="3"
+                                        Grid.Column="3"
+                                        Margin="0,0,0,5"
+                                        Command="{Binding DataContext.CommandOneInit, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding}"
+                                        Content="Init"
+                                        UseLayoutRounding="False"
+                                        Visibility="{Binding ShowExtendedInformations, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                                <StackPanel Grid.Row="4"
+                                            Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Visibility="{Binding ShowExtendedInformations, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                                    <TextBlock Text="{Binding CountOfBranches, Mode=OneWay}">
+                                        <TextBlock.ToolTip>
+                                            <StackPanel>
+                                                <TextBlock FontWeight="Bold" Text="Branches" />
+                                                <ItemsControl ItemsSource="{Binding ListOfBranches}" />
+                                            </StackPanel>
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
+                                </StackPanel>
+
+                                <TextBlock Grid.Row="5"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="3"
+                                           Margin="0,0,0,5"
+                                           Text="{Binding StatusText, Mode=OneWay}"
+                                           TextAlignment="Right"
+                                           TextTrimming="CharacterEllipsis"
+                                           Visibility="{Binding ShowExtendedInformations, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                                <TextBlock Grid.Row="5"
+                                           Grid.Column="1"
+                                           Text="{Binding CurrentBranch, Mode=OneWay}"
+                                           Visibility="{Binding ShowExtendedInformations, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                                    <TextBlock.ToolTip>
+                                        <StackPanel>
+                                            <TextBlock FontWeight="Bold" Text="Branches" />
+                                            <ItemsControl ItemsSource="{Binding ListOfBranches}" />
+                                        </StackPanel>
+                                    </TextBlock.ToolTip>
+
+                                </TextBlock>
+
+                                <StackPanel Grid.Row="4"
                                             Grid.Column="3"
-                                            Orientation="Horizontal">
+                                            Margin="0,0,0,5"
+                                            Orientation="Horizontal"
+                                            Visibility="{Binding ShowExtendedInformations, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                                     <Button Width="50"
-                                            Command="{Binding DataContext.CommandOneDeinit,
-                                                              RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                            Command="{Binding DataContext.CommandOneDeinit, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                             CommandParameter="{Binding}"
                                             Content="Deinit"
                                             UseLayoutRounding="False" />
 
                                     <Button Width="15"
-                                            Command="{Binding DataContext.CommandOneDeinitForce,
-                                                              RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                            Command="{Binding DataContext.CommandOneDeinitForce, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                             CommandParameter="{Binding}"
                                             Content="F"
                                             UseLayoutRounding="False" />
 
                                 </StackPanel>
-
-                                <TextBox Grid.Row="5"
-                                         Grid.Column="1"
-                                         VerticalAlignment="Center"
-                                         Background="Transparent"
-                                         BorderThickness="0"
-                                         IsReadOnly="True"
-                                         Text="{Binding CompleteTag,
-                                                        Mode=OneWay}" />
-
-                                <StackPanel Grid.Row="5"
-                                            Grid.Column="3"
-                                            Orientation="Horizontal">
-
-                                    <Button Width="50"
-                                            Command="{Binding DataContext.CommandOneUpdate,
-                                                              RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                            CommandParameter="{Binding}"
-                                            Content="Update"
-                                            UseLayoutRounding="False" />
-
-                                    <Button Width="15"
-                                            Command="{Binding DataContext.CommandOneUpdateForce,
-                                                              RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                            CommandParameter="{Binding}"
-                                            Content="F"
-                                            UseLayoutRounding="False" />
-
-                                </StackPanel>
-
-                                <TextBlock Grid.Row="7"
-                                           Grid.Column="1"
-                                           VerticalAlignment="Center"
-                                           Text="{Binding StatusText,
-                                                          Mode=OneWay}"
-                                           TextTrimming="CharacterEllipsis" />
-
-                                <Button Grid.Row="7"
-                                        Grid.Column="3"
-                                        Command="{Binding DataContext.CommandOnePullOriginMaster,
-                                                          RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                        CommandParameter="{Binding}"
-                                        Content="Pull o/m"
-                                        UseLayoutRounding="False" />
 
                             </Grid>
 
