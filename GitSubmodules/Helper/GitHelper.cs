@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using GitSubmodules.Enumerations;
 using GitSubmodules.Mvvm.Model;
 
@@ -94,6 +95,30 @@ namespace GitSubmodules.Helper
                 case SubmoduleCommand.OneBranchList:
                 case SubmoduleCommand.OtherBranchList:
                     return "branch";
+
+                case SubmoduleCommand.OneRemoveSubmoduleFull:
+                    throw new NotImplementedException("TODO: " + submoduleCommand);
+
+                case SubmoduleCommand.OneRemoveSubmoduleOnlyEntry:
+                    throw new NotImplementedException("TODO: " + submoduleCommand);
+
+                case SubmoduleCommand.OneRemoveSubmoduleOnlyFolder:
+                    throw new NotImplementedException("TODO: " + submoduleCommand);
+
+                case SubmoduleCommand.OneRemoveSubmoduleOnlyIndex:
+                    throw new NotImplementedException("TODO: " + submoduleCommand);
+
+                case SubmoduleCommand.OtherAddSubmodule:
+                    throw new NotImplementedException("TODO: " + submoduleCommand);
+
+                case SubmoduleCommand.OtherAddSubmoduleWithInit:
+                    throw new NotImplementedException("TODO: " + submoduleCommand);
+
+                case SubmoduleCommand.OtherAddSubmoduleWithUpdate:
+                    throw new NotImplementedException("TODO: " + submoduleCommand);
+
+                case SubmoduleCommand.OtherAddSubmoduleWithPullOrigin:
+                    throw new NotImplementedException("TODO: " + submoduleCommand);
 
                 default:
                     return string.Empty;
