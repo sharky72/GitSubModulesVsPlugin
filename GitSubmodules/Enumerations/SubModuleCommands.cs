@@ -86,6 +86,46 @@
         OneBranchList,
 
         /// <summary>
+        /// Command to remove the current submodule entry only from ".gitsubmodule" file
+        /// </summary>
+        OneRemoveSubmoduleOnlyEntry,
+
+        /// <summary>
+        /// Command to remove the current submodule entry only from ".git/index" file
+        /// </summary>
+        OneRemoveSubmoduleOnlyIndex,
+
+        /// <summary>
+        /// Command to remove only the current submodule folder
+        /// </summary>
+        OneRemoveSubmoduleOnlyFolder,
+
+        /// <summary>
+        /// Command to remove the current submodule complete (entry, index, folder)
+        /// </summary>
+        OneRemoveSubmoduleFull,
+
+        /// <summary>
+        /// Command to add a new submodule
+        /// </summary>
+        OtherAddSubmodule,
+
+        /// <summary>
+        /// Command to add a new submodule and init it
+        /// </summary>
+        OtherAddSubmoduleWithInit,
+
+        /// <summary>
+        /// Command to add a new submodule, init it and update it
+        /// </summary>
+        OtherAddSubmoduleWithUpdate,
+
+        /// <summary>
+        /// Command to add a new submodule, init it, update it and pull origin master
+        /// </summary>
+        OtherAddSubmoduleWithPullOrigin
+
+        /// <summary>
         /// Command to check the current installed git version
         /// </summary>
         OtherGitVersion,
