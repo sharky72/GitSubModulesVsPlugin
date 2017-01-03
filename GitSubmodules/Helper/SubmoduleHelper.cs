@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using GitSubmodules.Mvvm.Model;
 
 namespace GitSubmodules.Helper
@@ -23,6 +24,28 @@ namespace GitSubmodules.Helper
             }
 
             return frameworkElement.Tag as Submodule;
+        }
+
+        /// <summary>
+        /// Delete the folder of a given submodule
+        /// </summary>
+        /// <param name="submodule">The submodule with folder should be delete</param>
+        internal static void DeleteSubmoduleFolder(Submodule submodule)
+        {
+            // TODO: submodule need the correct path
+            // Directory.Delete(submodule.Name ,true);
+
+            throw new NotImplementedException("TODO:  DeleteSubmoduleFolder");
+        }
+
+        /// <summary>
+        /// Remove the submodule entry from the ".gitmodules" file
+        /// </summary>
+        /// <param name="submodule"></param>
+        internal static void RemoveSubmoduleEntry(Submodule submodule)
+        {
+            // TODO
+            throw new NotImplementedException("TODO:  RemoveSubmoduleEntry");
         }
     }
 }

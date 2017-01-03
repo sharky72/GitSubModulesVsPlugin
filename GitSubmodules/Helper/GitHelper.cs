@@ -97,22 +97,28 @@ namespace GitSubmodules.Helper
                     return "branch";
 
                 case SubmoduleCommand.OneRemoveSubmoduleFull:
+                    // SubmoduleCommand.OneDeinitForce
+                    // SubmoduleCommand.OneRemoveSubmoduleOnlyIndex
+                    // SubmoduleCommand.OneRemoveSubmoduleOnlyEntry
+                    // SubmoduleCommand.OneRemoveSubmoduleOnlyFolder
                     throw new NotImplementedException("TODO: " + submoduleCommand);
 
                 case SubmoduleCommand.OneRemoveSubmoduleOnlyEntry:
-                    throw new NotImplementedException("TODO: " + submoduleCommand);
-
-                case SubmoduleCommand.OneRemoveSubmoduleOnlyFolder:
-                    throw new NotImplementedException("TODO: " + submoduleCommand);
+                    SubmoduleHelper.RemoveSubmoduleEntry(submodule);
+                    return string.Empty;
 
                 case SubmoduleCommand.OneRemoveSubmoduleOnlyIndex:
-                    throw new NotImplementedException("TODO: " + submoduleCommand);
+                    return "rm --cached " + submoduleName;
+
+                case SubmoduleCommand.OneRemoveSubmoduleOnlyFolder:
+                    SubmoduleHelper.DeleteSubmoduleFolder(submodule);
+                    return string.Empty;
 
                 case SubmoduleCommand.OtherAddSubmodule:
-                    throw new NotImplementedException("TODO: " + submoduleCommand);
+                    return "submodule add " + submoduleName;
 
                 case SubmoduleCommand.OtherAddSubmoduleWithInit:
-                    throw new NotImplementedException("TODO: " + submoduleCommand);
+                    return "submodule add " + submoduleName + " --init";
 
                 case SubmoduleCommand.OtherAddSubmoduleWithUpdate:
                     throw new NotImplementedException("TODO: " + submoduleCommand);
