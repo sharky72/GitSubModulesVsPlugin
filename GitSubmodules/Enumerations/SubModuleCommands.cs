@@ -123,7 +123,7 @@
         /// <summary>
         /// Command to add a new submodule, init it, update it and pull origin master
         /// </summary>
-        OtherAddSubmoduleWithPullOrigin
+        OtherAddSubmoduleWithPullOrigin,
 
         /// <summary>
         /// Command to check the current installed git version
