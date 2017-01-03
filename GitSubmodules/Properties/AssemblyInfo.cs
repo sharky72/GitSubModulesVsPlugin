@@ -18,8 +18,8 @@ using System.Runtime.InteropServices;
 
 [assembly: NeutralResourcesLanguage("en-US")]
 
-[assembly: AssemblyVersion("1.5.0.0")]
-[assembly: AssemblyFileVersion("1.5.0.0")]
+[assembly: AssemblyVersion("1.6.0.0")]
+[assembly: AssemblyFileVersion("1.6.0.0")]
 
 [assembly: InternalsVisibleTo("GitSubmodules.UnitTest, PublicKey="
     + "00240000048000009400000006020000002400005253413100040000010001006f5988a51ad305"
