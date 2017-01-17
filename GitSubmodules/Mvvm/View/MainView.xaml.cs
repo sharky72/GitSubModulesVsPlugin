@@ -217,6 +217,70 @@ namespace GitSubmodules.Mvvm.View
             ViewModel.ExpandOneSubmodule(SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
+        /// <summary>
+        /// Event method to remove a submodule complete (deinit, cache, configuration and folder)
+        /// </summary>
+        /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
+        /// <param name="e">The arguments for this event</param>
+        private void RemoveComplete(object sender, EventArgs e)
+        {
+            var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
+            if((submodule == null) || (ViewModel == null))
+            {
+                return;
+            }
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Event method to remove the submodule only from the repository cache (.git/index)
+        /// </summary>
+        /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
+        /// <param name="e">The arguments for this event</param>
+        private void RemoveOnlyFromCache(object sender, EventArgs e)
+        {
+            var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
+            if((submodule == null) || (ViewModel == null))
+            {
+                return;
+            }
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Event method to remove the submodule only from the configuration (.git/config)
+        /// </summary>
+        /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
+        /// <param name="e">The arguments for this event</param>
+        private void RemoveOnlyFromConfiguration(object sender, EventArgs e)
+        {
+            var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
+            if((submodule == null) || (ViewModel == null))
+            {
+                return;
+            }
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Event method to remove only the submodule folder
+        /// </summary>
+        /// <param name="sender">The sender that contains the <see cref="Submodule"/> information</param>
+        /// <param name="e">The arguments for this event</param>
+        private void RemoveOnlyFolder(object sender, EventArgs e)
+        {
+            var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
+            if((submodule == null) || (ViewModel == null))
+            {
+                return;
+            }
+
+            throw new NotImplementedException();
+        }
+
         #endregion Private Methods
     }
 }

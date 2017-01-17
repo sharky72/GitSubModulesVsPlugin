@@ -211,28 +211,65 @@
 
                                         <Separator />
 
-                                        <MenuItem Click="CopyCompleteIdToClipboard"
-                                                  Header="Copy complete id to clipboard"
-                                                  Tag="{Binding}" />
+                                        <MenuItem Header="Copy to clipboard">
 
-                                        <MenuItem Click="CopyShortIdToClipboard"
-                                                  Header="Copy short id to clipboard"
-                                                  Tag="{Binding}" />
+                                            <MenuItem Click="CopyCompleteIdToClipboard"
+                                                      Header="Copy complete id to clipboard"
+                                                      Tag="{Binding}" />
 
-                                        <MenuItem Click="CopyCompleteTagToClipboard"
-                                                  Header="Copy complete tag to clipboard"
-                                                  Tag="{Binding}" />
+                                            <Separator />
 
-                                        <Separator />
+                                            <MenuItem Click="CopyShortIdToClipboard"
+                                                      Header="Copy short id to clipboard"
+                                                      Tag="{Binding}" />
 
-                                        <MenuItem Click="CopyCurrentBranchToClipboard"
-                                                  Header="Copy branch name to clipboard"
-                                                  Tag="{Binding}" />
+                                            <MenuItem Click="CopyCompleteTagToClipboard"
+                                                      Header="Copy complete tag to clipboard"
+                                                      Tag="{Binding}" />
 
-                                        <MenuItem Click="CopyBranchListToClipboard"
-                                                  Header="Copy branch list to clipboard"
-                                                  Tag="{Binding}" />
+                                            <Separator />
 
+                                            <MenuItem Click="CopyCurrentBranchToClipboard"
+                                                      Header="Copy branch name to clipboard"
+                                                      Tag="{Binding}" />
+
+                                            <MenuItem Click="CopyBranchListToClipboard"
+                                                      Header="Copy branch list to clipboard"
+                                                      Tag="{Binding}" />
+
+                                        </MenuItem>
+
+                                        <MenuItem Header="Remove Submodule">
+
+                                            <MenuItem Click="RemoveComplete"
+                                                      Header="Remove submodule complete (four-way)"
+                                                      Tag="{Binding}" />
+
+                                            <Separator />
+
+                                            <MenuItem Click="SubmoduleDeinitForce"
+                                                      Header="Deregister only (.git/config)"
+                                                      Tag="{Binding}" />
+
+                                            <MenuItem Click="RemoveOnlyFromCache"
+                                                      Header="Remove only from cache (.git/index)"
+                                                      Tag="{Binding}" />
+
+                                            <MenuItem Click="RemoveOnlyFromConfiguration"
+                                                      Header="Remove only from configuration (.gitmodules)"
+                                                      Tag="{Binding}" />
+
+                                            <MenuItem Click="RemoveOnlyFolder" Tag="{Binding}">
+                                                <MenuItem.Header>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Remove only folder (" />
+                                                        <TextBlock Text="{Binding Name}" />
+                                                        <TextBlock Text=")" />
+                                                    </StackPanel>
+                                                </MenuItem.Header>
+                                            </MenuItem>
+
+                                        </MenuItem>
                                     </ContextMenu>
 
                                 </Grid.ContextMenu>
