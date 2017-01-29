@@ -139,6 +139,9 @@
     <Compile Include="Mvvm\Model\Submodule.cs" />
     <Compile Include="Helper\RelayCommand.cs" />
     <Compile Include="Mvvm\ViewModel\MainViewModelCommands.cs" />
+    <Compile Include="Mvvm\View\AddSubmodule.xaml.cs">
+      <DependentUpon>AddSubmodule.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Mvvm\View\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -193,6 +196,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Mvvm\View\AddSubmodule.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Mvvm\View\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

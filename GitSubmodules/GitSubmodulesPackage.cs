@@ -3,6 +3,7 @@ using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using EnvDTE80;
+using GitSubmodules.Mvvm.View;
 using GitSubmodules.Mvvm.ViewModel;
 using GitSubmodules.Other;
 using Microsoft.VisualStudio;
@@ -106,6 +107,9 @@ namespace GitSubmodules
             }
 
             ErrorHandler.ThrowOnFailure(vsWindowFrame.Show());
+
+            // for testing
+            new AddSubmodule().Show();
         }
 
         /// <summary>
