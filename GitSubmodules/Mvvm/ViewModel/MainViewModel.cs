@@ -218,7 +218,7 @@ namespace GitSubmodules.Mvvm.ViewModel
             catch(Exception exception)
             {
                 WriteToOutputWindow(Category.Error, $"Can't open explorer on the given path {folderToOpen}");
-                WriteToOutputWindow(Category.Error, exception.ToString());
+                WriteToOutputWindow(exception);
             }
         }
 
@@ -309,7 +309,7 @@ namespace GitSubmodules.Mvvm.ViewModel
             catch(Exception exception)
             {
                 WriteToOutputWindow(Category.Error, "Get diretory name from solution path");
-                WriteToOutputWindow(Category.Error, exception.ToString());
+                WriteToOutputWindow(exception);
             }
 
             if(string.IsNullOrEmpty(Model.CurrentSolutionPath) || !Directory.Exists(Model.CurrentSolutionPath))
@@ -327,7 +327,7 @@ namespace GitSubmodules.Mvvm.ViewModel
             catch(Exception exception)
             {
                 WriteToOutputWindow(Category.Error, "Can't switch to solution path");
-                WriteToOutputWindow(Category.Error, exception.ToString());
+                WriteToOutputWindow(exception);
                 return false;
             }
 
@@ -364,6 +364,12 @@ namespace GitSubmodules.Mvvm.ViewModel
 
             Model.OutputPane.Activate();
         }
+
+        /// <summary>
+        /// Write a <see cref="Exception"/> with timestamp and counted number to a output window
+        /// </summary>
+        /// <param name="exception">The <see cref="Exception"/> to write</param>
+        private void WriteToOutputWindow(Exception exception) => WriteToOutputWindow(Category.Error, exception.ToString());
 
         /// <summary>
         /// Change the execution state of the functions of this extension
@@ -589,7 +595,7 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
             catch(Exception exception)
             {
-                WriteToOutputWindow(Category.Error, exception.ToString());
+                WriteToOutputWindow(exception);
             }
         }
 
