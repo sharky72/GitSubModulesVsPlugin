@@ -18,7 +18,7 @@ namespace GitSubmodules.Mvvm.View
         /// <summary>
         /// The view model for the this view that contains all logic and the model
         /// </summary>
-        public MainViewModel ViewModel { get; private set; }
+        public MainViewModel ViewModel { get; }
 
         #endregion Public Properties
 
@@ -128,12 +128,12 @@ namespace GitSubmodules.Mvvm.View
         private void CopyCompleteIdToClipboard(object sender, EventArgs e)
         {
             var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
-            if((submodule == null) || (ViewModel == null))
+            if(submodule == null)
             {
                 return;
             }
 
-            ViewModel.TryToSetTextToClipboard(submodule.CompleteId);
+            ViewModel?.TryToSetTextToClipboard(submodule.CompleteId);
         }
 
         /// <summary>
@@ -144,12 +144,12 @@ namespace GitSubmodules.Mvvm.View
         private void CopyShortIdToClipboard(object sender, EventArgs e)
         {
             var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
-            if((submodule == null) || (ViewModel == null))
+            if(submodule == null)
             {
                 return;
             }
 
-            ViewModel.TryToSetTextToClipboard(submodule.ShortId);
+            ViewModel?.TryToSetTextToClipboard(submodule.ShortId);
         }
 
         /// <summary>
@@ -160,12 +160,12 @@ namespace GitSubmodules.Mvvm.View
         private void CopyCompleteTagToClipboard(object sender, EventArgs e)
         {
             var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
-            if((submodule == null) || (ViewModel == null))
+            if(submodule == null)
             {
                 return;
             }
 
-            ViewModel.TryToSetTextToClipboard(submodule.CompleteTag);
+            ViewModel?.TryToSetTextToClipboard(submodule.CompleteTag);
         }
 
         /// <summary>
@@ -176,12 +176,12 @@ namespace GitSubmodules.Mvvm.View
         private void CopyCurrentBranchToClipboard(object sender, EventArgs e)
         {
             var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
-            if((submodule == null) || (ViewModel == null))
+            if(submodule == null)
             {
                 return;
             }
 
-            ViewModel.TryToSetTextToClipboard(submodule.CurrentBranch);
+            ViewModel?.TryToSetTextToClipboard(submodule.CurrentBranch);
         }
 
         /// <summary>
@@ -192,13 +192,12 @@ namespace GitSubmodules.Mvvm.View
         private void CopyBranchListToClipboard(object sender, EventArgs e)
         {
             var submodule = SubmoduleHelper.TryToGetSubmoduleFromTag(sender);
-            if((submodule == null) || (submodule.ListOfBranches == null) || (ViewModel == null))
+            if(submodule?.ListOfBranches == null)
             {
                 return;
             }
 
-            ViewModel.TryToSetTextToClipboard(submodule.ListOfBranches.Aggregate(string.Empty,
-                                                                                 (current, next) => current + "\n" + next));
+            ViewModel?.TryToSetTextToClipboard(submodule.ListOfBranches.Aggregate(string.Empty, (current, next) => current + "\n" + next));
         }
 
         /// <summary>
@@ -209,12 +208,7 @@ namespace GitSubmodules.Mvvm.View
         /// <param name="e">The arguments for this event</param>
         private void ExpandOneSubmodule(object sender, EventArgs e)
         {
-            if(ViewModel == null)
-            {
-                return;
-            }
-
-            ViewModel.ExpandOneSubmodule(SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
+            ViewModel?.ExpandOneSubmodule(SubmoduleHelper.TryToGetSubmoduleFromTag(sender));
         }
 
         /// <summary>

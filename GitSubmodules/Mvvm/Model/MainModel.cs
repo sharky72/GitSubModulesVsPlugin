@@ -21,7 +21,7 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public IEnumerable<Submodule> ListOfSubmodules
         {
-            get { return _listOfSubmodules; }
+            get => _listOfSubmodules;
             internal set
             {
                 _listOfSubmodules = value;
@@ -34,7 +34,7 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public string CurrentSolutionPath
         {
-            get { return _currentSolutionPath; }
+            get => _currentSolutionPath;
             internal set
             {
                 _currentSolutionPath= value;
@@ -47,7 +47,7 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public string GitVersion
         {
-            get { return _gitVersion; }
+            get => _gitVersion;
             internal set
             {
                 _gitVersion = value;
@@ -60,7 +60,7 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public IEnumerable<string> ListOfBranches
         {
-            get { return _listOfBranches; }
+            get => _listOfBranches;
             internal set
             {
                 _listOfBranches = value;
@@ -73,7 +73,7 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public string CountOfBranches
         {
-            get { return _countOfBranches; }
+            get => _countOfBranches;
             internal set
             {
                 _countOfBranches = value;
@@ -86,7 +86,7 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public string CurrentBranch
         {
-            get { return _currentBranch; }
+            get => _currentBranch;
             internal set
             {
                 _currentBranch = value;
@@ -99,7 +99,7 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public Brush Foreground
         {
-            get { return _foreground; }
+            get => _foreground;
             internal set
             {
                 _foreground = value;
@@ -112,7 +112,7 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public bool ShowWatingIndicator
         {
-            get { return _showWatingIndicator; }
+            get => _showWatingIndicator;
             set
             {
                 _showWatingIndicator = value;

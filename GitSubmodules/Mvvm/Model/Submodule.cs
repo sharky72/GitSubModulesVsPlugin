@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using GitSubmodules.Enumerations;
@@ -21,22 +20,22 @@ namespace GitSubmodules.Mvvm.Model
         /// <summary>
         /// The name of the submodule
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; }
 
         /// <summary>
         /// The complete id of the submodule (SHA1)
         /// </summary>
-        public string CompleteId { get; private set; }
+        public string CompleteId { get; }
 
         /// <summary>
         /// The short id of the submodule (SHA1)
         /// </summary>
-        public string ShortId { get; private set; }
+        public string ShortId { get; }
 
         /// <summary>
         /// The complete tag of the submodule, contains the tag and additional informationen
         /// </summary>
-        public string CompleteTag { get; private set; }
+        public string CompleteTag { get; }
 
         /// <summary>
         /// The background color for this module that indicate the crrent status of it
@@ -54,11 +53,11 @@ namespace GitSubmodules.Mvvm.Model
         public string StatusText { get; private set; }
 
         /// <summary>
-        /// The <see cref="Image"/> for the health status of this <see cref="Submodule"/>
+        /// The <see cref="BitmapSource"/> for the health status of this <see cref="Submodule"/>
         /// </summary>
         public BitmapSource HealthImage
         {
-            get { return _healthImage; }
+            get => _healthImage;
             internal set
             {
                 _healthImage = value;
@@ -71,7 +70,7 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public string HealthImageToolTip
         {
-            get { return _healthImageToolTip; }
+            get => _healthImageToolTip;
             private set
             {
                 _healthImageToolTip = value;
@@ -83,14 +82,14 @@ namespace GitSubmodules.Mvvm.Model
         /// The number of additional commits for this <see cref="Submodule"/>,
         /// based on the additional informations inside the <see cref="CompleteTag"/>
         /// </summary>
-        public int NumberOfAdditionalCommits { get; private set; }
+        public int NumberOfAdditionalCommits { get; }
 
         /// <summary>
         /// List with all branches of the submodule
         /// </summary>
         public IEnumerable<string> ListOfBranches
         {
-            get { return _listOfBranches; }
+            get => _listOfBranches;
             internal set
             {
                 _listOfBranches = value;
@@ -103,7 +102,7 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public string CountOfBranches
         {
-            get { return _countOfBranches; }
+            get => _countOfBranches;
             internal set
             {
                 _countOfBranches = value;
@@ -116,7 +115,7 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public string CurrentBranch
         {
-            get { return _currentBranch; }
+            get => _currentBranch;
             internal set
             {
                 _currentBranch = value;
@@ -129,7 +128,7 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public bool ShowExtendedInformations
         {
-            get { return _showExtendedInformations; }
+            get => _showExtendedInformations;
             internal set
             {
                 _showExtendedInformations = value;
@@ -142,7 +141,7 @@ namespace GitSubmodules.Mvvm.Model
         /// </summary>
         public bool ShowSlimInformations
         {
-            get { return _showSlimInformations; }
+            get => _showSlimInformations;
             set
             {
                 _showSlimInformations = value;

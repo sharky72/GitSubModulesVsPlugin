@@ -18,16 +18,14 @@ namespace GitSubmodules.Helper
         /// <param name="submoduleCommand">The <see cref="SubmoduleCommand"/> for the git <see cref="Process"/></param>
         /// <returns>The <see cref="ProcessStartInfo"/> for the git <see cref="Process"/></returns>
         internal static ProcessStartInfo GetProcessStartInfo(Submodule submodule, SubmoduleCommand submoduleCommand)
-        {
-            return new ProcessStartInfo("git.exe")
-            {
-                Arguments              = GetArguments(submodule, submoduleCommand),
-                CreateNoWindow         = true,
-                RedirectStandardError  = true,
-                RedirectStandardOutput = true,
-                UseShellExecute        = false
-            };
-        }
+            => new ProcessStartInfo("git.exe")
+                {
+                    Arguments              = GetArguments(submodule, submoduleCommand),
+                    CreateNoWindow         = true,
+                    RedirectStandardError  = true,
+                    RedirectStandardOutput = true,
+                    UseShellExecute        = false
+                };
 
         /// <summary>
         /// Returns a argument <see cref="string"/> for Git based on the given <see cref="Submodule"/>
@@ -38,9 +36,7 @@ namespace GitSubmodules.Helper
         /// <returns>Argument <see cref="string"/> for Git</returns>
         internal static string GetArguments(Submodule submodule, SubmoduleCommand submoduleCommand)
         {
-            var submoduleName = (submodule != null) && !string.IsNullOrEmpty(submodule.Name)
-                ? submodule.Name
-                : string.Empty;
+            var submoduleName = !string.IsNullOrEmpty(submodule?.Name) ? submodule.Name : string.Empty;
 
             switch(submoduleCommand)
             {

@@ -46,18 +46,15 @@ namespace GitSubmodules.Helper
         /// <param name="parameter">Data used by the command.
         /// If the command does not require data to be passed, this object can be set to null</param>
         /// <returns><c>true</c> if this command can be executed, otherwise <c>false</c></returns>
-        public bool CanExecute(object parameter)
-        {
-            return (_canExecute == null) || _canExecute(parameter);
-        }
+        public bool CanExecute(object parameter) => _canExecute?.Invoke(parameter) != true;
 
         /// <summary>
         /// Occurs when changes occur that affect whether or not the command should execute
         /// </summary>
         public event EventHandler CanExecuteChanged
         {
-               add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+               add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
 
         /// <summary>
@@ -67,12 +64,7 @@ namespace GitSubmodules.Helper
         /// If the command does not require data to be passed, this object can be set to null</param>
         public void Execute(object parameter)
         {
-            if(_execute == null)
-            {
-                return;
-            }
-
-            _execute(parameter);
+            _execute?.Invoke(parameter);
         }
 
         #endregion ICommand Member

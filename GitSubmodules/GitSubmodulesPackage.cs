@@ -119,12 +119,8 @@ namespace GitSubmodules
         private IVsWindowFrame TryToGetToolWindowFrame()
         {
             var window = FindToolWindow(typeof(MainViewModel), 0, false) as MainViewModel;
-            if((window == null) || (window.Frame == null))
-            {
-                return null;
-            }
 
-            return window.Frame as IVsWindowFrame;
+            return window?.Frame as IVsWindowFrame;
         }
 
         #endregion Private Methods

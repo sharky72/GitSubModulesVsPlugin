@@ -10,16 +10,14 @@ namespace GitSubmodules.Helper
     internal static class ThemeHelper
     {
         /// <summary>
-        /// Convert a Win32 colour value to a <see cref="System.Windows.Media.Brush"/>
+        /// Convert a Win32 colour value to a <see cref="Brush"/>
         /// </summary>
         /// <param name="win32ColorValue">The Win32 colour value for the compatible <see cref="Brush"/></param>
-        /// <returns>The converted <see cref="System.Windows.Media.Brush"/></returns>
+        /// <returns>The converted <see cref="Brush"/></returns>
         internal static Brush GetThemedBrush(uint win32ColorValue)
-        {
-            return win32ColorValue <= int.MaxValue
-                       ? ColorHelper.GetBrush(System.Drawing.ColorTranslator.FromWin32((int)win32ColorValue))
-                       : Brushes.Black;
-        }
+            => win32ColorValue <= int.MaxValue
+                ? ColorHelper.GetBrush(System.Drawing.ColorTranslator.FromWin32((int)win32ColorValue))
+                : Brushes.Black;
 
         /// <summary>
         /// Return a compatible <see cref="Brush"/> for the ToolWindowTextColorKey

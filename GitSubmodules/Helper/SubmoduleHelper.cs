@@ -18,12 +18,8 @@ namespace GitSubmodules.Helper
         internal static Submodule TryToGetSubmoduleFromTag(object surfaceObject)
         {
             var frameworkElement = surfaceObject as FrameworkElement;
-            if(frameworkElement == null)
-            {
-                return null;
-            }
 
-            return frameworkElement.Tag as Submodule;
+            return frameworkElement?.Tag as Submodule;
         }
 
         /// <summary>

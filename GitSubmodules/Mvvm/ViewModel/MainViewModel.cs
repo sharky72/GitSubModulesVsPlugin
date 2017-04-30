@@ -26,7 +26,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// <summary>
         /// The model that contains all used data of the view-model
         /// </summary>
-        public MainModel Model { get; private set; }
+        public MainModel Model { get; }
 
         #endregion Public Properties
 
@@ -83,7 +83,7 @@ namespace GitSubmodules.Mvvm.ViewModel
 
                 var gitStartInfo = GitHelper.GetProcessStartInfo(submodule, submoduleCommand);
 
-                WriteToOutputWindow(Category.Debug, string.Format("Start Git with the follow arguments: {0}", gitStartInfo.Arguments));
+                WriteToOutputWindow(Category.Debug, $"Start Git with the follow arguments: {gitStartInfo.Arguments}");
 
                 using(var process = Process.Start(gitStartInfo))
                 {
@@ -108,8 +108,8 @@ namespace GitSubmodules.Mvvm.ViewModel
                         return;
                     }
 
-                    WriteToOutputWindow(Category.Error, string.Format("Error on Git process with command: {0}", gitStartInfo.Arguments));
-                    WriteToOutputWindow(Category.Error, string.Format("Git process end with errorcode: {0}", process.ExitCode));
+                    WriteToOutputWindow(Category.Error, $"Error on Git process with command: {gitStartInfo.Arguments}");
+                    WriteToOutputWindow(Category.Error, $"Git process end with errorcode: {process.ExitCode}");
 
                     using(var reader = process.StandardError)
                     {
@@ -201,13 +201,13 @@ namespace GitSubmodules.Mvvm.ViewModel
                 return;
             }
 
-            var folderToOpen = (submodule != null) && !string.IsNullOrEmpty(submodule.Name)
+            var folderToOpen = !string.IsNullOrEmpty(submodule?.Name)
                 ? Path.Combine(Model.CurrentSolutionPath, submodule.Name)
                 : Model.CurrentSolutionPath;
 
             if(!Directory.Exists(folderToOpen))
             {
-                WriteToOutputWindow(Category.Error, string.Format("Folder not found {0}", folderToOpen));
+                WriteToOutputWindow(Category.Error, $"Folder not found {folderToOpen}");
                 return;
             }
 
@@ -217,7 +217,7 @@ namespace GitSubmodules.Mvvm.ViewModel
             }
             catch(Exception exception)
             {
-                WriteToOutputWindow(Category.Error, string.Format("Can't open explorer on the given path {0}", folderToOpen));
+                WriteToOutputWindow(Category.Error, $"Can't open explorer on the given path {folderToOpen}");
                 WriteToOutputWindow(Category.Error, exception.ToString());
             }
         }
@@ -288,12 +288,12 @@ namespace GitSubmodules.Mvvm.ViewModel
 
             if(!Directory.Exists(submoduleFolder))
             {
-                WriteToOutputWindow(Category.Error, string.Format("Directory of {0} not found", submoduleFolder));
+                WriteToOutputWindow(Category.Error, $"Directory of {submoduleFolder} not found");
                 return;
             }
 
             Directory.SetCurrentDirectory(submoduleFolder);
-            WriteToOutputWindow(Category.Debug, string.Format("Set path to {0} ", submoduleFolder));
+            WriteToOutputWindow(Category.Debug, $"Set path to {submoduleFolder} ");
         }
 
         /// <summary>
@@ -318,7 +318,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                 return false;
             }
 
-            WriteToOutputWindow(Category.Debug, string.Format("Set solution path to {0}", Model.CurrentSolutionPath));
+            WriteToOutputWindow(Category.Debug, $"Set solution path to {Model.CurrentSolutionPath}");
 
             try
             {
@@ -348,14 +348,14 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// <param name="message">The message to write</param>
         internal void WriteToOutputWindow(Category category, string message)
         {
-            if((Model == null) || (Model.OutputPane == null))
+            if(Model?.OutputPane == null)
             {
                 return;
             }
 
             Model.OutputPane.OutputString(category != Category.EmptyLine
-                ? string.Format("{0:HH:mm:ss} - {1:00} - {2} : {3}\n", DateTime.Now, Model.GitCounter, category, message)
-                : "\n");
+                    ? $"{DateTime.Now:HH:mm:ss} - {Model.GitCounter:00} - {category} : {message}\n"
+                    : "\n");
 
             if(category != Category.Error)
             {
@@ -423,7 +423,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                     }
 
                     Model.ListOfBranches = consoleOutput.Split('\n').Select(found => found.TrimStart('*', ' ', '(').TrimEnd(')'));
-                    Model.CountOfBranches = string.Format("Branch (of {0})", Model.ListOfBranches.Count());
+                    Model.CountOfBranches = $"Branch (of {Model.ListOfBranches.Count()})";
 
                     var branch = consoleOutput.Split('\n').FirstOrDefault(found => found.StartsWith("*", StringComparison.Ordinal));
                     if(string.IsNullOrEmpty(branch))
@@ -453,7 +453,7 @@ namespace GitSubmodules.Mvvm.ViewModel
                     }
 
                     submodule.ListOfBranches = consoleOutput.Split('\n').Select(found => found.TrimStart('*', ' ', '(').TrimEnd(')'));
-                    submodule.CountOfBranches = string.Format("Branch (of {0}):", submodule.ListOfBranches.Count());
+                    submodule.CountOfBranches = $"Branch (of {submodule.ListOfBranches.Count()}):";
 
                     var submoduleBranch = consoleOutput.Split('\n').FirstOrDefault(found => found.StartsWith("*", StringComparison.Ordinal));
                     if(string.IsNullOrEmpty(submoduleBranch))
@@ -527,15 +527,13 @@ namespace GitSubmodules.Mvvm.ViewModel
 
                     if(splitedAnswer.Count == Model.ListOfSubmodules.Count())
                     {
-                        WriteToOutputWindow(Category.Debug,
-                                            string.Format("Count of Submodules: {0}", Model.ListOfSubmodules.Count()));
+                        WriteToOutputWindow(Category.Debug, $"Count of Submodules: {Model.ListOfSubmodules.Count()}");
                     }
                     else
                     {
                         WriteToOutputWindow(Category.Error,
-                                            string.Format("Count of Submodules {0} are not identical with count of lines {1}",
-                                                          Model.ListOfSubmodules.Count(),
-                                                          splitedAnswer.Count));
+                                            $"Count of Submodules {Model.ListOfSubmodules.Count()}" +
+                                            $" are not identical with count of lines {splitedAnswer.Count}");
                     }
 
                     CanExecuteCommand(true);
@@ -554,7 +552,7 @@ namespace GitSubmodules.Mvvm.ViewModel
         /// <param name="submoduleToExpand">The submodule to expand</param>
         internal void ExpandOneSubmodule(Submodule submoduleToExpand)
         {
-            if((submoduleToExpand == null) || (Model == null) || (Model.ListOfSubmodules == null))
+            if((submoduleToExpand == null) || (Model?.ListOfSubmodules == null))
             {
                 return;
             }
